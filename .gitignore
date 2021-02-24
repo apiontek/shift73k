@@ -24,7 +24,7 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-real_estate-*.tar
+bones73k-*.tar
 
 # If NPM crashes, it generates a log, let's ignore it too.
 npm-debug.log

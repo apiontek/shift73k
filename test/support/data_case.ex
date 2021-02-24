@@ -1,4 +1,4 @@
-defmodule RealEstate.DataCase do
+defmodule Bones73k.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule RealEstate.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use RealEstate.DataCase, async: true`, although
+  by setting `use Bones73k.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,20 +18,20 @@ defmodule RealEstate.DataCase do
 
   using do
     quote do
-      alias RealEstate.Repo
+      alias Bones73k.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import RealEstate.DataCase
+      import Bones73k.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(RealEstate.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bones73k.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(RealEstate.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Bones73k.Repo, {:shared, self()})
     end
 
     :ok

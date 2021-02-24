@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :real_estate,
-  ecto_repos: [RealEstate.Repo]
+config :bones73k,
+  ecto_repos: [Bones73k.Repo]
 
 # Configures the endpoint
-config :real_estate, RealEstateWeb.Endpoint,
+config :bones73k, Bones73kWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "LdIQmzV5UCWSbB2SdiWFHLgxYNObKq9Za/VyguoILxfOAMDb5IsptKCKtXTRn+Tf",
-  render_errors: [view: RealEstateWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: RealEstate.PubSub,
+  render_errors: [view: Bones73kWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Bones73k.PubSub,
   live_view: [signing_salt: "2D4GC4ac"]
 
 # Configures Elixir's Logger

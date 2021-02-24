@@ -1,7 +1,7 @@
-defmodule RealEstate.AccountsFixtures do
+defmodule Bones73k.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `RealEstate.Accounts` context.
+  entities via the `Bones73k.Accounts` context.
   """
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
@@ -14,7 +14,7 @@ defmodule RealEstate.AccountsFixtures do
         email: unique_user_email(),
         password: valid_user_password()
       })
-      |> RealEstate.Accounts.register_user()
+      |> Bones73k.Accounts.register_user()
 
     user
   end
@@ -26,7 +26,7 @@ defmodule RealEstate.AccountsFixtures do
         email: unique_user_email(),
         password: valid_user_password()
       })
-      |> RealEstate.Accounts.register_admin()
+      |> Bones73k.Accounts.register_admin()
 
     user
   end

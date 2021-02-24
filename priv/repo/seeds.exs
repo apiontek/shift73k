@@ -5,27 +5,27 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     RealEstate.Repo.insert!(%RealEstate.SomeSchema{})
+#     Bones73k.Repo.insert!(%Bones73k.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
 {:ok, admin} =
-  RealEstate.Accounts.register_admin(%{
+  Bones73k.Accounts.register_admin(%{
     email: "admin@company.com",
     password: "123456789abc",
     password_confirmation: "123456789abc"
   })
 
 {:ok, user_1} =
-  RealEstate.Accounts.register_user(%{
+  Bones73k.Accounts.register_user(%{
     email: "user1@company.com",
     password: "123456789abc",
     password_confirmation: "123456789abc"
   })
 
 {:ok, user_2} =
-  RealEstate.Accounts.register_user(%{
+  Bones73k.Accounts.register_user(%{
     email: "user2@company.com",
     password: "123456789abc",
     password_confirmation: "123456789abc"
@@ -38,7 +38,7 @@ Enum.each(1..10, fn i ->
     description: "Property that belongs to user 1",
     user_id: user_1.id
   }
-  |> RealEstate.Properties.create_property()
+  |> Bones73k.Properties.create_property()
 
   %{
     name: "Property #{i} - User 2",
@@ -46,7 +46,7 @@ Enum.each(1..10, fn i ->
     description: "Property that belongs to user 2",
     user_id: user_2.id
   }
-  |> RealEstate.Properties.create_property()
+  |> Bones73k.Properties.create_property()
 
   %{
     name: "Property #{i} - Admin",
@@ -54,5 +54,5 @@ Enum.each(1..10, fn i ->
     description: "Property that belongs to admin",
     user_id: admin.id
   }
-  |> RealEstate.Properties.create_property()
+  |> Bones73k.Properties.create_property()
 end)

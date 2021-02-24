@@ -1,0 +1,36 @@
+<h1>Show Property</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, Bones73kWeb.PropertyLive.FormComponent,
+    id: @property.id,
+    title: @page_title,
+    action: @live_action,
+    property: @property,
+    return_to: Routes.property_show_path(@socket, :show, @property) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @property.name %>
+  </li>
+
+  <li>
+    <strong>Price:</strong>
+    <%= @property.price %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @property.description %>
+  </li>
+
+</ul>
+
+<%= if Roles.can?(@current_user, @property, :edit) do %>
+  <span><%= live_patch "Edit", to: Routes.property_show_path(@socket, :edit, @property), class: "button" %></span>
+<% end %>
+<%= if Roles.can?(@current_user, @property, :index) do %>
+  <span><%= live_redirect "Back", to: Routes.property_index_path(@socket, :index) %></span>
+<% end %>

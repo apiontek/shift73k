@@ -1,4 +1,4 @@
-defmodule RealEstateWeb.ChannelCase do
+defmodule Bones73kWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule RealEstateWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use RealEstateWeb.ChannelCase, async: true`, although
+  by setting `use Bones73kWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule RealEstateWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import RealEstateWeb.ChannelCase
+      import Bones73kWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint RealEstateWeb.Endpoint
+      @endpoint Bones73kWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(RealEstate.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bones73k.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(RealEstate.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Bones73k.Repo, {:shared, self()})
     end
 
     :ok

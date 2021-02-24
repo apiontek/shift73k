@@ -1,4 +1,4 @@
-# RealEstate
+# Bones73k
 
 See full article [here](https://www.leanpanda.com/blog/authentication-and-authorisation-in-phoenix-liveview/).
 

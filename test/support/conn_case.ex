@@ -1,4 +1,4 @@
-defmodule RealEstateWeb.ConnCase do
+defmodule Bones73kWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule RealEstateWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use RealEstateWeb.ConnCase, async: true`, although
+  by setting `use Bones73kWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -22,20 +22,20 @@ defmodule RealEstateWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import RealEstateWeb.ConnCase
+      import Bones73kWeb.ConnCase
 
-      alias RealEstateWeb.Router.Helpers, as: Routes
+      alias Bones73kWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint RealEstateWeb.Endpoint
+      @endpoint Bones73kWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(RealEstate.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bones73k.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(RealEstate.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Bones73k.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
@@ -50,7 +50,7 @@ defmodule RealEstateWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}) do
-    user = RealEstate.AccountsFixtures.user_fixture()
+    user = Bones73k.AccountsFixtures.user_fixture()
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -60,7 +60,7 @@ defmodule RealEstateWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_user(conn, user) do
-    token = RealEstate.Accounts.generate_user_session_token(user)
+    token = Bones73k.Accounts.generate_user_session_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
