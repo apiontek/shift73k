@@ -52,7 +52,7 @@ defmodule Bones73kWeb.PropertyLiveTest do
 
       assert index_live
              |> form("#property-form", property: @invalid_attrs)
-             |> render_change() =~ "can&apos;t be blank"
+             |> render_change() =~ "can&#39;t be blank"
 
       {:ok, _, html} =
         index_live
@@ -74,7 +74,7 @@ defmodule Bones73kWeb.PropertyLiveTest do
 
       assert index_live
              |> form("#property-form", property: @invalid_attrs)
-             |> render_change() =~ "can&apos;t be blank"
+             |> render_change() =~ "can&#39;t be blank"
 
       {:ok, _, html} =
         index_live
@@ -128,7 +128,7 @@ defmodule Bones73kWeb.PropertyLiveTest do
 
       assert index_live
              |> form("#property-form", property: @invalid_attrs)
-             |> render_change() =~ "can&apos;t be blank"
+             |> render_change() =~ "can&#39;t be blank"
 
       {:ok, _, html} =
         index_live
@@ -258,7 +258,7 @@ defmodule Bones73kWeb.PropertyLiveTest do
 
       assert show_live
              |> form("#property-form", property: @invalid_attrs)
-             |> render_change() =~ "can&apos;t be blank"
+             |> render_change() =~ "can&#39;t be blank"
 
       {:ok, _, html} =
         show_live
@@ -294,7 +294,7 @@ defmodule Bones73kWeb.PropertyLiveTest do
 
       assert show_live
              |> form("#property-form", property: @invalid_attrs)
-             |> render_change() =~ "can&apos;t be blank"
+             |> render_change() =~ "can&#39;t be blank"
 
       {:ok, _, html} =
         show_live
