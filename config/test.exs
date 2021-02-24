@@ -8,18 +8,22 @@ config :bcrypt_elixir, :log_rounds, 1
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :real_estate, RealEstate.Repo,
+config :bones73k, Bones73k.Repo,
   username: "postgres",
   password: "postgres",
-  database: "real_estate_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "bones73k_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :real_estate, RealEstateWeb.Endpoint,
+config :bones73k, Bones73kWeb.Endpoint,
   http: [port: 4002],
   server: false
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# Import secret config
+import_config "test.secret.exs"
+

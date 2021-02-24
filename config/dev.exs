@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :real_estate, RealEstate.Repo,
+config :bones73k, Bones73k.Repo,
   username: "postgres",
   password: "postgres",
-  database: "real_estate_dev",
+  database: "bones73k_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :real_estate, RealEstate.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :real_estate, RealEstateWeb.Endpoint,
+config :bones73k, Bones73kWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -55,13 +55,13 @@ config :real_estate, RealEstateWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :real_estate, RealEstateWeb.Endpoint,
+config :bones73k, Bones73kWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/real_estate_web/(live|views)/.*(ex)$",
-      ~r"lib/real_estate_web/templates/.*(eex)$"
+      ~r"lib/bones73k_web/(live|views)/.*(ex)$",
+      ~r"lib/bones73k_web/templates/.*(eex)$"
     ]
   ]
 
@@ -74,3 +74,7 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Import secret config
+import_config "dev.secret.exs"
+
