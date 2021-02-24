@@ -25,7 +25,8 @@ config :bones73k, Bones73kWeb.Endpoint,
       "node_modules/webpack/bin/webpack.js",
       "--mode",
       "development",
-      "--watch-stdin",
+      "--watch",
+      "--watch-options-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
@@ -77,4 +78,3 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Import secret config
 import_config "dev.secret.exs"
-
