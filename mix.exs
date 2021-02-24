@@ -49,7 +49,9 @@ defmodule Bones73k.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:phx_gen_auth, "~> 0.5", only: [:dev], runtime: false},
-      {:ecto_enum, "~> 1.4"}
+      {:ecto_enum, "~> 1.4"},
+      {:bamboo, "~> 1.7.1"},
+      {:bamboo_smtp, "~> 3.1.3"}
     ]
   end
 

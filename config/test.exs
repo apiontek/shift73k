@@ -24,6 +24,8 @@ config :bones73k, Bones73kWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
+# Bamboo test mailer config
+config :bones73k, Bones73k.Mailer, adapter: Bamboo.TestAdapter
+
 # Import secret config
 import_config "test.secret.exs"
-
