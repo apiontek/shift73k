@@ -37,6 +37,19 @@ module.exports = (env, options) => {
           ],
         },
         {
+          test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                esModule: false,
+                name: "[name].[ext]",
+                outputPath: "../fonts",
+              },
+            },
+          ],
+        },
+        {
           test: /\.svg$/,
           loader: "svg-sprite-loader",
           options: {

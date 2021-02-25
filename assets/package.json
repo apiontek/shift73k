@@ -7,6 +7,7 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
+    "@fontsource/lato": "^4.2.1",
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@mdi/svg": "^5.9.55",
     "@popperjs/core": "^2.8.4",
@@ -25,6 +26,7 @@
     "copy-webpack-plugin": "^7.x",
     "css-loader": "^5.x",
     "css-minimizer-webpack-plugin": "^1.x",
+    "file-loader": "^6.2.0",
     "glob-all": "^3.2.1",
     "mini-css-extract-plugin": "^1.x",
     "postcss": "^8.2.6",
