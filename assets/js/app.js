@@ -3,6 +3,10 @@
 // its own CSS file.
 import "../css/app.scss";
 
+// Import icons for sprite-loader
+// brand icon
+import "../node_modules/@fortawesome/fontawesome-free/svgs/solid/skull-crossbones.svg";
+
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
 // in "webpack.config.js".
