@@ -31,7 +31,8 @@ defmodule Bones73kWeb do
     quote do
       use Phoenix.View,
         root: "lib/bones73k_web/templates",
-        namespace: Bones73kWeb
+        namespace: Bones73kWeb,
+        pattern: "**/*"
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
