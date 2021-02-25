@@ -102,6 +102,9 @@ defmodule Bones73kWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
+      # Import SVG Icon helper
+      import Bones73kWeb.IconHelper
+
       import Bones73kWeb.ErrorHelpers
       import Bones73kWeb.Gettext
       alias Bones73kWeb.Router.Helpers, as: Routes

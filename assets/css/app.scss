@@ -1,6 +1,34 @@
 /* Bootstrap v5 */
 @import "~bootstrap/scss/bootstrap";
 
+/* SVG icon style helper */
+// [class*=" icon"],
+// [class^="icon"] {
+//   width: 1em;
+//   height: 1em;
+//   stroke: currentColor;
+//   fill: currentColor;
+// }
+
+/*SVG ICON SYSTEM*/
+.icon {
+  display: inline-flex;
+  align-self: center;
+}
+
+.icon svg,
+.icon img {
+  height: 1em;
+  width: 1em;
+  fill: currentColor;
+}
+
+.icon.baseline svg,
+.icon img {
+  top: 0.125em;
+  position: relative;
+}
+
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
 .phx-no-feedback .invalid-feedback {
