@@ -45,7 +45,7 @@ module.exports = (env, options) => {
             publicPath: "../images/",
             symbolId: (filePath) => {
               if (filePath.includes("bootstrap-icons")) {
-                return `bsi-${path.basename(filePath).slice(0, -4)}`;
+                return `bi-${path.basename(filePath).slice(0, -4)}`;
               } else if (filePath.includes("@fortawesome")) {
                 if (filePath.includes("brands")) {
                   return `fab-${path.basename(filePath).slice(0, -4)}`;
