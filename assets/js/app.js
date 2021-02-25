@@ -18,8 +18,8 @@ import topbar from "topbar";
 import { LiveSocket } from "phoenix_live_view";
 
 // Bootstrap v5 js imports
-import Collapse from "bootstrap/js/dist/collapse";
-import Dropdown from "bootstrap/js/dist/dropdown";
+import "bootstrap/js/dist/collapse";
+import "bootstrap/js/dist/dropdown";
 
 // LiveSocket setup
 let csrfToken = document
