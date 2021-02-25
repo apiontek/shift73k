@@ -1,8 +1,9 @@
 const path = require("path");
-const glob = require("glob");
+const glob = require("glob-all");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const PurgecssPlugin = require("purgecss-webpack-plugin");
 
 module.exports = (env, options) => {
   const devMode = options.mode !== "production";
@@ -27,7 +28,12 @@ module.exports = (env, options) => {
         },
         {
           test: /\.[s]?css$/,
-          use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+          use: [
+            MiniCssExtractPlugin.loader,
+            "css-loader",
+            "sass-loader",
+            "postcss-loader",
+          ],
         },
       ],
     },
@@ -36,7 +42,22 @@ module.exports = (env, options) => {
       new CopyWebpackPlugin({
         patterns: [{ from: "static/", to: "../" }],
       }),
-    ],
+    ].concat(
+      devMode
+        ? []
+        : [
+            new PurgecssPlugin({
+              paths: glob.sync([
+                "../**/*.html.leex",
+                "../**/*.html.eex",
+                "../**/views/**/*.ex",
+                "../**/live/**/*.ex",
+                "./js/**/*.js",
+              ]),
+              safelist: [/phx/, /topbar/],
+            }),
+          ]
+    ),
     optimization: {
       minimizer: ["...", new CssMinimizerPlugin()],
     },
