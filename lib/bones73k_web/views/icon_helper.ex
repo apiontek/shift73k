@@ -1,4 +1,4 @@
-defmodule Bones73kWeb.IconHelper do
+defmodule Bones73kWeb.IconHelpers do
   @moduledoc """
   Generate SVG sprite use tags for SVG icons
   """

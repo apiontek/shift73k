@@ -103,7 +103,7 @@ defmodule Bones73kWeb do
       import Phoenix.View
 
       # Import SVG Icon helper
-      import Bones73kWeb.IconHelper
+      import Bones73kWeb.IconHelpers
 
       import Bones73kWeb.ErrorHelpers
       import Bones73kWeb.Gettext
