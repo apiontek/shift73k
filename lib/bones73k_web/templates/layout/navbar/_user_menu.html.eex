@@ -1,0 +1,24 @@
+<li class="nav-item dropdown" phx-update="ignore">
+
+  <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
+    <%= @current_user && "Account" || "Welcome" %>
+  </a>
+
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUserMenu">
+
+    <%= if @current_user do %>
+
+      <li><%= content_tag :span, @current_user.email, class: "dropdown-item-text" %></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><%= link "Settings", nav_link_opts(@conn, to: Routes.user_settings_path(@conn, :edit), class: "dropdown-item") %></li>
+      <li><%= link "Log out", nav_link_opts(@conn, to: Routes.user_session_path(@conn, :delete), method: :delete, class: "dropdown-item") %></li>
+
+    <% else %>
+
+      <li><%= link "Register", nav_link_opts(@conn, to: Routes.user_registration_path(@conn, :new), class: "dropdown-item") %></li>
+      <li><%= link "Log in", nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "dropdown-item") %></li>
+
+    <% end %>
+  </ul>
+
+</li>

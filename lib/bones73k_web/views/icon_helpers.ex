@@ -4,7 +4,6 @@ defmodule Bones73kWeb.IconHelpers do
   """
 
   use Phoenix.HTML
-  import Bones73k.Util.List
   alias Bones73kWeb.Router.Helpers, as: Routes
 
   def icon_div(conn, name, div_opts \\ [], svg_opts \\ []) do
@@ -15,21 +14,11 @@ defmodule Bones73kWeb.IconHelpers do
 
   def icon_svg(conn, name, opts \\ []) do
     content_tag(:svg, tag_opts(name, opts)) do
-      tag(:use, "xlink:href": Routes.static_path(conn, "/images/icons.svg#" <> name))
+      tag(:use, "xlink:href": Routes.static_path(conn, "/images/icons.svg##{name}"))
     end
   end
 
   defp tag_opts(name, opts) do
-    classes = "#{Keyword.get(opts, :class, "")} #{name}" |> String.trim_leading()
-    styles = Keyword.get(opts, :style)
-    width = Keyword.get(opts, :width)
-    height = Keyword.get(opts, :height)
-    id = Keyword.get(opts, :id)
-
-    [class: classes]
-    |> prepend_if(styles, {:style, styles})
-    |> prepend_if(width, {:style, width})
-    |> prepend_if(height, {:style, height})
-    |> prepend_if(id, {:id, id})
+    Keyword.update(opts, :class, name, fn c -> "#{c} #{name}" end)
   end
 end

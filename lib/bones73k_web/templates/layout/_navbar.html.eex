@@ -2,7 +2,7 @@
   <div class="container">
 
     <%= link to: Routes.page_path(@conn, :index), class: "navbar-brand" do %>
-      <%= icon_div @conn, "fas-skull-crossbones", class: "icon baseline" %>
+      <%= icon_div @conn, "fas-skull-crossbones", [class: "icon baseline"] %>
       Bones73k
     <% end %>
 
@@ -12,29 +12,45 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent" phx-update="ignore">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
         <li class="nav-item">
+          <%= link "Properties", nav_link_opts(@conn, to: Routes.property_index_path(@conn, :index), class: "nav-link") %>
+        </li>
+
+        <%# ACTIVE page link example %>
+        <%# <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
+        </li> %>
+
+        <%# DISABLED page link example %>
+        <%# <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li> %>
+
+        <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+          <li class="nav-item">
+          <%= link "LiveDashboard", nav_link_opts(@conn, to: Routes.live_dashboard_path(@conn, :home), class: "nav-link") %>
+          </li>
+        <% end %>
+
         <li class="nav-item dropdown" phx-update="ignore">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownExample" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownExample">
             <li><a class="dropdown-item" href="#">Action</a></li>
             <li><a class="dropdown-item" href="#">Another action</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
+
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
+      <ul class="navbar-nav">
+
+        <%= render "navbar/_user_menu.html", assigns %>
+
+      </ul>
+
     </div>
   </div>
 </nav>
