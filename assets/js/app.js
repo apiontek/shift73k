@@ -24,6 +24,8 @@ import { LiveSocket } from "phoenix_live_view";
 // Bootstrap v5 js imports
 import "bootstrap/js/dist/collapse";
 import "bootstrap/js/dist/dropdown";
+// Boostrap helpers
+import "./_hamburger";
 
 // LiveSocket setup
 let csrfToken = document
