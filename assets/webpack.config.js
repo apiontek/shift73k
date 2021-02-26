@@ -59,16 +59,14 @@ module.exports = (env, options) => {
             symbolId: (filePath) => {
               if (filePath.includes("bootstrap-icons")) {
                 return `bi-${path.basename(filePath).slice(0, -4)}`;
-              } else if (filePath.includes("@fortawesome")) {
-                if (filePath.includes("brands")) {
-                  return `fab-${path.basename(filePath).slice(0, -4)}`;
-                } else if (filePath.includes("solid")) {
-                  return `fas-${path.basename(filePath).slice(0, -4)}`;
-                } else {
-                  return `far-${path.basename(filePath).slice(0, -4)}`;
-                }
               } else if (filePath.includes("@mdi")) {
                 return `mdi-${path.basename(filePath).slice(0, -4)}`;
+              } else if (filePath.includes("heroicons")) {
+                if (filePath.includes("outline")) {
+                  return `hio-${path.basename(filePath).slice(0, -4)}`;
+                } else {
+                  return `his-${path.basename(filePath).slice(0, -4)}`;
+                }
               } else {
                 return `${path.basename(filePath).slice(0, -4)}`;
               }

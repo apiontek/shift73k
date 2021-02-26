@@ -4,8 +4,8 @@
 import "../css/app.scss";
 
 // Import icons for sprite-loader
-// brand icon
-import "../node_modules/@fortawesome/fontawesome-free/svgs/solid/skull-crossbones.svg";
+// navbar brand icon
+import "../node_modules/@mdi/svg/svg/skull-crossbones.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

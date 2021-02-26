@@ -13,6 +13,21 @@
 /* LiveView specific CSS */
 @import "phx-liveview";
 
+/* Navbar toggler icon override */
+.navbar-toggler-icon {
+  -webkit-transition: background 150ms ease;
+  -moz-transition: background 150ms ease;
+  -o-transition: background 150ms ease;
+  -ms-transition: background 150ms ease;
+  transition: background 150ms ease;
+}
+.navbar-light .navbar-toggler.collapsed .navbar-toggler-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="rgba(0, 0, 0, 0.55)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>');
+}
+.navbar-light .navbar-toggler .navbar-toggler-icon {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="rgba(0, 0, 0, 0.55)"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>');
+}
+
 /* Alerts and form errors */
 .alert:empty {
   display: none;

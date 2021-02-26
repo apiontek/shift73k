@@ -8,11 +8,11 @@
   },
   "dependencies": {
     "@fontsource/lato": "^4.2.1",
-    "@fortawesome/fontawesome-free": "^5.15.2",
     "@mdi/svg": "^5.9.55",
     "@popperjs/core": "^2.8.4",
     "bootstrap": "^5.0.0-beta2",
     "bootstrap-icons": "^1.4.0",
+    "heroicons": "^0.4.2",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
