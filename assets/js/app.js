@@ -6,6 +6,8 @@ import "../css/app.scss";
 // Import icons for sprite-loader
 // navbar brand icon
 import "../node_modules/@mdi/svg/svg/skull-crossbones.svg";
+// x/close for alerts etc
+import "../node_modules/bootstrap-icons/icons/x.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -24,15 +26,20 @@ import { LiveSocket } from "phoenix_live_view";
 // Bootstrap v5 js imports
 import "bootstrap/js/dist/collapse";
 import "bootstrap/js/dist/dropdown";
+import "bootstrap/js/dist/alert";
 // Boostrap helpers
-import "./_hamburger";
+import "./_hamburger-helper";
+import { AlertRemover } from "./_alert-remover";
 
 // LiveSocket setup
+let Hooks = {};
+Hooks.AlertRemover = AlertRemover;
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 let liveSocket = new LiveSocket("/live", Socket, {
   params: { _csrf_token: csrfToken },
+  hooks: Hooks,
 });
 
 // Show progress bar on live navigation and form submits

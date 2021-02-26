@@ -1,4 +1,4 @@
-<li class="nav-item dropdown" phx-update="ignore">
+<li class="nav-item dropdown">
 
   <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
     <%= @current_user && "Account" || "Welcome" %>

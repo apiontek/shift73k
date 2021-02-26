@@ -1,11 +1,17 @@
 <main role="main" class="container">
-  <p class="alert alert-info" role="alert"
-    phx-click="lv:clear-flash"
-    phx-value-key="info"><%= live_flash(@flash, :info) %></p>
 
-  <p class="alert alert-danger" role="alert"
-    phx-click="lv:clear-flash"
-    phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+  <%# liveview flash alerts: %>
+  <div class="container">
+    <%= for {kind, class} <- alert_kinds() do %>
+      <%= if flash_content = live_flash(@flash, kind) do %>
+        <div class="<%= class %> alert-dismissible fade show" role="alert" id="lv-alert-<%= kind %>" phx-hook="AlertRemover" data-key="<%= kind %>">
+          <%= flash_content %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 
   <%= @inner_content %>
+
 </main>

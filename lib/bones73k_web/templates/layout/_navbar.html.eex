@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
   <div class="container">
 
     <%= link to: Routes.page_path(@conn, :index), class: "navbar-brand py-0 fs-4" do %>
@@ -12,7 +12,9 @@
       </span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent" phx-update="ignore">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <%# nav LEFT items %>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
         <li class="nav-item">
@@ -35,7 +37,7 @@
           </li>
         <% end %>
 
-        <li class="nav-item dropdown" phx-update="ignore">
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownExample" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownExample">
             <li><a class="dropdown-item" href="#">Action</a></li>
@@ -47,6 +49,7 @@
 
       </ul>
 
+      <%# nav RIGHT items %>
       <ul class="navbar-nav">
 
         <%= render "navbar/_user_menu.html", assigns %>
