@@ -81,6 +81,9 @@ defmodule Bones73kWeb.Router do
     get("/users/confirm", UserConfirmationController, :new)
     post("/users/confirm", UserConfirmationController, :create)
     get("/users/confirm/:token", UserConfirmationController, :confirm)
+
+    # Special non-live page for testing only
+    get("/other", OtherController, :index)
   end
 
   scope "/", Bones73kWeb do
