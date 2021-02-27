@@ -9,26 +9,30 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+alias Bones73k.Accounts
 
 {:ok, admin} =
-  Bones73k.Accounts.register_admin(%{
+  Accounts.register_user(%{
     email: "admin@company.com",
     password: "123456789abc",
-    password_confirmation: "123456789abc"
+    password_confirmation: "123456789abc",
+    role: Accounts.registration_role()
   })
 
 {:ok, user_1} =
-  Bones73k.Accounts.register_user(%{
+  Accounts.register_user(%{
     email: "user1@company.com",
     password: "123456789abc",
-    password_confirmation: "123456789abc"
+    password_confirmation: "123456789abc",
+    role: Accounts.registration_role()
   })
 
 {:ok, user_2} =
-  Bones73k.Accounts.register_user(%{
+  Accounts.register_user(%{
     email: "user2@company.com",
     password: "123456789abc",
-    password_confirmation: "123456789abc"
+    password_confirmation: "123456789abc",
+    role: Accounts.registration_role()
   })
 
 Enum.each(1..10, fn i ->

@@ -5,8 +5,13 @@ defmodule Bones73k.Accounts.User do
 
   defenum(RolesEnum, :role, [
     :user,
+    :manager,
     :admin
   ])
+
+  @max_email 254
+  @min_password 6
+  @max_password 80
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -19,6 +24,10 @@ defmodule Bones73k.Accounts.User do
     timestamps()
   end
 
+  def max_email, do: @max_email
+  def min_password, do: @min_password
+  def max_password, do: @max_password
+
   @doc """
   A user changeset for registration.
 
@@ -26,53 +35,71 @@ defmodule Bones73k.Accounts.User do
   Otherwise databases may truncate the email without warnings, which
   could lead to unpredictable or insecure behaviour. Long passwords may
   also be very expensive to hash for certain algorithms.
+
+  ## Options
+
+    * `:hash_password` - Hashes the password so it can be stored securely
+      in the database and ensures the password field is cleared to prevent
+      leaks in the logs. If password hashing is not needed and clearing the
+      password field is not desired (like when using this changeset for
+      validations on a LiveView form), this option can be set to `false`.
+      Defaults to `true`.
   """
-  def registration_changeset(user, attrs) do
+  def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :role])
+    |> validate_role()
     |> validate_email()
-    |> validate_password()
+    |> validate_password(opts)
   end
 
-  @doc """
-  A user changeset for registering admins.
-  """
-  def admin_registration_changeset(user, attrs) do
-    user
-    |> registration_changeset(attrs)
-    |> prepare_changes(&set_admin_role/1)
+  defp role_validator(:role, role) do
+    (RolesEnum.valid_value?(role) && []) || [role: "invalid user role"]
+  end
+
+  defp validate_role(changeset) do
+    changeset
+    |> validate_required([:role])
+    |> validate_change(:role, &role_validator/2)
+  end
+
+  defp validate_email_format(changeset) do
+    r_email = ~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-z0-9-]+(\.[a-z0-9-]+)*$/i
+
+    changeset
+    |> validate_required([:email])
+    |> validate_format(:email, r_email, message: "must be a valid email address")
+    |> validate_length(:email, max: @max_email)
   end
 
   defp validate_email(changeset) do
     changeset
-    |> validate_required([:email])
-    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
-    |> validate_length(:email, max: 160)
+    |> validate_email_format()
     |> unsafe_validate_unique(:email, Bones73k.Repo)
     |> unique_constraint(:email)
   end
 
-  defp validate_password(changeset) do
+  defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 80)
+    |> validate_length(:password, min: @min_password, max: @max_password)
     # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
     # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
-    |> prepare_changes(&hash_password/1)
+    |> maybe_hash_password(opts)
   end
 
-  defp hash_password(changeset) do
+  defp maybe_hash_password(changeset, opts) do
+    hash_password? = Keyword.get(opts, :hash_password, true)
     password = get_change(changeset, :password)
 
-    changeset
-    |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
-    |> delete_change(:password)
-  end
-
-  defp set_admin_role(changeset) do
-    changeset
-    |> put_change(:role, :admin)
+    if hash_password? && password && changeset.valid? do
+      changeset
+      |> put_change(:hashed_password, Bcrypt.hash_pwd_salt(password))
+      |> delete_change(:password)
+    else
+      changeset
+    end
   end
 
   @doc """
@@ -93,11 +120,11 @@ defmodule Bones73k.Accounts.User do
   @doc """
   A user changeset for changing the password.
   """
-  def password_changeset(user, attrs) do
+  def password_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:password])
     |> validate_confirmation(:password, message: "does not match password")
-    |> validate_password()
+    |> validate_password(opts)
   end
 
   @doc """

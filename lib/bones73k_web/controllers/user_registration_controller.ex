@@ -6,12 +6,15 @@ defmodule Bones73kWeb.UserRegistrationController do
   alias Bones73kWeb.UserAuth
 
   def new(conn, _params) do
-    changeset = Accounts.change_user_registration(%User{})
+    changeset = Accounts.change_user_registration(%User{}, %{role: Accounts.registration_role()})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"user" => user_params}) do
-    case Accounts.register_user(user_params) do
+    user_params
+    |> Map.put_new("role", Accounts.registration_role())
+    |> Accounts.register_user()
+    |> case do
       {:ok, user} ->
         %Bamboo.Email{} =
           Accounts.deliver_user_confirmation_instructions(

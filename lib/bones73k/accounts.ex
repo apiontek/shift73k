@@ -11,6 +11,19 @@ defmodule Bones73k.Accounts do
   ## Database getters
 
   @doc """
+  Returns the list of users.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}, ...]
+
+  """
+  def list_users do
+    Repo.all(User)
+  end
+
+  @doc """
   Gets a user by email.
 
   ## Examples
@@ -60,6 +73,22 @@ defmodule Bones73k.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc """
+  Gets a single user.
+
+  Returns nil if the User does not exist.
+
+  ## Examples
+
+      iex> get_user(123)
+      %User{}
+
+      iex> get_user(456)
+      nil
+
+  """
+  def get_user(id), do: Repo.get(User, id)
+
   ## User registration
 
   @doc """
@@ -81,22 +110,11 @@ defmodule Bones73k.Accounts do
   end
 
   @doc """
-  Registers an admin.
-
-  ## Examples
-
-      iex> register_admin(%{field: value})
-      {:ok, %User{}}
-
-      iex> register_admin(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
+  Returns role for user registration. First user to register gets :admin role.
+  Following users get :user role. Used by registration controller/liveview.
+  Admins can choose role for new users they create, and modify other uses.
   """
-  def register_admin(attrs) do
-    %User{}
-    |> User.admin_registration_changeset(attrs)
-    |> Repo.insert()
-  end
+  def registration_role, do: (Repo.exists?(User) && :user) || :admin
 
   def logout_user(%User{} = user) do
     # Delete all user tokens
