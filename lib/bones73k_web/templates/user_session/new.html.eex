@@ -7,7 +7,7 @@
   </h3>
   <p class="lead">Who goes there?</p>
 
-  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
+  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: "needs-validation", novalidate: true], fn f -> %>
     <%= if @error_message do %>
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <%= @error_message %>
@@ -22,7 +22,11 @@
       </span>
       <%= email_input f, :email,
           class: "form-control",
-          required: true %>
+          placeholder: "e.g., babka@73k.us",
+          maxlength: User.max_email,
+          required: true
+        %>
+      <span class="invalid-feedback">must be a valid email address</span>
     </div>
 
     <%= label f, :password, class: "form-label" %>
@@ -32,7 +36,9 @@
       </span>
       <%= password_input f, :password,
           class: "form-control",
-          required: true %>
+          required: true
+        %>
+      <span class="invalid-feedback">password is required</span>
     </div>
 
     <div class="form-check mb-3">
