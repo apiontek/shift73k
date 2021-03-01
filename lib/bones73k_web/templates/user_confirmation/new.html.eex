@@ -1,15 +1,40 @@
-<h1>Resend confirmation instructions</h1>
+<div class="row justify-content-center">
+  <div class="col-sm-9 col-md-7 col-lg-5 col-xl-4 ">
 
-<%= form_for :user, Routes.user_confirmation_path(@conn, :create), fn f -> %>
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
+  <h3>
+    <%= icon_div @conn, "bi-arrow-repeat", [class: "icon baseline"] %>
+    Resend confirmation instructions
+  </h3>
+  <p class="lead">We'll send you another email with a link to confirm your email address.</p>
 
-  <div>
-    <%= submit "Resend confirmation instructions" %>
+  <%= form_for :user, Routes.user_confirmation_path(@conn, :create), [class: "needs-validation", novalidate: true], fn f -> %>
+
+    <%= label f, :email, class: "form-label" %>
+    <div class="input-group has-validation mb-3">
+      <span class="input-group-text">
+        <%= icon_div @conn, "bi-at", [class: "icon fs-5"] %>
+      </span>
+      <%= email_input f, :email,
+          value: @current_user && @current_user.email || "",
+          placeholder: "e.g., babka@73k.us",
+          class: "form-control",
+          maxlength: User.max_email,
+          required: true,
+          autofocus: !@current_user
+        %>
+      <span class="invalid-feedback">must be a valid email address</span>
+    </div>
+
+    <div class="mb-3">
+      <%= submit "Resend confirmation instructions", class: "btn btn-primary" %>
+    </div>
+
+  <% end %>
+
+  <p>
+    <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+    <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
+  </p>
+
   </div>
-<% end %>
-
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
+</div>

@@ -15,7 +15,7 @@ import "../node_modules/bootstrap-icons/icons/box-arrow-right.svg"; // log out
 import "../node_modules/bootstrap-icons/icons/at.svg";
 import "../node_modules/bootstrap-icons/icons/key.svg";
 import "../node_modules/bootstrap-icons/icons/key-fill.svg";
-import "../node_modules/bootstrap-icons/icons/envelope.svg";
+import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
