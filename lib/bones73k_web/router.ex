@@ -95,7 +95,6 @@ defmodule Bones73kWeb.Router do
     delete("/users/log_out", UserSessionController, :delete)
     # TODO: understanding/testing force_logout?
     get("/users/force_logout", UserSessionController, :force_logout)
-    # TODO:
     get("/users/confirm", UserConfirmationController, :new)
     post("/users/confirm", UserConfirmationController, :create)
     get("/users/confirm/:token", UserConfirmationController, :confirm)
