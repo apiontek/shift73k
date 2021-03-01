@@ -18,11 +18,22 @@ defmodule Bones73kWeb.Router do
   end
 
   pipeline :user do
-    plug(EnsureRolePlug, [:admin, :user])
+    plug(EnsureRolePlug, [:admin, :manager, :user])
+  end
+
+  pipeline :manager do
+    plug(EnsureRolePlug, [:admin, :manager])
   end
 
   pipeline :admin do
     plug(EnsureRolePlug, :admin)
+  end
+
+  scope "/", Bones73kWeb do
+    pipe_through [:browser]
+
+    live "/", PageLive, :index
+    get "/other", OtherController, :index
   end
 
   # Other scopes may use custom stacks.
@@ -46,15 +57,18 @@ defmodule Bones73kWeb.Router do
     end
   end
 
-  ## Authentication routes
-
   scope "/", Bones73kWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
 
+    # # liveview user auth routes
+    # live "/users/reset_password", UserLive.ResetPassword, :new
+    # live "/users/reset_password/:token", UserLive.ResetPassword, :edit
+
+    # original user auth routes from phx.gen.auth
     get("/users/register", UserRegistrationController, :new)
-    post("/users/register", UserRegistrationController, :create)
     get("/users/log_in", UserSessionController, :new)
     post("/users/log_in", UserSessionController, :create)
+    # TODO:
     get("/users/reset_password", UserResetPasswordController, :new)
     post("/users/reset_password", UserResetPasswordController, :create)
     get("/users/reset_password/:token", UserResetPasswordController, :edit)
@@ -64,26 +78,27 @@ defmodule Bones73kWeb.Router do
   scope "/", Bones73kWeb do
     pipe_through([:browser, :require_authenticated_user])
 
+    # # liveview user settings
+    # live "/users/settings", UserLive.Settings, :edit
+
+    # original user routes from phx.gen.auth
+    # TODO:
     get("/users/settings", UserSettingsController, :edit)
     put("/users/settings/update_password", UserSettingsController, :update_password)
     put("/users/settings/update_email", UserSettingsController, :update_email)
     get("/users/settings/confirm_email/:token", UserSettingsController, :confirm_email)
-
-    # This line was moved
-    live("/", PageLive, :index)
   end
 
   scope "/", Bones73kWeb do
     pipe_through([:browser])
 
-    get("/users/force_logout", UserSessionController, :force_logout)
     delete("/users/log_out", UserSessionController, :delete)
+    # TODO: understanding/testing force_logout?
+    get("/users/force_logout", UserSessionController, :force_logout)
+    # TODO:
     get("/users/confirm", UserConfirmationController, :new)
     post("/users/confirm", UserConfirmationController, :create)
     get("/users/confirm/:token", UserConfirmationController, :confirm)
-
-    # Special non-live page for testing only
-    get("/other", OtherController, :index)
   end
 
   scope "/", Bones73kWeb do

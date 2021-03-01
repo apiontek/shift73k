@@ -3,7 +3,7 @@ defmodule Bones73kWeb.PageLive do
 
   @impl true
   def mount(_params, session, socket) do
-    socket = assign_defaults(session, socket)
+    socket = assign_defaults(socket, session)
     {:ok, assign(socket, query: "", results: %{})}
   end
 

@@ -1,15 +1,17 @@
 <main role="main" class="container">
 
   <%# liveview flash alerts: %>
-  <div class="container">
-    <%= for {kind, color} <- alert_kinds() do %>
-      <%= if flash_content = live_flash(@flash, kind) do %>
-        <div class="alert alert-<%= color %> alert-dismissible fade show" role="alert" id="lv-alert-<%= kind %>" phx-hook="AlertRemover" data-key="<%= kind %>">
-          <%= flash_content %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+  <div class="row justify-content-center">
+    <div class="col-md-11 col-lg-9 col-xl-8 ">
+      <%= for {kind, color} <- alert_kinds() do %>
+        <%= if flash_content = live_flash(@flash, kind) do %>
+          <div class="alert alert-<%= color %> alert-dismissible fade show" role="alert" id="lv-alert-<%= kind %>" phx-hook="AlertRemover" data-key="<%= kind %>">
+            <%= flash_content %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% end %>
       <% end %>
-    <% end %>
+    </div>
   </div>
 
   <%= @inner_content %>

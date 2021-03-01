@@ -1,33 +1,8 @@
 defmodule Bones73kWeb.UserRegistrationController do
   use Bones73kWeb, :controller
-
-  alias Bones73k.Accounts
-  alias Bones73k.Accounts.User
-  alias Bones73kWeb.UserAuth
+  import Phoenix.LiveView.Controller
 
   def new(conn, _params) do
-    changeset = Accounts.change_user_registration(%User{}, %{role: Accounts.registration_role()})
-    render(conn, "new.html", changeset: changeset)
-  end
-
-  def create(conn, %{"user" => user_params}) do
-    user_params
-    |> Map.put_new("role", Accounts.registration_role())
-    |> Accounts.register_user()
-    |> case do
-      {:ok, user} ->
-        %Bamboo.Email{} =
-          Accounts.deliver_user_confirmation_instructions(
-            user,
-            &Routes.user_confirmation_url(conn, :confirm, &1)
-          )
-
-        conn
-        |> put_flash(:info, "User created successfully.")
-        |> UserAuth.log_in_user(user)
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
+    live_render(conn, Bones73kWeb.UserLive.Registration)
   end
 end

@@ -8,13 +8,60 @@ defmodule Bones73kWeb.ErrorHelpers do
   @doc """
   Generates tag for inlined form input errors.
   """
-  def error_tag(form, field) do
-    Enum.map(Keyword.get_values(form.errors, field), fn error ->
-      content_tag(:span, translate_error(error),
-        class: "invalid-feedback",
-        phx_feedback_for: input_id(form, field)
-      )
-    end)
+  def error_tag(form, field, opts \\ []) do
+    opts = error_opts(form, field, opts)
+
+    form.errors
+    |> Keyword.get_values(field)
+    |> Enum.map(fn error -> content_tag(:span, translate_error(error), opts) end)
+  end
+
+  defp error_opts(form, field, opts) do
+    append = "invalid-feedback"
+    input_id = input_id(form, field)
+
+    opts
+    |> Keyword.put_new(:id, error_id(input_id))
+    |> Keyword.put_new(:phx_feedback_for, input_id)
+    |> Keyword.update(:class, append, fn c -> "#{append} #{c}" end)
+  end
+
+  def error_id(%Phoenix.HTML.Form{} = form, field), do: input_id(form, field) |> error_id()
+  def error_id(input_id) when is_binary(input_id), do: "#{input_id}_feedback"
+
+  def input_class(form, field, classes \\ "") do
+    case field_status(form, field) do
+      :ok -> "#{classes} is-valid"
+      :error -> "#{classes} is-invalid"
+      _ -> classes
+    end
+  end
+
+  defp field_status(form, field) do
+    case field_has_data?(form, field) do
+      true ->
+        form.errors
+        |> Keyword.get_values(field)
+        |> Enum.empty?()
+        |> case do
+          true -> :ok
+          false -> :error
+        end
+
+      false ->
+        :default
+    end
+  end
+
+  defp field_has_data?(form, field) when is_atom(field),
+    do: field_has_data?(form, Atom.to_string(field))
+
+  defp field_has_data?(form, field) when is_binary(field) do
+    case Map.get(form.params, field) do
+      nil -> false
+      "" -> false
+      _ -> true
+    end
   end
 
   @doc """

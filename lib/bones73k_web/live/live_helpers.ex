@@ -2,9 +2,20 @@ defmodule Bones73kWeb.LiveHelpers do
   import Phoenix.LiveView
   alias Bones73k.Accounts
   alias Bones73k.Accounts.User
-  alias Bones73kWeb.Router.Helpers, as: Routes
   alias Bones73kWeb.UserAuth
   import Phoenix.LiveView.Helpers
+
+  @doc """
+  Performs the {:noreply, socket} for a given socket.
+  This helps make the noreply pipeable
+  """
+  def live_noreply(socket), do: {:noreply, socket}
+
+  @doc """
+  Performs the {:ok, socket} for a given socket.
+  This helps make the ok reply pipeable
+  """
+  def live_okreply(socket), do: {:ok, socket}
 
   @doc """
   Renders a component inside the `Bones73kWeb.ModalComponent` component.
@@ -26,28 +37,21 @@ defmodule Bones73kWeb.LiveHelpers do
     live_component(socket, Bones73kWeb.ModalComponent, modal_opts)
   end
 
-  def assign_defaults(session, socket) do
+  @doc """
+  Loads default assigns for liveviews
+  """
+  def assign_defaults(socket, session) do
     Bones73kWeb.Endpoint.subscribe(UserAuth.pubsub_topic())
-
-    socket =
-      assign_new(socket, :current_user, fn ->
-        find_current_user(session)
-      end)
-
-    case socket.assigns.current_user do
-      %User{} ->
-        socket
-
-      _other ->
-        socket
-        |> put_flash(:error, "You must log in to access this page.")
-        |> redirect(to: Routes.user_session_path(socket, :new))
-    end
+    assign_current_user(socket, session)
   end
 
-  defp find_current_user(session) do
+  # For liveviews, ensures current_user is in socket assigns.
+  def assign_current_user(socket, session) do
     with user_token when not is_nil(user_token) <- session["user_token"],
-         %User{} = user <- Accounts.get_user_by_session_token(user_token),
-         do: user
+         %User{} = user <- Accounts.get_user_by_session_token(user_token) do
+      assign(socket, :current_user, user)
+    else
+      _ -> socket
+    end
   end
 end

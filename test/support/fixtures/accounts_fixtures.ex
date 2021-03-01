@@ -23,10 +23,11 @@ defmodule Bones73k.AccountsFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(%{
+        role: :admin,
         email: unique_user_email(),
         password: valid_user_password()
       })
-      |> Bones73k.Accounts.register_admin()
+      |> Bones73k.Accounts.register_user()
 
     user
   end
@@ -38,5 +39,16 @@ defmodule Bones73k.AccountsFixtures do
     %Bamboo.Email{} = email = fun.(&"[TOKEN]#{&1}[TOKEN]")
     [_, token, _] = String.split(email.text_body, "[TOKEN]")
     token
+  end
+
+  def login_params_token(user, return_path) do
+    Phoenix.Token.encrypt(Bones73kWeb.Endpoint, "login_params", %{
+      user_id: user.id,
+      user_return_to: return_path,
+      messages: [
+        success: "A message of success!",
+        info: "Some information as well."
+      ]
+    })
   end
 end

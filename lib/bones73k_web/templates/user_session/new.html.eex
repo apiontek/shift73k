@@ -1,27 +1,55 @@
-<h1>Log in</h1>
+<div class="row justify-content-center">
+  <div class="col-sm-9 col-md-7 col-lg-5 col-xl-4 ">
 
-<%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
-  <%= if @error_message do %>
-    <div class="alert alert-danger">
-      <p><%= @error_message %></p>
+  <h3>
+    <%= icon_div @conn, "bi-box-arrow-in-left", [class: "icon baseline"] %>
+    Log in
+  </h3>
+  <p class="lead">Who goes there?</p>
+
+  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
+    <%= if @error_message do %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= @error_message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+
+    <%= label f, :email, class: "form-label" %>
+    <div class="input-group has-validation mb-3">
+      <span class="input-group-text">
+        <%= icon_div @conn, "bi-at", [class: "icon fs-5"] %>
+      </span>
+      <%= email_input f, :email,
+          class: "form-control",
+          required: true %>
     </div>
+
+    <%= label f, :password, class: "form-label" %>
+    <div class="input-group has-validation mb-3">
+      <span class="input-group-text">
+        <%= icon_div @conn, "bi-key", [class: "icon fs-5"] %>
+      </span>
+      <%= password_input f, :password,
+          class: "form-control",
+          required: true %>
+    </div>
+
+    <div class="form-check mb-3">
+      <%= checkbox f, :remember_me, class: "form-check-input" %>
+      <%= label f, :remember_me, "Keep me logged in for 60 days", class: "form-check-label" %>
+    </div>
+
+    <div class="mb-3">
+      <%= submit "Log in", class: "btn btn-primary" %>
+    </div>
+
   <% end %>
 
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
+  <p>
+    <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+    <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
+  </p>
 
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-
-  <%= label f, :remember_me, "Keep me logged in for 60 days" %>
-  <%= checkbox f, :remember_me %>
-
-  <div>
-    <%= submit "Log in" %>
   </div>
-<% end %>
-
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
-</p>
+</div>

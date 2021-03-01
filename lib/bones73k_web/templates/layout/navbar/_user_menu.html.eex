@@ -1,7 +1,8 @@
 <li class="nav-item dropdown">
 
   <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
-    <%= @current_user && "Account" || "Welcome" %>
+    <%= icon_div @conn, "bi-person-circle", [class: "icon baseline me-1"] %>
+    <%= @current_user && "Hello!" || "Hello?" %>
   </a>
 
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUserMenu">
@@ -10,13 +11,32 @@
 
       <li><%= content_tag :span, @current_user.email, class: "dropdown-item-text" %></li>
       <li><hr class="dropdown-divider"></li>
-      <li><%= link "Settings", nav_link_opts(@conn, to: Routes.user_settings_path(@conn, :edit), class: "dropdown-item") %></li>
-      <li><%= link "Log out", nav_link_opts(@conn, to: Routes.user_session_path(@conn, :delete), method: :delete, class: "dropdown-item") %></li>
+      <li>
+        <%= link nav_link_opts(@conn, to: Routes.user_settings_path(@conn, :edit), class: "dropdown-item") do %>
+          Settings
+        <% end %>
+      </li>
+      <li>
+        <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :delete), method: :delete, class: "dropdown-item") do %>
+          <%= icon_div @conn, "bi-box-arrow-right", [class: "icon baseline me-1"] %>
+          Log out
+        <% end %>
+      </li>
 
     <% else %>
 
-      <li><%= link "Register", nav_link_opts(@conn, to: Routes.user_registration_path(@conn, :new), class: "dropdown-item") %></li>
-      <li><%= link "Log in", nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "dropdown-item") %></li>
+      <li>
+        <%= link nav_link_opts(@conn, to: Routes.user_registration_path(@conn, :new), class: "dropdown-item") do %>
+          <%= icon_div @conn, "bi-person-plus", [class: "icon baseline me-1"] %>
+          Register
+        <% end %>
+      </li>
+      <li>
+        <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "dropdown-item") do %>
+          <%= icon_div @conn, "bi-box-arrow-in-left", [class: "icon baseline me-1"] %>
+          Log in
+        <% end %>
+      </li>
 
     <% end %>
   </ul>
