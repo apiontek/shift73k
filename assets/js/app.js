@@ -5,9 +5,16 @@ import "../css/app.scss";
 
 // Import icons for sprite-loader
 // navbar brand icon
-import "../node_modules/@mdi/svg/svg/skull-crossbones.svg";
-// x/close for alerts etc
-import "../node_modules/bootstrap-icons/icons/x.svg";
+import "../node_modules/@mdi/svg/svg/skull-crossbones.svg"; // brand
+// menus etc
+import "../node_modules/bootstrap-icons/icons/person-circle.svg"; // accounts menu
+import "../node_modules/bootstrap-icons/icons/person-plus.svg"; // new user / register
+import "../node_modules/bootstrap-icons/icons/box-arrow-in-left.svg"; // log in
+import "../node_modules/bootstrap-icons/icons/box-arrow-right.svg"; // log out
+// forms etc
+import "../node_modules/bootstrap-icons/icons/at.svg";
+import "../node_modules/bootstrap-icons/icons/key.svg";
+import "../node_modules/bootstrap-icons/icons/key-fill.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
