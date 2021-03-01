@@ -70,6 +70,9 @@ defmodule Bones73kWeb do
     quote do
       use Phoenix.LiveComponent
 
+      # Import General Custom Live Helpers
+      import Bones73kWeb.LiveHelpers
+
       unquote(view_helpers())
     end
   end
