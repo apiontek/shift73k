@@ -4,12 +4,6 @@ defmodule Bones73kWeb.UserLive.Registration do
   alias Bones73k.Accounts
   alias Bones73k.Accounts.User
 
-  @messages [
-    success: "Welcome! New accout created.",
-    info:
-      "Some features may be unavailable until you confirm your email. Check your inbox for instructions."
-  ]
-
   @impl true
   def mount(_params, session, socket) do
     socket
@@ -25,7 +19,11 @@ defmodule Bones73kWeb.UserLive.Registration do
     %{
       user_id: nil,
       user_return_to: Map.get(session, "user_return_to", "/"),
-      messages: @messages
+      messages: [
+        success: "Welcome! Your new account has been created, and you've been logged in.",
+        info:
+          "Some features may be unavailable until you confirm your email address. Check your inbox for instructions."
+      ]
     }
   end
 

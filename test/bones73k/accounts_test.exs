@@ -58,19 +58,19 @@ defmodule Bones73k.AccountsTest do
     end
 
     test "validates email and password when given" do
-      {:error, changeset} = Accounts.register_user(%{email: "not valid", password: "not valid"})
-
-      assert %{
-               email: ["must have the @ sign and no spaces"],
-               password: ["should be at least 12 character(s)"]
-             } = errors_on(changeset)
+      {:error, changeset} = Accounts.register_user(%{email: "not valid", password: "2shrt"})
+      pw_err = "should be at least #{User.min_password()} character(s)"
+      assert "must be a valid email address" in errors_on(changeset).email
+      assert pw_err in errors_on(changeset).password
     end
 
     test "validates maximum values for email and password for security" do
-      too_long = String.duplicate("db", 100)
+      too_long = "#{String.duplicate("db", 300)}@example.com"
       {:error, changeset} = Accounts.register_user(%{email: too_long, password: too_long})
-      assert "should be at most 160 character(s)" in errors_on(changeset).email
-      assert "should be at most 80 character(s)" in errors_on(changeset).password
+      em_err = "should be at most #{User.max_email()} character(s)"
+      pw_err = "should be at most #{User.max_password()} character(s)"
+      assert em_err in errors_on(changeset).email
+      assert pw_err in errors_on(changeset).password
     end
 
     test "validates email uniqueness" do
@@ -92,16 +92,22 @@ defmodule Bones73k.AccountsTest do
       assert is_nil(user.password)
       assert user.role == :user
     end
-  end
 
-  describe "register_admin/1" do
-    test "registers users with a hashed password and sets role to :admin" do
+    test "registers different role :manager and sets role to :manager" do
       email = unique_user_email()
-      {:ok, user} = Accounts.register_admin(%{email: email, password: valid_user_password()})
+      attrs = %{email: email, role: :manager, password: valid_user_password()}
+      {:ok, user} = Accounts.register_user(attrs)
       assert user.email == email
       assert is_binary(user.hashed_password)
       assert is_nil(user.confirmed_at)
       assert is_nil(user.password)
+      assert user.role == :manager
+    end
+
+    test "registers different role :admin and sets role to :admin" do
+      email = unique_user_email()
+      attrs = %{email: email, role: :admin, password: valid_user_password()}
+      {:ok, user} = Accounts.register_user(attrs)
       assert user.role == :admin
     end
   end
@@ -109,7 +115,7 @@ defmodule Bones73k.AccountsTest do
   describe "change_user_registration/2" do
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Accounts.change_user_registration(%User{})
-      assert changeset.required == [:password, :email]
+      assert changeset.required == [:password, :email, :role]
     end
   end
 
@@ -126,45 +132,42 @@ defmodule Bones73k.AccountsTest do
     end
 
     test "requires email to change", %{user: user} do
-      {:error, changeset} = Accounts.apply_user_email(user, valid_user_password(), %{})
+      attrs = %{"current_password" => valid_user_password()}
+      {:error, changeset} = Accounts.apply_user_email(user, attrs)
       assert %{email: ["did not change"]} = errors_on(changeset)
     end
 
     test "validates email", %{user: user} do
-      {:error, changeset} =
-        Accounts.apply_user_email(user, valid_user_password(), %{email: "not valid"})
-
-      assert %{email: ["must have the @ sign and no spaces"]} = errors_on(changeset)
+      attrs = %{"current_password" => valid_user_password(), "email" => "not valid"}
+      {:error, changeset} = Accounts.apply_user_email(user, attrs)
+      assert %{email: ["must be a valid email address"]} = errors_on(changeset)
     end
 
     test "validates maximum value for email for security", %{user: user} do
-      too_long = String.duplicate("db", 100)
-
-      {:error, changeset} =
-        Accounts.apply_user_email(user, valid_user_password(), %{email: too_long})
-
-      assert "should be at most 160 character(s)" in errors_on(changeset).email
+      too_long = "#{String.duplicate("db", 300)}@example.com"
+      attrs = %{"current_password" => valid_user_password(), "email" => too_long}
+      {:error, changeset} = Accounts.apply_user_email(user, attrs)
+      em_err = "should be at most #{User.max_email()} character(s)"
+      assert em_err in errors_on(changeset).email
     end
 
     test "validates email uniqueness", %{user: user} do
       %{email: email} = user_fixture()
-
-      {:error, changeset} =
-        Accounts.apply_user_email(user, valid_user_password(), %{email: email})
-
+      attrs = %{"current_password" => valid_user_password(), "email" => email}
+      {:error, changeset} = Accounts.apply_user_email(user, attrs)
       assert "has already been taken" in errors_on(changeset).email
     end
 
     test "validates current password", %{user: user} do
-      {:error, changeset} =
-        Accounts.apply_user_email(user, "invalid", %{email: unique_user_email()})
-
+      attrs = %{"current_password" => "invalid", "email" => unique_user_email()}
+      {:error, changeset} = Accounts.apply_user_email(user, attrs)
       assert %{current_password: ["is not valid"]} = errors_on(changeset)
     end
 
     test "applies the email without persisting it", %{user: user} do
       email = unique_user_email()
-      {:ok, user} = Accounts.apply_user_email(user, valid_user_password(), %{email: email})
+      attrs = %{"current_password" => valid_user_password(), "email" => email}
+      {:ok, user} = Accounts.apply_user_email(user, attrs)
       assert user.email == email
       assert Accounts.get_user!(user.id).email != email
     end
@@ -245,52 +248,47 @@ defmodule Bones73k.AccountsTest do
     end
 
     test "validates password", %{user: user} do
-      {:error, changeset} =
-        Accounts.update_user_password(user, valid_user_password(), %{
-          password: "not valid",
-          password_confirmation: "another"
-        })
+      attrs = %{
+        "current_password" => valid_user_password(),
+        "password" => "2shrt",
+        "password_confirmation" => "another"
+      }
 
-      assert %{
-               password: ["should be at least 12 character(s)"],
-               password_confirmation: ["does not match password"]
-             } = errors_on(changeset)
+      {:error, changeset} = Accounts.update_user_password(user, attrs)
+      pw_err = "should be at least #{User.min_password()} character(s)"
+      conf_err = "does not match password"
+      assert pw_err in errors_on(changeset).password
+      assert conf_err in errors_on(changeset).password_confirmation
     end
 
     test "validates maximum values for password for security", %{user: user} do
-      too_long = String.duplicate("db", 100)
+      attrs = %{
+        "current_password" => valid_user_password(),
+        "password" => String.duplicate("db", 100)
+      }
 
-      {:error, changeset} =
-        Accounts.update_user_password(user, valid_user_password(), %{password: too_long})
-
-      assert "should be at most 80 character(s)" in errors_on(changeset).password
+      {:error, changeset} = Accounts.update_user_password(user, attrs)
+      pw_err = "should be at most #{User.max_password()} character(s)"
+      assert pw_err in errors_on(changeset).password
     end
 
     test "validates current password", %{user: user} do
-      {:error, changeset} =
-        Accounts.update_user_password(user, "invalid", %{password: valid_user_password()})
-
+      attrs = %{"current_password" => "invalid", "password" => valid_user_password()}
+      {:error, changeset} = Accounts.update_user_password(user, attrs)
       assert %{current_password: ["is not valid"]} = errors_on(changeset)
     end
 
     test "updates the password", %{user: user} do
-      {:ok, user} =
-        Accounts.update_user_password(user, valid_user_password(), %{
-          password: "new valid password"
-        })
-
+      attrs = %{"current_password" => valid_user_password(), "password" => "new valid password"}
+      {:ok, user} = Accounts.update_user_password(user, attrs)
       assert is_nil(user.password)
       assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
     end
 
     test "deletes all tokens for the given user", %{user: user} do
       _ = Accounts.generate_user_session_token(user)
-
-      {:ok, _} =
-        Accounts.update_user_password(user, valid_user_password(), %{
-          password: "new valid password"
-        })
-
+      attrs = %{"current_password" => valid_user_password(), "password" => "new valid password"}
+      {:ok, _} = Accounts.update_user_password(user, attrs)
       refute Repo.get_by(UserToken, user_id: user.id)
     end
   end
@@ -456,14 +454,13 @@ defmodule Bones73k.AccountsTest do
     test "validates password", %{user: user} do
       {:error, changeset} =
         Accounts.reset_user_password(user, %{
-          password: "not valid",
+          password: "2shrt",
           password_confirmation: "another"
         })
 
-      assert %{
-               password: ["should be at least 12 character(s)"],
-               password_confirmation: ["does not match password"]
-             } = errors_on(changeset)
+      pw_err = "should be at least #{User.min_password()} character(s)"
+      assert pw_err in errors_on(changeset).password
+      assert "does not match password" in errors_on(changeset).password_confirmation
     end
 
     test "validates maximum values for password for security", %{user: user} do

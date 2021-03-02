@@ -72,13 +72,9 @@ defmodule Bones73kWeb.Router do
     pipe_through([:browser, :require_authenticated_user])
 
     # # liveview user settings
-    # live "/users/settings", UserLive.Settings, :edit
+    live "/users/settings", UserLive.Settings, :edit
 
     # original user routes from phx.gen.auth
-    # TODO:
-    get("/users/settings", UserSettingsController, :edit)
-    put("/users/settings/update_password", UserSettingsController, :update_password)
-    put("/users/settings/update_email", UserSettingsController, :update_email)
     get("/users/settings/confirm_email/:token", UserSettingsController, :confirm_email)
   end
 
@@ -86,7 +82,6 @@ defmodule Bones73kWeb.Router do
     pipe_through([:browser])
 
     delete("/users/log_out", UserSessionController, :delete)
-    # TODO: understanding/testing force_logout?
     get("/users/force_logout", UserSessionController, :force_logout)
     get("/users/confirm", UserConfirmationController, :new)
     post("/users/confirm", UserConfirmationController, :create)

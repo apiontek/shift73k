@@ -15,6 +15,12 @@ defmodule Bones73kWeb.UserResetPasswordControllerTest do
       response = html_response(conn, 200)
       assert response =~ "Forgot your password?\n  </h3>"
     end
+
+    test "redirects if already logged in", %{conn: conn} do
+      to = Routes.user_reset_password_path(conn, :new)
+      conn = conn |> log_in_user(user_fixture()) |> get(to)
+      assert redirected_to(conn) == "/"
+    end
   end
 
   describe "POST /users/reset_password" do

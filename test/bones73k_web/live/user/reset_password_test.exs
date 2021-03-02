@@ -6,8 +6,7 @@ defmodule Bones73kWeb.UserLive.ResetPasswordTest do
 
   alias Bones73k.Repo
   alias Bones73k.Accounts
-  alias Bones73k.Accounts.User
-  alias Bones73k.Accounts.UserToken
+  alias Bones73k.Accounts.{User, UserToken}
 
   setup %{conn: conn} do
     user = user_fixture()
@@ -46,7 +45,7 @@ defmodule Bones73kWeb.UserLive.ResetPasswordTest do
 
     # Confirm redirected
     flash = assert_redirected(view, Routes.user_session_path(conn, :new))
-    assert flash["success"] == "Password reset successfully."
+    assert flash["info"] == "Password reset successfully."
 
     # Confirm password was updated
     assert Accounts.get_user_by_email_and_password(user.email, new_pw)

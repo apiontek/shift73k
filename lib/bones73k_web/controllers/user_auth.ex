@@ -35,10 +35,6 @@ defmodule Bones73kWeb.UserAuth do
     |> put_session(:user_token, token)
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
     |> maybe_write_remember_me_cookie(token, params)
-    |> put_flash(
-      :info,
-      raw("Welcome back, #{user.email} &mdash; you were logged in successfuly.")
-    )
     |> redirect(to: get_session(conn, :user_return_to) || signed_in_path(conn))
   end
 

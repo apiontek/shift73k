@@ -4,12 +4,6 @@ defmodule Bones73kWeb.PageLiveTest do
   import Phoenix.LiveViewTest
   import Bones73k.AccountsFixtures
 
-  test "disconnected and connected render without authentication should redirect to login page",
-       %{conn: conn} do
-    # If we don't previously log in we will be redirected to the login page
-    assert {:error, {:redirect, %{to: "/users/log_in"}}} = live(conn, "/")
-  end
-
   test "disconnected and connected render with authentication should redirect to index page", %{
     conn: conn
   } do
@@ -42,9 +36,6 @@ defmodule Bones73kWeb.PageLiveTest do
 
     conn = get(conn, "/users/force_logout")
     assert "/" = redir_path = redirected_to(conn, 302)
-    conn = get(recycle(conn), redir_path)
-
-    assert "/users/log_in" = redir_path = redirected_to(conn, 302)
     conn = get(recycle(conn), redir_path)
 
     assert html_response(conn, 200) =~

@@ -27,7 +27,7 @@ defmodule Bones73kWeb.UserLive.ResetPassword do
       {:ok, _} ->
         {:noreply,
          socket
-         |> put_flash(:success, "Password reset successfully.")
+         |> put_flash(:info, "Password reset successfully.")
          |> redirect(to: Routes.user_session_path(socket, :new))}
 
       {:error, changeset} ->

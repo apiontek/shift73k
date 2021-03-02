@@ -172,10 +172,10 @@ defmodule Bones73k.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def apply_user_email(user, password, attrs) do
+  def apply_user_email(user, %{"current_password" => curr_pw} = attrs) do
     user
     |> User.email_changeset(attrs)
-    |> User.validate_current_password(password)
+    |> User.validate_current_password(curr_pw)
     |> Ecto.Changeset.apply_action(:update)
   end
 
@@ -247,11 +247,11 @@ defmodule Bones73k.Accounts do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_user_password(user, password, attrs) do
+  def update_user_password(user, %{"current_password" => curr_pw} = attrs) do
     changeset =
       user
       |> User.password_changeset(attrs)
-      |> User.validate_current_password(password)
+      |> User.validate_current_password(curr_pw)
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, changeset)

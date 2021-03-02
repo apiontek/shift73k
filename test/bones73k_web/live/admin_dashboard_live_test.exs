@@ -52,9 +52,6 @@ defmodule Bones73kWeb.AdminDashboardLiveTest do
     assert "/" = redir_path = redirected_to(conn, 302)
     conn = get(recycle(conn), redir_path)
 
-    assert "/users/log_in" = redir_path = redirected_to(conn, 302)
-    conn = get(recycle(conn), redir_path)
-
     assert html_response(conn, 200) =~
              "You were logged out. Please login again to continue using our application."
   end

@@ -188,14 +188,11 @@ defmodule Bones73kWeb.PropertyLiveTest do
       assert_receive {:DOWN, ^ref, _, _, _}
       refute Process.alive?(index_live.pid)
 
-      # Assert our liveview was redirected, following first to /users/force_logout, then to "/", and then to "/users/log_in"
+      # Assert our liveview was redirected, following first to /users/force_logout, then to "/"
       assert_redirect(index_live, "/users/force_logout")
 
       conn = get(conn, "/users/force_logout")
       assert "/" = redir_path = redirected_to(conn, 302)
-      conn = get(recycle(conn), redir_path)
-
-      assert "/users/log_in" = redir_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redir_path)
 
       assert html_response(conn, 200) =~
@@ -336,9 +333,6 @@ defmodule Bones73kWeb.PropertyLiveTest do
 
       conn = get(conn, "/users/force_logout")
       assert "/" = redir_path = redirected_to(conn, 302)
-      conn = get(recycle(conn), redir_path)
-
-      assert "/users/log_in" = redir_path = redirected_to(conn, 302)
       conn = get(recycle(conn), redir_path)
 
       assert html_response(conn, 200) =~

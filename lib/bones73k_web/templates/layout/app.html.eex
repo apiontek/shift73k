@@ -2,7 +2,7 @@
 
   <%# phoenix flash alerts: %>
   <div class="row justify-content-center">
-    <div class="col-md-11 col-lg-9 col-xl-8 ">
+    <div class="col-md-12 col-lg-10 col-xl-9 ">
       <%= for {kind, color} <- alert_kinds() do %>
         <%= if flash_content = get_flash(@conn, kind) do %>
           <div class="alert alert-<%= color %> alert-dismissible fade show" role="alert">
