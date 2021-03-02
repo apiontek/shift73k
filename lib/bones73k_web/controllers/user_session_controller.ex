@@ -6,7 +6,6 @@ defmodule Bones73kWeb.UserSessionController do
   alias Bones73kWeb.UserAuth
 
   def new(conn, _params) do
-    # IO.inspect(conn.private, label: "session_new conn.private :")
     render(conn, "new.html", error_message: nil)
   end
 

@@ -13,7 +13,7 @@ defmodule Bones73kWeb.UserResetPasswordControllerTest do
     test "renders the reset password page", %{conn: conn} do
       conn = get(conn, Routes.user_reset_password_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Forgot your password?</h1>"
+      assert response =~ "Forgot your password?\n  </h3>"
     end
   end
 
@@ -52,9 +52,10 @@ defmodule Bones73kWeb.UserResetPasswordControllerTest do
       %{token: token}
     end
 
-    test "renders reset password", %{conn: conn, token: token} do
+    test "renders reset password with user_id in session", %{conn: conn, token: token, user: user} do
       conn = get(conn, Routes.user_reset_password_path(conn, :edit, token))
-      assert html_response(conn, 200) =~ "<h1>Reset password</h1>"
+      assert get_session(conn, "user_id") == user.id
+      assert html_response(conn, 200) =~ "Reset password\n  </h3>"
     end
 
     test "does not render reset password with invalid token", %{conn: conn} do
@@ -72,42 +73,6 @@ defmodule Bones73kWeb.UserResetPasswordControllerTest do
         end)
 
       %{token: token}
-    end
-
-    test "resets password once", %{conn: conn, user: user, token: token} do
-      conn =
-        put(conn, Routes.user_reset_password_path(conn, :update, token), %{
-          "user" => %{
-            "password" => "new valid password",
-            "password_confirmation" => "new valid password"
-          }
-        })
-
-      assert redirected_to(conn) == Routes.user_session_path(conn, :new)
-      refute get_session(conn, :user_token)
-      assert get_flash(conn, :info) =~ "Password reset successfully"
-      assert Accounts.get_user_by_email_and_password(user.email, "new valid password")
-    end
-
-    test "does not reset password on invalid data", %{conn: conn, token: token} do
-      conn =
-        put(conn, Routes.user_reset_password_path(conn, :update, token), %{
-          "user" => %{
-            "password" => "too short",
-            "password_confirmation" => "does not match"
-          }
-        })
-
-      response = html_response(conn, 200)
-      assert response =~ "<h1>Reset password</h1>"
-      assert response =~ "should be at least 12 character(s)"
-      assert response =~ "does not match password"
-    end
-
-    test "does not reset password with invalid token", %{conn: conn} do
-      conn = put(conn, Routes.user_reset_password_path(conn, :update, "oops"))
-      assert redirected_to(conn) == "/"
-      assert get_flash(conn, :error) =~ "Reset password link is invalid or it has expired"
     end
   end
 end

@@ -60,19 +60,12 @@ defmodule Bones73kWeb.Router do
   scope "/", Bones73kWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
 
-    # # liveview user auth routes
-    # live "/users/reset_password", UserLive.ResetPassword, :new
-    # live "/users/reset_password/:token", UserLive.ResetPassword, :edit
-
-    # original user auth routes from phx.gen.auth
     get("/users/register", UserRegistrationController, :new)
     get("/users/log_in", UserSessionController, :new)
     post("/users/log_in", UserSessionController, :create)
-    # TODO:
     get("/users/reset_password", UserResetPasswordController, :new)
     post("/users/reset_password", UserResetPasswordController, :create)
     get("/users/reset_password/:token", UserResetPasswordController, :edit)
-    put("/users/reset_password/:token", UserResetPasswordController, :update)
   end
 
   scope "/", Bones73kWeb do

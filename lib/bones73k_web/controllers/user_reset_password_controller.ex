@@ -1,9 +1,10 @@
 defmodule Bones73kWeb.UserResetPasswordController do
   use Bones73kWeb, :controller
+  import Phoenix.LiveView.Controller
 
   alias Bones73k.Accounts
 
-  plug(:get_user_by_reset_password_token when action in [:edit, :update])
+  plug(:get_user_by_reset_password_token when action in [:edit])
 
   def new(conn, _params) do
     render(conn, "new.html")
@@ -21,34 +22,20 @@ defmodule Bones73kWeb.UserResetPasswordController do
     conn
     |> put_flash(
       :info,
-      "If your email is in our system, you will receive instructions to reset your password shortly."
+      "If your email is in our system, you'll receive instructions to reset your password shortly."
     )
     |> redirect(to: "/")
   end
 
   def edit(conn, _params) do
-    render(conn, "edit.html", changeset: Accounts.change_user_password(conn.assigns.user))
-  end
-
-  # Do not log in the user after reset password to avoid a
-  # leaked token giving the user access to the account.
-  def update(conn, %{"user" => user_params}) do
-    case Accounts.reset_user_password(conn.assigns.user, user_params) do
-      {:ok, _} ->
-        conn
-        |> put_flash(:info, "Password reset successfully.")
-        |> redirect(to: Routes.user_session_path(conn, :new))
-
-      {:error, changeset} ->
-        render(conn, "edit.html", changeset: changeset)
-    end
+    live_render(conn, Bones73kWeb.UserLive.ResetPassword)
   end
 
   defp get_user_by_reset_password_token(conn, _opts) do
     %{"token" => token} = conn.params
 
     if user = Accounts.get_user_by_reset_password_token(token) do
-      conn |> assign(:user, user) |> assign(:token, token)
+      put_session(conn, "user_id", user.id)
     else
       conn
       |> put_flash(:error, "Reset password link is invalid or it has expired.")

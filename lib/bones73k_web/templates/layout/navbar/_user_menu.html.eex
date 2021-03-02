@@ -13,6 +13,7 @@
       <li><hr class="dropdown-divider"></li>
       <li>
         <%= link nav_link_opts(@conn, to: Routes.user_settings_path(@conn, :edit), class: "dropdown-item") do %>
+          <%= icon_div @conn, "bi-sliders", [class: "icon baseline me-1"] %>
           Settings
         <% end %>
       </li>

@@ -1,8 +1,6 @@
 defmodule Bones73kWeb.UserLive.RegistrationTest do
   use Bones73kWeb.ConnCase
 
-  # import Plug.Conn
-  # import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   import Bones73k.AccountsFixtures
 
@@ -34,10 +32,11 @@ defmodule Bones73kWeb.UserLive.RegistrationTest do
       assert html =~ "Register\n  </h3>"
       assert html =~ "must be a valid email address"
       assert html =~ "should be at least #{User.min_password()} character(s)"
+      assert html =~ "type=\"submit\" disabled=\"disabled\""
     end
 
     @tag :capture_log
-    test "creates account and sets login params_token and phx-trigger-action", %{
+    test "creates account, sets login token & phx-trigger-action", %{
       conn: conn,
       user_return_to: user_return_to
     } do

@@ -11,12 +11,16 @@ import "../node_modules/bootstrap-icons/icons/person-circle.svg"; // accounts me
 import "../node_modules/bootstrap-icons/icons/person-plus.svg"; // new user / register
 import "../node_modules/bootstrap-icons/icons/box-arrow-in-left.svg"; // log in
 import "../node_modules/bootstrap-icons/icons/box-arrow-right.svg"; // log out
+import "../node_modules/bootstrap-icons/icons/sliders.svg"; // new user / register
 // forms etc
 import "../node_modules/bootstrap-icons/icons/at.svg";
 import "../node_modules/bootstrap-icons/icons/key.svg";
 import "../node_modules/bootstrap-icons/icons/key-fill.svg";
+import "../node_modules/bootstrap-icons/icons/lock.svg";
 import "../node_modules/bootstrap-icons/icons/shield-lock.svg";
 import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg";
+import "../node_modules/bootstrap-icons/icons/door-open.svg"; // log in
+import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // brand
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

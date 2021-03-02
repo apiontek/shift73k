@@ -20,7 +20,6 @@
             class: input_class(f, :email, "form-control"),
             placeholder: "e.g., babka@73k.us",
             maxlength: User.max_email,
-            required: true,
             autofocus: true,
             phx_debounce: "blur",
             aria_describedby: error_id(f, :email)
@@ -38,7 +37,6 @@
         <%= password_input f, :password,
             value: input_value(f, :password),
             class: input_class(f, :password, "form-control"),
-            minlength: User.min_password,
             maxlength: User.max_password,
             required: true,
             phx_debounce: "200",
