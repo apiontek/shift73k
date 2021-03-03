@@ -30,37 +30,13 @@ defmodule Bones73kWeb.ErrorHelpers do
   def error_id(input_id) when is_binary(input_id), do: "#{input_id}_feedback"
 
   def input_class(form, field, classes \\ "") do
-    case field_status(form, field) do
-      :ok -> "#{classes} is-valid"
-      :error -> "#{classes} is-invalid"
-      _ -> classes
-    end
-  end
-
-  defp field_status(form, field) do
-    case field_has_data?(form, field) do
-      true ->
-        form.errors
-        |> Keyword.get_values(field)
-        |> Enum.empty?()
-        |> case do
-          true -> :ok
-          false -> :error
+    case form.source.action do
+      nil -> classes
+      _ ->
+        case Keyword.has_key?(form.errors, field) do
+          true -> "#{classes} is-invalid"
+          _ -> "#{classes} is-valid"
         end
-
-      false ->
-        :default
-    end
-  end
-
-  defp field_has_data?(form, field) when is_atom(field),
-    do: field_has_data?(form, Atom.to_string(field))
-
-  defp field_has_data?(form, field) when is_binary(field) do
-    case Map.get(form.params, field) do
-      nil -> false
-      "" -> false
-      _ -> true
     end
   end
 

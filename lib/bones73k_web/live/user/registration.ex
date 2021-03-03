@@ -30,7 +30,7 @@ defmodule Bones73kWeb.UserLive.Registration do
   @impl true
   def handle_event("validate", %{"user" => user_params}, socket) do
     cs = Accounts.change_user_registration(%User{}, user_params)
-    {:noreply, assign(socket, changeset: %{cs | action: :update})}
+    {:noreply, assign(socket, changeset: %{cs | action: :validate})}
   end
 
   @impl true

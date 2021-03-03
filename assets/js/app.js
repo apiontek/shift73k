@@ -37,17 +37,20 @@ import topbar from "topbar";
 import { LiveSocket } from "phoenix_live_view";
 
 // Bootstrap v5 js imports
+import "bootstrap/js/dist/alert";
 import "bootstrap/js/dist/collapse";
 import "bootstrap/js/dist/dropdown";
-import "bootstrap/js/dist/alert";
-// Boostrap helpers
+// Bootstrap helpers
 import "./_hamburger-helper";
 import "./_form-validity";
+// Bootstrap-liveview helpers
 import { AlertRemover } from "./_alert-remover";
+import { BsModal } from "./_bs_modal";
 
 // LiveSocket setup
 let Hooks = {};
 Hooks.AlertRemover = AlertRemover;
+Hooks.BsModal = BsModal;
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");

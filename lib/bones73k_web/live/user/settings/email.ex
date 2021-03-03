@@ -20,7 +20,7 @@ defmodule Bones73kWeb.UserLive.Settings.Email do
   @impl true
   def handle_event("validate", %{"user" => user_params}, socket) do
     cs = get_changeset(socket.assigns.current_user, user_params)
-    {:noreply, assign(socket, changeset: %{cs | action: :update})}
+    {:noreply, assign(socket, changeset: %{cs | action: :validate})}
   end
 
   # user_settings_path  GET     /users/settings/confirm_email/:token   Bones73kWeb.UserSettingsController :confirm_email

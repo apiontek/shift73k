@@ -5,12 +5,10 @@ defmodule Bones73kWeb.PropertyLive.FormComponent do
 
   @impl true
   def update(%{property: property} = assigns, socket) do
-    changeset = Properties.change_property(property)
-
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign(:changeset, changeset)}
+    socket
+    |> assign(assigns)
+    |> assign(:changeset, Properties.change_property(property))
+    |> live_okreply()
   end
 
   @impl true
@@ -30,10 +28,10 @@ defmodule Bones73kWeb.PropertyLive.FormComponent do
   defp save_property(socket, :edit, property_params) do
     case Properties.update_property(socket.assigns.property, property_params) do
       {:ok, _property} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Property updated successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
+        socket
+        |> put_flash(:info, "Property updated successfully")
+        |> push_event("modal-please-hide", %{})
+        |> live_noreply()
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -46,10 +44,10 @@ defmodule Bones73kWeb.PropertyLive.FormComponent do
 
     case Properties.create_property(property_params) do
       {:ok, _property} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Property created successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
+        socket
+        |> put_flash(:info, "Property created successfully")
+        |> push_event("modal-please-hide", %{})
+        |> live_noreply()
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

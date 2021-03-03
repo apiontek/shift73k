@@ -30,7 +30,7 @@ defmodule Bones73kWeb.UserLive.Settings.Password do
   @impl true
   def handle_event("validate", %{"user" => user_params}, socket) do
     cs = get_changeset(socket.assigns.current_user, user_params)
-    {:noreply, assign(socket, changeset: %{cs | action: :update})}
+    {:noreply, assign(socket, changeset: %{cs | action: :validate})}
   end
 
   @impl true

@@ -19,7 +19,7 @@ defmodule Bones73kWeb.UserLive.ResetPassword do
   @impl true
   def handle_event("validate", %{"user" => user_params}, socket) do
     cs = Accounts.change_user_password(socket.assigns.user, user_params)
-    {:noreply, socket |> assign(changeset: %{cs | action: :update})}
+    {:noreply, socket |> assign(changeset: %{cs | action: :validate})}
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
@@ -34,7 +34,7 @@ defmodule Bones73kWeb.UserLive.ResetPassword do
         {:noreply,
          socket
          |> put_flash(:error, "Please check the errors below.")
-         |> assign(changeset: %{changeset | action: :update})}
+         |> assign(changeset: changeset)}
     end
   end
 end

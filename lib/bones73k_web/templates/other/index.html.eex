@@ -11,27 +11,31 @@
     <div class="border-4 border-dashed border-gray-200 rounded-lg h-96"></div>
   </div> %>
     <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus dolore sunt quia aperiam sint id
-      reprehenderit? Dolore incidunt alias inventore accusantium nulla optio, ducimus eius aliquam hic, pariatur
-      voluptate distinctio.
+      Praesent velit justo, auctor ut nibh id, fermentum eleifend nunc. Cras sed purus dignissim, ornare elit et, ultrices elit. Sed quis neque consequat, laoreet ante a, hendrerit elit. Maecenas dapibus sed nulla vitae consectetur. Duis sollicitudin augue nisl, et rhoncus enim tempor at. Fusce scelerisque sollicitudin purus sit amet iaculis. Phasellus lacinia mi ut laoreet accumsan. Sed sagittis erat nec sem placerat, ut volutpat neque porttitor. Suspendisse tempor mauris vel mollis sagittis. In ut laoreet arcu. Duis sed felis in dui imperdiet luctus nec faucibus sem. Donec commodo urna ut enim fringilla, quis lacinia ligula malesuada. Quisque feugiat fermentum pretium. Integer sed porttitor lacus, sed bibendum diam. Aliquam dapibus neque et pharetra interdum.
     </p>
   <!-- /End replace -->
 </div>
 
-<%# <div class="columns is-centered">
-  <div class="column is-three-fifths">
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
 
-    <div class="title is-4">
-      <span>Other Page</span>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Aliquam ultrices elit purus, eget dignissim orci pulvinar id. Curabitur tincidunt, ligula eu condimentum porttitor, nibh sapien scelerisque urna, nec cursus nisi nisi a neque. Mauris hendrerit orci blandit, suscipit ante nec, porttitor neque. Nunc.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
     </div>
-
-    <div class="subtitle">With a subtitle no less!</div>
-
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus dolore sunt quia aperiam sint id
-      reprehenderit? Dolore incidunt alias inventore accusantium nulla optio, ducimus eius aliquam hic, pariatur
-      voluptate distinctio.
-    </p>
-
   </div>
-</div> %>
+</div>
