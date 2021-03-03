@@ -11,7 +11,7 @@ defmodule Bones73kWeb.UserDashboardLive do
   def render(assigns) do
     ~L"""
     <section class="phx-hero">
-      <h1>Welcome to the user dashboard!</h1>
+      <h2>Welcome to the user dashboard!</h2>
     </section>
     """
   end

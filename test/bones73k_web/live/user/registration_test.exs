@@ -17,7 +17,7 @@ defmodule Bones73kWeb.UserLive.RegistrationTest do
     test "displays registration form", %{conn: conn} do
       {:ok, _view, html} = live_isolated(conn, Bones73kWeb.UserLive.Registration)
 
-      assert html =~ "Register\n  </h3>"
+      assert html =~ "Register\n  </h2>"
       assert html =~ "Email</label>"
     end
 
@@ -29,7 +29,7 @@ defmodule Bones73kWeb.UserLive.RegistrationTest do
         |> form("#reg_form", %{"user" => %{"email" => "abc", "password" => "abc"}})
         |> render_change()
 
-      assert html =~ "Register\n  </h3>"
+      assert html =~ "Register\n  </h2>"
       assert html =~ "must be a valid email address"
       assert html =~ "should be at least #{User.min_password()} character(s)"
       assert html =~ "type=\"submit\" disabled=\"disabled\""

@@ -7,7 +7,7 @@ defmodule Bones73kWeb.UserRegistrationControllerTest do
     test "renders registration page", %{conn: conn} do
       conn = get(conn, Routes.user_registration_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "Register\n  </h3>"
+      assert response =~ "Register\n  </h2>"
       assert response =~ "Log in\n</a>"
       assert response =~ "Register\n</a>"
     end

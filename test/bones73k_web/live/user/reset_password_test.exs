@@ -17,7 +17,7 @@ defmodule Bones73kWeb.UserLive.ResetPasswordTest do
   test "displays registration form", %{conn: conn, user: user} do
     {:ok, _view, html} = live_isolated(conn, Bones73kWeb.UserLive.ResetPassword)
 
-    assert html =~ "Reset password\n  </h3>"
+    assert html =~ "Reset password\n  </h2>"
     assert html =~ user.email
     assert html =~ "New password</label>"
   end
@@ -28,7 +28,7 @@ defmodule Bones73kWeb.UserLive.ResetPasswordTest do
     form_data = %{"user" => %{"password" => "abc", "password_confirmation" => "def"}}
     html = form(view, "#pw_reset_form", form_data) |> render_change()
 
-    assert html =~ "Reset password\n  </h3>"
+    assert html =~ "Reset password\n  </h2>"
     assert html =~ "should be at least #{User.min_password()} character(s)"
     assert html =~ "does not match password"
     assert html =~ "type=\"submit\" disabled=\"disabled\""

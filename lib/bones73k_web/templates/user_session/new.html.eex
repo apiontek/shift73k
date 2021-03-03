@@ -1,10 +1,10 @@
 <div class="row justify-content-center">
   <div class="col-sm-9 col-md-7 col-lg-5 col-xl-4 ">
 
-  <h3>
+  <h2>
     <%= icon_div @conn, "bi-door-open", [class: "icon baseline"] %>
     Log in
-  </h3>
+  </h2>
   <p class="lead">Who goes there?</p>
 
   <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: "needs-validation", novalidate: true], fn f -> %>
@@ -41,7 +41,7 @@
       <span class="invalid-feedback">password is required</span>
     </div>
 
-    <div class="form-check mb-3">
+    <div class="form-check mb-3 no-valid-style">
       <%= checkbox f, :remember_me, class: "form-check-input" %>
       <%= label f, :remember_me, "Keep me logged in for 60 days", class: "form-check-label" %>
     </div>

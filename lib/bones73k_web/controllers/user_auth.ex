@@ -1,7 +1,6 @@
 defmodule Bones73kWeb.UserAuth do
   import Plug.Conn
   import Phoenix.Controller
-  import Phoenix.HTML
 
   alias Bones73k.Accounts
   alias Bones73kWeb.Router.Helpers, as: Routes

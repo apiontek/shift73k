@@ -13,6 +13,8 @@ defmodule Bones73kWeb.IconHelpers do
   end
 
   def icon_svg(conn, name, opts \\ []) do
+    opts = aria_hidden?(opts)
+
     content_tag(:svg, tag_opts(name, opts)) do
       tag(:use, "xlink:href": Routes.static_path(conn, "/images/icons.svg##{name}"))
     end
@@ -20,5 +22,14 @@ defmodule Bones73kWeb.IconHelpers do
 
   defp tag_opts(name, opts) do
     Keyword.update(opts, :class, name, fn c -> "#{c} #{name}" end)
+  end
+
+  defp aria_hidden?(opts) do
+    case Keyword.get(opts, :aria_hidden) do
+      "false" -> Keyword.drop(opts, [:aria_hidden])
+      false -> Keyword.drop(opts, [:aria_hidden])
+      "true" -> opts
+      _ -> Keyword.put(opts, :aria_hidden, "true")
+    end
   end
 end

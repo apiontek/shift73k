@@ -1,10 +1,10 @@
 <div class="row justify-content-center">
   <div class="col-sm-9 col-md-7 col-lg-5 col-xl-4 ">
 
-  <h3>
+  <h2>
     <%= icon_div @conn, "mdi-head-question-outline", [class: "icon baseline"] %>
     Forgot your password?
-  </h3>
+  </h2>
   <p class="lead">We'll send you an email with instructions to reset your password.</p>
 
   <%= form_for :user, Routes.user_reset_password_path(@conn, :create), [class: "needs-validation", novalidate: true], fn f -> %>

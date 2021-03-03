@@ -13,7 +13,7 @@ defmodule Bones73kWeb.UserResetPasswordControllerTest do
     test "renders the reset password page", %{conn: conn} do
       conn = get(conn, Routes.user_reset_password_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "Forgot your password?\n  </h3>"
+      assert response =~ "Forgot your password?\n  </h2>"
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -61,7 +61,7 @@ defmodule Bones73kWeb.UserResetPasswordControllerTest do
     test "renders reset password with user_id in session", %{conn: conn, token: token, user: user} do
       conn = get(conn, Routes.user_reset_password_path(conn, :edit, token))
       assert get_session(conn, "user_id") == user.id
-      assert html_response(conn, 200) =~ "Reset password\n  </h3>"
+      assert html_response(conn, 200) =~ "Reset password\n  </h2>"
     end
 
     test "does not render reset password with invalid token", %{conn: conn} do

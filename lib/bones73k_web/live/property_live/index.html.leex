@@ -1,4 +1,4 @@
-<h1>Listing Properties</h1>
+<h2>Listing Properties</h2>
 
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, Bones73kWeb.PropertyLive.FormComponent,
@@ -10,12 +10,12 @@
     return_to: Routes.property_index_path(@socket, :index) %>
 <% end %>
 
-<table>
+<table class="table">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Price</th>
-      <th>Description</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Description</th>
 
       <th></th>
     </tr>

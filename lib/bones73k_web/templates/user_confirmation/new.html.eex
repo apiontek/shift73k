@@ -1,10 +1,10 @@
 <div class="row justify-content-center">
   <div class="col-sm-9 col-md-7 col-lg-5 col-xl-4 ">
 
-  <h3>
+  <h2>
     <%= icon_div @conn, "bi-arrow-repeat", [class: "icon baseline"] %>
     Resend confirmation instructions
-  </h3>
+  </h2>
   <p class="lead">We'll send you another email with instructions to confirm your email address.</p>
 
   <%= form_for :user, Routes.user_confirmation_path(@conn, :create), [class: "needs-validation", novalidate: true], fn f -> %>

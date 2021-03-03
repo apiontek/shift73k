@@ -15,3 +15,13 @@
 
 /* Navbar toggler icon override */
 @import "nav-burger";
+
+/* extra */
+.was-validated .no-valid-style .form-check-input:valid,
+.form-check-input.is-valid {
+  border-color: inherit !important;
+}
+.was-validated .no-valid-style .form-check-input:valid ~ .form-check-label,
+.no-valid-style .form-check-input.is-valid ~ .form-check-label {
+  color: inherit !important;
+}
