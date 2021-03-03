@@ -1,4 +1,4 @@
-<h1>Show Property</h1>
+<h2>Show Property</h2>
 
 <%= if @live_action in [:edit] do %>
   <%= live_modal @socket, Bones73kWeb.PropertyLive.FormComponent,
@@ -9,28 +9,26 @@
     return_to: Routes.property_show_path(@socket, :show, @property) %>
 <% end %>
 
-<ul>
+<table class="table table-nonfluid">
+  <tbody>
+    <tr>
+      <th scope="row" class="text-end">Name</th>
+      <td><%= @property.name %></td>
+    </tr>
+    <tr>
+      <th scope="row" class="text-end">Price</th>
+      <td><%= @property.price %></td>
+    </tr>
+    <tr>
+      <th scope="row" class="text-end">Description</th>
+      <td><%= @property.description %></td>
+    </tr>
+  </tbody>
+</table>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @property.name %>
-  </li>
-
-  <li>
-    <strong>Price:</strong>
-    <%= @property.price %>
-  </li>
-
-  <li>
-    <strong>Description:</strong>
-    <%= @property.description %>
-  </li>
-
-</ul>
-
-<%= if Roles.can?(@current_user, @property, :edit) do %>
-  <span><%= live_patch "Edit", to: Routes.property_show_path(@socket, :edit, @property), class: "button" %></span>
-<% end %>
 <%= if Roles.can?(@current_user, @property, :index) do %>
-  <span><%= live_redirect "Back", to: Routes.property_index_path(@socket, :index) %></span>
+  <%= live_redirect "Back", to: Routes.property_index_path(@socket, :index), class: "btn btn-secondary" %>
+<% end %>
+<%= if Roles.can?(@current_user, @property, :edit) do %>
+  <%= live_patch "Edit", to: Routes.property_show_path(@socket, :edit, @property), class: "btn btn-primary" %>
 <% end %>
