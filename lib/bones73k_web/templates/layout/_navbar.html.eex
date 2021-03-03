@@ -33,12 +33,6 @@
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         </li> %>
 
-        <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-          <li class="nav-item">
-          <%= link "LiveDashboard", nav_link_opts(@conn, to: Routes.live_dashboard_path(@conn, :home), class: "nav-link") %>
-          </li>
-        <% end %>
-
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownExample" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownExample">

@@ -34,6 +34,8 @@ defmodule Bones73kWeb.LiveHelpers do
   def live_modal(socket, component, opts) do
     path = Keyword.fetch!(opts, :return_to)
     modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
+    # dirty little workaround for elixir complaining about socket being unused
+    _socket = socket
     live_component(socket, Bones73kWeb.ModalComponent, modal_opts)
   end
 

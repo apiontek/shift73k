@@ -39,3 +39,6 @@ config :bones73k, Bones73kWeb.Endpoint,
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
+
+# Import extra secret stuff not to be included in git repo
+import_config "really.secret.exs"

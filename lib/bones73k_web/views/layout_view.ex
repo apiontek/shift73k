@@ -10,12 +10,12 @@ defmodule Bones73kWeb.LayoutView do
 
   def alert_kinds do
     [
-      success: "success",
-      info: "info",
-      error: "danger",
-      warning: "warning",
-      primary: "primary",
-      secondary: "secondary"
+      success: "alert-success",
+      info: "alert-info",
+      error: "alert-danger",
+      warning: "alert-warning",
+      primary: "alert-primary",
+      secondary: "alert-secondary"
     ]
   end
 end
