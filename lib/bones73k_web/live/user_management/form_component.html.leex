@@ -30,7 +30,7 @@
       <span class="input-group-text">
         <%= icon_div @socket, "bi-shield-shaded", [class: "icon"] %>
       </span>
-      <%= select f, :role, Enum.map(User.roles(), fn {k, v} -> {String.capitalize(Atom.to_string(k)), k} end), class: "form-select" %>
+      <%= select f, :role, Enum.map(User.roles(), fn {k, _v} -> {String.capitalize(Atom.to_string(k)), k} end), class: "form-select" %>
       <span class="valid-feedback text-primary" style="display: block;">
         <%= role_description(input_value(f, :role)) %>
       </span>

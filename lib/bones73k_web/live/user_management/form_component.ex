@@ -1,7 +1,7 @@
 defmodule Bones73kWeb.UserManagement.FormComponent do
   use Bones73kWeb, :live_component
 
-  alias Bones73k.{Repo, Accounts}
+  alias Bones73k.Accounts
   alias Bones73k.Accounts.User
   alias Bones73kWeb.Roles
 
