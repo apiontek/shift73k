@@ -141,6 +141,20 @@ defmodule Bones73kWeb.UserAuth do
   end
 
   @doc """
+  Used for routes that require the user's email to be confirmed.
+  """
+  def require_email_confirmed(conn, _opts) do
+    if conn.assigns[:current_user] |> Map.get(:confirmed_at) do
+      conn
+    else
+      conn
+      |> put_flash(:error, "You must confirm your email to access this page.")
+      |> redirect(to: Routes.user_confirmation_path(conn, :new))
+      |> halt()
+    end
+  end
+
+  @doc """
   Returns the pubsub topic name for receiving  notifications when a user updated
   """
   def pubsub_topic, do: @pubsub_topic

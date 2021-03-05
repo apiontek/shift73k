@@ -18,13 +18,16 @@ defmodule Bones73kWeb.PropertyLive.Index do
     property = property_from_params(params)
 
     if Roles.can?(current_user, property, live_action) do
-      socket = assign(socket, :properties, list_properties())
-      {:noreply, apply_action(socket, live_action, params)}
+      socket
+      |> assign(:properties, list_properties())
+      |> assign(:modal_return_to, Routes.property_index_path(socket, :index))
+      |> apply_action(live_action, params)
+      |> live_noreply()
     else
-      {:noreply,
-       socket
-       |> put_flash(:error, "Unauthorised")
-       |> redirect(to: "/")}
+      socket
+      |> put_flash(:error, "Unauthorised")
+      |> redirect(to: "/")
+      |> live_noreply()
     end
   end
 
@@ -62,6 +65,16 @@ defmodule Bones73kWeb.PropertyLive.Index do
        |> put_flash(:error, "Unauthorised")
        |> redirect(to: "/")}
     end
+  end
+
+  @impl true
+  def handle_info({:close_modal, _}, %{assigns: %{modal_return_to: to}} = socket) do
+    socket |> copy_flash() |> push_patch(to: to) |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:put_flash_message, {flash_type, msg}}, socket) do
+    socket |> put_flash(flash_type, msg) |> live_noreply()
   end
 
   defp property_from_params(params)

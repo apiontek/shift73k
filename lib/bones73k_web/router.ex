@@ -105,4 +105,14 @@ defmodule Bones73kWeb.Router do
 
     live("/admin_dashboard", AdminDashboardLive, :index)
   end
+
+  # Users Management
+  scope "/users", Bones73kWeb do
+    pipe_through [:browser, :require_authenticated_user, :manager, :require_email_confirmed]
+
+    live("/", UserManagementLive.Index, :index)
+    live("/new", UserManagementLive.Index, :new)
+    live("/edit/:id", UserManagementLive.Index, :edit)
+    # resources "/", UserManagementController, only: [:new, :create, :edit, :update]
+  end
 end

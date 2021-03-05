@@ -3,11 +3,13 @@ defmodule Bones73k.Accounts.User do
   import Ecto.Changeset
   import EctoEnum
 
-  defenum(RolesEnum, :role, [
-    :user,
-    :manager,
-    :admin
-  ])
+  @roles [
+    user: "Basic user level",
+    manager: "Can create users, update user emails & passwords",
+    admin: "Can delete users and change user roles"
+  ]
+
+  defenum(RolesEnum, :role, Keyword.keys(@roles))
 
   @max_email 254
   @min_password 6
@@ -27,6 +29,7 @@ defmodule Bones73k.Accounts.User do
   def max_email, do: @max_email
   def min_password, do: @min_password
   def max_password, do: @max_password
+  def roles, do: @roles
 
   @doc """
   A user changeset for registration.
@@ -52,6 +55,28 @@ defmodule Bones73k.Accounts.User do
     |> validate_email()
     |> validate_password(opts)
   end
+
+  # def update_changeset(user, attrs, opts \\ [])
+
+  # def update_changeset(user, %{"password" => ""} = attrs, _),
+  #   do: update_changeset_no_pw(user, attrs)
+
+  # def update_changeset(user, %{password: ""} = attrs, _), do: update_changeset_no_pw(user, attrs)
+
+  def update_changeset(user, attrs, opts) do
+    user
+    |> cast(attrs, [:email, :password, :role])
+    |> validate_role()
+    |> validate_email()
+    |> validate_password_not_required(opts)
+  end
+
+  # def update_changeset_no_pw(user, attrs) do
+  #   user
+  #   |> cast(attrs, [:email, :role])
+  #   |> validate_role()
+  #   |> validate_email()
+  # end
 
   defp role_validator(:role, role) do
     (RolesEnum.valid_value?(role) && []) || [role: "invalid user role"]
@@ -82,6 +107,11 @@ defmodule Bones73k.Accounts.User do
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
+    |> validate_password_not_required(opts)
+  end
+
+  defp validate_password_not_required(changeset, opts) do
+    changeset
     |> validate_length(:password, min: @min_password, max: @max_password)
     # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")

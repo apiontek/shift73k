@@ -40,7 +40,7 @@ defmodule Bones73kWeb.UserLive.Registration do
     |> Accounts.register_user()
     |> case do
       {:ok, user} ->
-        %Bamboo.Email{} =
+        {:ok, %Bamboo.Email{}} =
           Accounts.deliver_user_confirmation_instructions(
             user,
             &Routes.user_confirmation_url(socket, :confirm, &1)

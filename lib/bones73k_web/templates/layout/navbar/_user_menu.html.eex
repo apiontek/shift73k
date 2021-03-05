@@ -11,6 +11,15 @@
 
       <li><%= content_tag :span, @current_user.email, class: "dropdown-item-text" %></li>
       <li><hr class="dropdown-divider"></li>
+      <%= if Roles.can?(@current_user, %User{}, :index) do %>
+        <li>
+          <%= link nav_link_opts(@conn, to: Routes.user_management_index_path(@conn, :index), class: "dropdown-item") do %>
+            <%= icon_div @conn, "bi-people", [class: "icon baseline me-1"] %>
+            Users
+          <% end %>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+      <% end %>
       <li>
         <%= link nav_link_opts(@conn, to: Routes.user_settings_path(@conn, :edit), class: "dropdown-item") do %>
           <%= icon_div @conn, "bi-sliders", [class: "icon baseline me-1"] %>

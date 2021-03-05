@@ -13,14 +13,28 @@ import "../node_modules/bootstrap-icons/icons/box-arrow-in-left.svg"; // log in
 import "../node_modules/bootstrap-icons/icons/box-arrow-right.svg"; // log out
 import "../node_modules/bootstrap-icons/icons/sliders.svg"; // new user / register
 // forms etc
-import "../node_modules/bootstrap-icons/icons/at.svg";
-import "../node_modules/bootstrap-icons/icons/key.svg";
-import "../node_modules/bootstrap-icons/icons/key-fill.svg";
-import "../node_modules/bootstrap-icons/icons/lock.svg";
-import "../node_modules/bootstrap-icons/icons/shield-lock.svg";
-import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg";
-import "../node_modules/bootstrap-icons/icons/door-open.svg"; // log in
-import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // brand
+import "../node_modules/bootstrap-icons/icons/at.svg"; // email field
+import "../node_modules/bootstrap-icons/icons/key.svg"; // new password field
+import "../node_modules/bootstrap-icons/icons/key-fill.svg"; // pw confirm field
+import "../node_modules/bootstrap-icons/icons/lock.svg"; // current pw field
+import "../node_modules/bootstrap-icons/icons/shield-shaded.svg"; // role
+// live tables
+import "../node_modules/bootstrap-icons/icons/filter.svg";
+import "../node_modules/bootstrap-icons/icons/backspace.svg"; // clear filter
+import "../node_modules/bootstrap-icons/icons/sort-down-alt.svg";
+import "../node_modules/bootstrap-icons/icons/sort-up-alt.svg";
+import "../node_modules/bootstrap-icons/icons/chevron-left.svg";
+import "../node_modules/bootstrap-icons/icons/chevron-right.svg";
+import "../node_modules/bootstrap-icons/icons/pencil.svg";
+import "../node_modules/bootstrap-icons/icons/trash.svg";
+import "../node_modules/bootstrap-icons/icons/check.svg";
+import "../node_modules/bootstrap-icons/icons/x.svg";
+// page headers
+import "../node_modules/bootstrap-icons/icons/shield-lock.svg"; // reset password
+import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg"; // resend confirmation
+import "../node_modules/bootstrap-icons/icons/door-open.svg"; // log in header
+import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // forgot password
+import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

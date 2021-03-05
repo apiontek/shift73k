@@ -50,8 +50,10 @@ defmodule Bones73k.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phx_gen_auth, "~> 0.5", only: [:dev], runtime: false},
       {:ecto_enum, "~> 1.4"},
-      {:bamboo, "~> 1.7.1"},
-      {:bamboo_smtp, "~> 3.1.3"}
+      {:bamboo, "~> 2.0"},
+      {:bamboo_smtp, "~> 4.0"},
+      {:scrivener_ecto, "~> 2.0"},
+      {:timex, "~> 3.5"}
     ]
   end
 

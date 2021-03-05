@@ -28,8 +28,10 @@ defmodule Bones73kWeb.PropertyLive.FormComponent do
   defp save_property(socket, :edit, property_params) do
     case Properties.update_property(socket.assigns.property, property_params) do
       {:ok, _property} ->
+        flash = {:info, "Property updated successfully"}
+        send(self(), {:put_flash_message, flash})
+
         socket
-        |> put_flash(:info, "Property updated successfully")
         |> push_event("modal-please-hide", %{})
         |> live_noreply()
 
@@ -44,8 +46,10 @@ defmodule Bones73kWeb.PropertyLive.FormComponent do
 
     case Properties.create_property(property_params) do
       {:ok, _property} ->
+        flash = {:info, "Property created successfully"}
+        send(self(), {:put_flash_message, flash})
+
         socket
-        |> put_flash(:info, "Property created successfully")
         |> push_event("modal-please-hide", %{})
         |> live_noreply()
 

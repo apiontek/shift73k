@@ -13,7 +13,7 @@
       <%= label f, :email, class: "form-label" %>
       <div class="input-group has-validation">
         <span class="input-group-text">
-          <%= icon_div @socket, "bi-at", [class: "icon fs-5"] %>
+          <%= icon_div @socket, "bi-at", [class: "icon"] %>
         </span>
         <%= email_input f, :email,
             value: input_value(f, :email),
@@ -32,14 +32,13 @@
       <%= label f, :password, class: "form-label" %>
       <div class="input-group has-validation">
         <span class="input-group-text">
-          <%= icon_div @socket, "bi-key", [class: "icon fs-5"] %>
+          <%= icon_div @socket, "bi-key", [class: "icon"] %>
         </span>
         <%= password_input f, :password,
             value: input_value(f, :password),
             class: input_class(f, :password, "form-control"),
             maxlength: User.max_password,
-            required: true,
-            phx_debounce: "200",
+            phx_debounce: "250",
             aria_describedby: error_id(f, :password)
           %>
         <%= error_tag f, :password %>
@@ -47,7 +46,12 @@
     </div>
 
     <div class="mb-3">
-      <%= submit (@trigger_submit && "Saving..." || "Register"), disabled: @trigger_submit || !@changeset.valid?, class: "btn btn-primary", phx_disable_with: "Saving..." %>
+      <%= submit (@trigger_submit && "Saving..." || "Register"),
+          class: "btn btn-primary",
+          disabled: @trigger_submit || !@changeset.valid?,
+          aria_disabled: (@trigger_submit || !@changeset.valid?) && "true" || false,
+          phx_disable_with: "Saving..."
+        %>
     </div>
 
   <% end %>

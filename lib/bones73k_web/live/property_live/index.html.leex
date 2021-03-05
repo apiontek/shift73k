@@ -1,17 +1,16 @@
-<div class="d-flex justify-content-between d-flex align-items-end">
-  <h2>Listing Properties</h2>
-  <span><%= live_patch "New Property", to: Routes.property_index_path(@socket, :new), class: "btn btn-primary" %></span>
-</div>
-
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, Bones73kWeb.PropertyLive.FormComponent,
     id: @property.id || :new,
     title: @page_title,
     action: @live_action,
     property: @property,
-    current_user: @current_user,
-    return_to: Routes.property_index_path(@socket, :index) %>
+    current_user: @current_user %>
 <% end %>
+
+<div class="d-flex justify-content-between d-flex align-items-end">
+  <h2>Listing Properties</h2>
+  <span><%= live_patch "New Property", to: Routes.property_index_path(@socket, :new), class: "btn btn-primary" %></span>
+</div>
 
 <table class="table">
   <thead>

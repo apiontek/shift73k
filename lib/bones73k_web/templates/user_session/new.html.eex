@@ -18,7 +18,7 @@
     <%= label f, :email, class: "form-label" %>
     <div class="input-group has-validation mb-3">
       <span class="input-group-text">
-        <%= icon_div @conn, "bi-at", [class: "icon fs-5"] %>
+        <%= icon_div @conn, "bi-at", [class: "icon"] %>
       </span>
       <%= email_input f, :email,
           class: "form-control",
@@ -32,7 +32,7 @@
     <%= label f, :password, class: "form-label" %>
     <div class="input-group has-validation mb-3">
       <span class="input-group-text">
-        <%= icon_div @conn, "bi-lock", [class: "icon fs-5"] %>
+        <%= icon_div @conn, "bi-lock", [class: "icon"] %>
       </span>
       <%= password_input f, :password,
           class: "form-control",

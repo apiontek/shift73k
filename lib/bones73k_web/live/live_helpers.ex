@@ -1,9 +1,10 @@
 defmodule Bones73kWeb.LiveHelpers do
   import Phoenix.LiveView
+  import Phoenix.LiveView.Helpers
+
   alias Bones73k.Accounts
   alias Bones73k.Accounts.User
   alias Bones73kWeb.UserAuth
-  import Phoenix.LiveView.Helpers
 
   @doc """
   Performs the {:noreply, socket} for a given socket.
@@ -32,8 +33,7 @@ defmodule Bones73kWeb.LiveHelpers do
         return_to: Routes.property_index_path(@socket, :index) %>
   """
   def live_modal(socket, component, opts) do
-    path = Keyword.fetch!(opts, :return_to)
-    modal_opts = [id: :modal, return_to: path, component: component, opts: opts]
+    modal_opts = [id: :modal, component: component, opts: opts]
     # dirty little workaround for elixir complaining about socket being unused
     _socket = socket
     live_component(socket, Bones73kWeb.ModalComponent, modal_opts)
@@ -55,5 +55,15 @@ defmodule Bones73kWeb.LiveHelpers do
     else
       _ -> socket
     end
+  end
+
+  @doc """
+  Copies current flash into new put_flash invocations.
+  To be used before a push_patch.
+  """
+  def copy_flash(%{assigns: %{flash: flash}} = socket) do
+    Enum.reduce(flash, socket, fn {k, v}, acc ->
+      put_flash(acc, String.to_existing_atom(k), v)
+    end)
   end
 end

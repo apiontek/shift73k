@@ -10,6 +10,12 @@ use Mix.Config
 config :bones73k,
   ecto_repos: [Bones73k.Repo]
 
+# Custom application global variables
+config :bones73k, :app_global_vars,
+  time_zone: "America/New_York",
+  mailer_reply_to: "reply_to@example.com",
+  mailer_from: "app_name@example.com"
+
 # Configures the endpoint
 config :bones73k, Bones73kWeb.Endpoint,
   url: [host: "localhost"],

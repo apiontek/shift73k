@@ -9,7 +9,15 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias Bones73k.Repo
 alias Bones73k.Accounts
+alias Bones73k.Accounts.User
+alias Bones73k.Properties
+alias Bones73k.Properties.Property
+
+############################################################################
+## INSERTING MOCK USER DATA
 
 {:ok, admin} =
   Accounts.register_user(%{
@@ -34,6 +42,42 @@ alias Bones73k.Accounts
     password_confirmation: "123456789abc",
     role: Accounts.registration_role()
   })
+
+# if Mix.env() == :dev do
+this_path = Path.dirname(__ENV__.file)
+
+users_json = Path.join(this_path, "MOCK_DATA_users.json")
+
+count_to_take = 123
+
+mock_users = users_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
+
+mock_users = ~s([
+      {"email":"adam@73k.us","password":"adamadam","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
+      {"email":"karen@73k.us","password":"karenkaren","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
+      {"email":"kat@73k.us","password":"katkat","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
+    ]) |> Jason.decode!() |> Enum.concat(mock_users)
+
+mock_users =
+  Enum.map(mock_users, fn e ->
+    add_dt = NaiveDateTime.from_iso8601!(e["inserted_at"])
+
+    %{
+      email: e["email"],
+      role: String.to_existing_atom(e["role"]),
+      hashed_password: Bcrypt.hash_pwd_salt(e["password"]),
+      inserted_at: add_dt,
+      updated_at: add_dt,
+      confirmed_at: (e["confirmed_at"] && NaiveDateTime.add(add_dt, 300, :second)) || nil
+    }
+  end)
+
+Repo.insert_all(User, mock_users)
+# end
+
+############################################################################
+## IF ENV IS DEV
+## INSERTING MOCK PROPERTIES DATA
 
 Enum.each(1..10, fn i ->
   %{
@@ -60,3 +104,29 @@ Enum.each(1..10, fn i ->
   }
   |> Bones73k.Properties.create_property()
 end)
+
+# if Mix.env() == :dev do
+# this_path = Path.dirname(__ENV__.file)
+
+props_json = Path.join(this_path, "MOCK_DATA_properties.json")
+
+count_to_take = 123
+
+mock_props = props_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
+
+mock_props =
+  Enum.map(mock_props, fn e ->
+    add_dt = NaiveDateTime.from_iso8601!(e["inserted_at"])
+
+    %{
+      name: e["name"],
+      price: e["price"],
+      description: e["description"],
+      user_id: e["user_id"],
+      inserted_at: add_dt,
+      updated_at: add_dt
+    }
+  end)
+
+Repo.insert_all(Property, mock_props)
+# end

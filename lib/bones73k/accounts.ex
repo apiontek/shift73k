@@ -144,6 +144,40 @@ defmodule Bones73k.Accounts do
     User.registration_changeset(user, attrs)
   end
 
+  ## User Management: updates, deletes
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user updates.
+
+  ## Examples
+
+      iex> change_user_update(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user_update(user, attrs \\ %{})
+  def change_user_update(nil, _), do: nil
+
+  def change_user_update(%User{} = user, attrs) do
+    User.update_changeset(user, attrs, hash_password: true)
+  end
+
+  # @doc """
+  # Returns an `%Ecto.Changeset{}` for tracking singer_name updates.
+  # """
+  # def change_singer_name_update(%User{} = user, attrs \\ %{}) do
+  #   User.update_singer_name_changeset(user, attrs)
+  # end
+
+  @doc """
+  Updates the user given with attributes given
+  """
+  def update_user(user, attrs) do
+    user
+    |> User.update_changeset(attrs, hash_password: true)
+    |> Repo.update()
+  end
+
   ## Settings
 
   @doc """
@@ -398,4 +432,21 @@ defmodule Bones73k.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  ## Management Actions
+
+  @doc """
+  Deletes a user.
+
+  ## Examples
+
+      iex> delete_user(user)
+      {:ok, %User{}}
+
+      iex> delete_user(user)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_user(nil), do: {:error, false}
+  def delete_user(%User{} = user), do: Repo.delete(user)
 end
