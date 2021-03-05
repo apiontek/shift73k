@@ -36,7 +36,7 @@ defmodule Bones73k.AccountsFixtures do
     # {:ok, captured} = fun.(&"[TOKEN]#{&1}[TOKEN]")
     # [_, token, _] = String.split(captured.body, "[TOKEN]")
     # token
-    %Bamboo.Email{} = email = fun.(&"[TOKEN]#{&1}[TOKEN]")
+    {:ok, %Bamboo.Email{} = email} = fun.(&"[TOKEN]#{&1}[TOKEN]")
     [_, token, _] = String.split(email.text_body, "[TOKEN]")
     token
   end

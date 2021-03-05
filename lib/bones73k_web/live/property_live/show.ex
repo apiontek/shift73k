@@ -17,16 +17,27 @@ defmodule Bones73kWeb.PropertyLive.Show do
     property = Properties.get_property!(id)
 
     if Roles.can?(current_user, property, live_action) do
-      {:noreply,
-       socket
-       |> assign(:property, property)
-       |> assign(:page_title, page_title(live_action))}
+      socket
+      |> assign(:property, property)
+      |> assign(:page_title, page_title(live_action))
+      |> assign(:modal_return_to, Routes.property_show_path(socket, :show, property))
+      |> live_noreply()
     else
-      {:noreply,
-       socket
-       |> put_flash(:error, "Unauthorised")
-       |> redirect(to: "/")}
+      socket
+      |> put_flash(:error, "Unauthorised")
+      |> redirect(to: "/")
+      |> live_noreply()
     end
+  end
+
+  @impl true
+  def handle_info({:close_modal, _}, %{assigns: %{modal_return_to: to}} = socket) do
+    socket |> copy_flash() |> push_patch(to: to) |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:put_flash_message, {flash_type, msg}}, socket) do
+    socket |> put_flash(flash_type, msg) |> live_noreply()
   end
 
   defp page_title(:show), do: "Show Property"

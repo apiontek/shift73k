@@ -54,14 +54,23 @@ defmodule Bones73kWeb.PropertyLiveTest do
              |> form("#property-form", property: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
-        index_live
-        |> form("#property-form", property: @create_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.property_index_path(conn, :index))
+      # update form attrs
+      index_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_change()
 
+      # submit new form attrs
+      index_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_submit()
+
+      # send modal close event & observe results
+      send(index_live.pid, {:close_modal, true})
+      html = render(index_live)
+
+      assert_patched(index_live, Routes.property_index_path(conn, :index))
       assert html =~ "Property created successfully"
-      assert html =~ "some description"
+      assert html =~ "some updated description"
     end
 
     test "updates property in listing", %{conn: conn, property: property} do
@@ -76,12 +85,21 @@ defmodule Bones73kWeb.PropertyLiveTest do
              |> form("#property-form", property: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
-        index_live
-        |> form("#property-form", property: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.property_index_path(conn, :index))
+      # update form attrs
+      index_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_change()
 
+      # submit new form attrs
+      index_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_submit()
+
+      # send modal close event & observe results
+      send(index_live.pid, {:close_modal, true})
+      html = render(index_live)
+
+      assert_patched(index_live, Routes.property_index_path(conn, :index))
       assert html =~ "Property updated successfully"
       assert html =~ "some updated description"
     end
@@ -130,12 +148,21 @@ defmodule Bones73kWeb.PropertyLiveTest do
              |> form("#property-form", property: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
-        index_live
-        |> form("#property-form", property: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.property_index_path(conn, :index))
+      # update form attrs
+      index_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_change()
 
+      # submit new form attrs
+      index_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_submit()
+
+      # send modal close event & observe results
+      send(index_live.pid, {:close_modal, true})
+      html = render(index_live)
+
+      assert_patched(index_live, Routes.property_index_path(conn, :index))
       assert html =~ "Property updated successfully"
       assert html =~ "some updated description"
     end
@@ -257,12 +284,21 @@ defmodule Bones73kWeb.PropertyLiveTest do
              |> form("#property-form", property: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
-        show_live
-        |> form("#property-form", property: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.property_show_path(conn, :show, property))
+      # update form attrs
+      show_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_change()
 
+      # submit new form attrs
+      show_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_submit()
+
+      # send modal close event & observe results
+      send(show_live.pid, {:close_modal, true})
+      html = render(show_live)
+
+      assert_patched(show_live, Routes.property_show_path(conn, :show, property))
       assert html =~ "Property updated successfully"
       assert html =~ "some updated description"
     end
@@ -293,12 +329,21 @@ defmodule Bones73kWeb.PropertyLiveTest do
              |> form("#property-form", property: @invalid_attrs)
              |> render_change() =~ "can&#39;t be blank"
 
-      {:ok, _, html} =
-        show_live
-        |> form("#property-form", property: @update_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.property_show_path(conn, :show, property))
+      # update form attrs
+      show_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_change()
 
+      # submit new form attrs
+      show_live
+      |> form("#property-form", property: @update_attrs)
+      |> render_submit()
+
+      # send modal close event & observe results
+      send(show_live.pid, {:close_modal, true})
+      html = render(show_live)
+
+      assert_patched(show_live, Routes.property_show_path(conn, :show, property))
       assert html =~ "Property updated successfully"
       assert html =~ "some updated description"
     end
