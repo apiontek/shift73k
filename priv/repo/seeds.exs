@@ -10,10 +10,10 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
+import Ecto.Query
 alias Bones73k.Repo
 alias Bones73k.Accounts
 alias Bones73k.Accounts.User
-alias Bones73k.Properties
 alias Bones73k.Properties.Property
 
 ############################################################################
@@ -114,15 +114,18 @@ count_to_take = 123
 
 mock_props = props_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
 
+random_user_query = from User, order_by: fragment("RANDOM()"), limit: 1
+
 mock_props =
   Enum.map(mock_props, fn e ->
     add_dt = NaiveDateTime.from_iso8601!(e["inserted_at"])
+    rand_user = Repo.one(random_user_query)
 
     %{
       name: e["name"],
       price: e["price"],
       description: e["description"],
-      user_id: e["user_id"],
+      user_id: rand_user.id,
       inserted_at: add_dt,
       updated_at: add_dt
     }

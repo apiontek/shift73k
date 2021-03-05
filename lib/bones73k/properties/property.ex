@@ -2,11 +2,13 @@ defmodule Bones73k.Properties.Property do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "properties" do
     field :description, :string
     field :name, :string
     field :price, :decimal
-    field :user_id, :id
+    belongs_to :user, Bones73k.Accounts.User
 
     timestamps()
   end
