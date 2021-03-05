@@ -24,7 +24,7 @@
     "@babel/preset-env": "^7.x",
     "autoprefixer": "^10.2.4",
     "babel-loader": "^8.x",
-    "copy-webpack-plugin": "^7.x",
+    "copy-webpack-plugin": "^8.x",
     "css-loader": "^5.x",
     "css-minimizer-webpack-plugin": "^1.x",
     "file-loader": "^6.2.0",
@@ -35,7 +35,7 @@
     "postcss-scss": "^3.0.4",
     "purgecss-webpack-plugin": "^4.0.2",
     "sass": "^1.x",
-    "sass-loader": "^10.x",
+    "sass-loader": "^11.x",
     "svg-sprite-loader": "^5.2.1",
     "webpack": "^5.x",
     "webpack-cli": "^4.x"
