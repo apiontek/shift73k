@@ -10,7 +10,6 @@ defmodule Bones73kWeb.UserManagement.FormComponent do
     socket
     |> assign(assigns)
     |> init_changeset(assigns)
-    |> assign(:role_id, 1)
     |> live_okreply()
   end
 
@@ -40,7 +39,7 @@ defmodule Bones73kWeb.UserManagement.FormComponent do
             &Routes.user_confirmation_url(socket, :confirm, &1)
           )
 
-        flash = {:success, "User created successfully: #{user.email}"}
+        flash = {:info, "User created successfully: #{user.email}"}
         send(self(), {:put_flash_message, flash})
 
         socket
@@ -79,6 +78,11 @@ defmodule Bones73kWeb.UserManagement.FormComponent do
   @impl true
   def handle_event("save", %{"user" => user_params}, socket) do
     save_user(socket, user_params)
+  end
+
+  @impl true
+  def handle_event("cancel", _, socket) do
+    {:noreply, push_event(socket, "modal-please-hide", %{})}
   end
 
   def role_description(role) when is_atom(role) do

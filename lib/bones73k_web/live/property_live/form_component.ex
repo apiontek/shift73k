@@ -21,8 +21,14 @@ defmodule Bones73kWeb.PropertyLive.FormComponent do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
+  @impl true
   def handle_event("save", %{"property" => property_params}, socket) do
     save_property(socket, socket.assigns.action, property_params)
+  end
+
+  @impl true
+  def handle_event("cancel", _, socket) do
+    {:noreply, push_event(socket, "modal-please-hide", %{})}
   end
 
   defp save_property(socket, :edit, property_params) do

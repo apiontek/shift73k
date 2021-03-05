@@ -7,7 +7,7 @@ defmodule Bones73k.Repo.Migrations.CreateProperties do
       add(:name, :string)
       add(:price, :decimal)
       add(:description, :text)
-      add(:user_id, references(:users, type: :binary_id, on_delete: :nothing))
+      add(:user_id, references(:users, type: :binary_id, on_delete: :delete_all), null: false)
 
       timestamps()
     end

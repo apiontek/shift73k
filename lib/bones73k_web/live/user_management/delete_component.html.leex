@@ -1,0 +1,16 @@
+<div class="modal-body">
+
+  Are you sure you want to delete "<%= @delete_user.email %>"?
+
+</div>
+<div class="modal-footer">
+
+  <%= link "Cancel", to: "#", class: "btn btn-secondary me-2", phx_click: "cancel", phx_target: @myself %>
+  <%= link "Confirm Delete", to: "#",
+      class: "btn btn-danger",
+      phx_click: "confirm",
+      phx_target: @myself,
+      phx_value_id: @delete_user.id,
+      phx_value_email: @delete_user.email %>
+
+</div>

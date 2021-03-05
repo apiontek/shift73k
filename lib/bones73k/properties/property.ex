@@ -8,7 +8,7 @@ defmodule Bones73k.Properties.Property do
     field :description, :string
     field :name, :string
     field :price, :decimal
-    belongs_to :user, Bones73k.Accounts.User
+    field :user_id, :binary_id
 
     timestamps()
   end

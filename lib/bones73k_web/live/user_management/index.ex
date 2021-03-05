@@ -14,6 +14,7 @@ defmodule Bones73kWeb.UserManagementLive.Index do
   def mount(_params, session, socket) do
     socket
     |> assign_defaults(session)
+    |> assign(:page, nil)
     |> live_okreply()
   end
 
@@ -27,7 +28,9 @@ defmodule Bones73kWeb.UserManagementLive.Index do
       socket
       |> assign(:query, query_map(params))
       |> assign_modal_return_to()
-      |> page_query()
+      |> assign(:delete_user, nil)
+      |> assign(:page, nil)
+      |> request_page_query()
       |> apply_action(socket.assigns.live_action, params)
       |> live_noreply()
     else
@@ -36,6 +39,11 @@ defmodule Bones73kWeb.UserManagementLive.Index do
       |> redirect(to: "/")
       |> live_noreply()
     end
+  end
+
+  defp request_page_query(%{assigns: %{query: query}} = socket) do
+    send(self(), {:do_page_query, query})
+    socket
   end
 
   defp apply_action(socket, :index, _params) do
@@ -78,56 +86,30 @@ defmodule Bones73kWeb.UserManagementLive.Index do
     }
   end
 
-  defp page_query(%{assigns: %{query: query}} = socket) do
-    result_page =
-      from(u in User)
-      |> or_where([u], ilike(u.email, ^"%#{query.filter}%"))
-      # |> or_where([u], ilike(u.singer_name, ^"%#{query.filter}%"))
-      |> order_by([u], [
-        {^String.to_existing_atom(query.sort_order), ^String.to_existing_atom(query.sort_by)}
-      ])
-      |> Repo.paginate(page: query.page_number, page_size: query.page_size)
-
-    socket
-    |> assign(:page, result_page)
-    |> assign(:table_loading, false)
+  defp page_query(query) do
+    from(u in User)
+    |> or_where([u], ilike(u.email, ^"%#{query.filter}%"))
+    |> order_by([u], [
+      {^String.to_existing_atom(query.sort_order), ^String.to_existing_atom(query.sort_by)}
+    ])
+    |> Repo.paginate(page: query.page_number, page_size: query.page_size)
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id, "email" => email}, socket) do
-    id
-    |> Accounts.get_user()
-    |> Accounts.delete_user()
-    |> case do
-      {:ok, _} ->
-        socket
-        |> put_flash(:success, "User deleted successfully: \"#{email}\"")
-        |> assign(:table_loading, true)
-        |> page_query()
-        |> live_noreply()
-
-      {:error, _} ->
-        socket
-        |> put_flash(
-          :error,
-          "Something went wrong attempting to delete user \"#{email}\". Possibly already deleted? Reloading list..."
-        )
-        |> assign(:table_loading, true)
-        |> page_query()
-        |> live_noreply()
-    end
+  def handle_event("delete-modal", %{"id" => id}, socket) do
+    {:noreply, assign(socket, :delete_user, Accounts.get_user(id))}
   end
 
   @impl true
   def handle_event("filter-change", params, socket) do
     send(self(), {:query_update, Map.put(params, "page_number", "1")})
-    {:noreply, assign(socket, :table_loading, true)}
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("filter-clear", _params, socket) do
     send(self(), {:query_update, %{"filter" => "", "page_number" => "1"}})
-    {:noreply, assign(socket, :table_loading, true)}
+    {:noreply, socket}
   end
 
   @impl true
@@ -143,32 +125,32 @@ defmodule Bones73kWeb.UserManagementLive.Index do
        )) ||
       send(self(), {:query_update, Map.put(params, "sort_order", "asc")})
 
-    {:noreply, assign(socket, :table_loading, true)}
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("sort-by-change", %{"sort" => params}, socket) do
     send(self(), {:query_update, params})
-    {:noreply, assign(socket, :table_loading, true)}
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("sort-order-change", _params, socket) do
     new_sort_order = (socket.assigns.query.sort_order == "asc" && "desc") || "asc"
     send(self(), {:query_update, %{"sort_order" => new_sort_order}})
-    {:noreply, assign(socket, :table_loading, true)}
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("page-change", params, socket) do
     send(self(), {:query_update, params})
-    {:noreply, assign(socket, :table_loading, true)}
+    {:noreply, socket}
   end
 
   @impl true
   def handle_event("page-size-change", params, socket) do
     send(self(), {:query_update, Map.put(params, "page_number", "1")})
-    {:noreply, assign(socket, :table_loading, true)}
+    {:noreply, socket}
   end
 
   @impl true
@@ -178,6 +160,11 @@ defmodule Bones73kWeb.UserManagementLive.Index do
        to: Routes.user_management_index_path(socket, :index, get_new_params(params, q)),
        replace: true
      )}
+  end
+
+  @impl true
+  def handle_info({:do_page_query, query}, socket) do
+    {:noreply, assign(socket, :page, page_query(query))}
   end
 
   @impl true

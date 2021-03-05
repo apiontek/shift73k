@@ -7,6 +7,14 @@
       current_user: @current_user %>
 <% end %>
 
+<%= if @delete_user do %>
+  <%= live_modal @socket, Bones73kWeb.UserManagement.DeleteComponent,
+      id: @delete_user.id,
+      title: "Delete User",
+      delete_user: @delete_user,
+      current_user: @current_user %>
+<% end %>
+
 
 <h2 class="mb-3">
   <%= icon_div @socket, "bi-people", [class: "icon baseline"] %>
@@ -14,16 +22,16 @@
 </h2>
 
 <%# filtering and new item creation %>
-<div class="d-flex flex-column flex-sm-row justify-content-between d-flex align-items-start">
+<div class="d-flex flex-column flex-sm-row justify-content-between d-flex align-items-start mb-3">
 
   <%= live_patch to: Routes.user_management_index_path(@socket, :new, Enum.into(@query, [])),
-      class: "btn btn-primary mb-2" do %>
+      class: "btn btn-primary mb-3 mb-sm-0" do %>
     <%= icon_div @socket, "bi-person-plus", [class: "icon baseline me-1"] %>
     New User
   <% end %>
 
   <%= form_for :filter, "#", [phx_change: "filter-change"], fn flt -> %>
-  <div class="input-group mb-2">
+  <div class="input-group">
 
     <span class="input-group-text">
       <%= icon_div @socket, "bi-filter", [class: "icon"] %>
@@ -47,89 +55,101 @@
 </div>
 
 <%# main data table %>
-<table class="table">
+<div class="table-responsive">
+  <table class="table">
 
-  <thead>
-    <tr class="<%= @table_loading && "loading" || "" %>">
+    <thead>
+      <tr>
 
-      <th scope="col" phx-click="sort-change" phx-value-sort_by="email" class="cursor-pointer">
-        Email
-        <%= if @query.sort_by == "email", do: icon_div @socket,
-              (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
-              [class: "icon baseline ms-1"]
-            %>
-      </th>
+        <th scope="col" phx-click="sort-change" phx-value-sort_by="email" class="cursor-pointer">
+          Email
+          <%= if @query.sort_by == "email", do: icon_div @socket,
+                (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
+                [class: "icon baseline ms-1"]
+              %>
+        </th>
 
-      <th scope="col" phx-click="sort-change" phx-value-sort_by="role" class="cursor-pointer">
-        Role
-        <%= if @query.sort_by == "role", do: icon_div @socket,
-              (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
-              [class: "icon baseline ms-1"]
-            %>
-      </th>
+        <th scope="col" phx-click="sort-change" phx-value-sort_by="role" class="cursor-pointer">
+          Role
+          <%= if @query.sort_by == "role", do: icon_div @socket,
+                (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
+                [class: "icon baseline ms-1"]
+              %>
+        </th>
 
-      <th scope="col" phx-click="sort-change" phx-value-sort_by="inserted_at" class="cursor-pointer">
-        Created at
-        <%= if @query.sort_by == "inserted_at", do: icon_div @socket,
-              (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
-              [class: "icon baseline ms-1"]
-            %>
-      </th>
+        <th scope="col" phx-click="sort-change" phx-value-sort_by="inserted_at" class="cursor-pointer">
+          Created at
+          <%= if @query.sort_by == "inserted_at", do: icon_div @socket,
+                (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
+                [class: "icon baseline ms-1"]
+              %>
+        </th>
 
-      <th scope="col">Confirmed?</th>
+        <th scope="col">Confirmed?</th>
 
-      <th></th>
-
-    </tr>
-  </thead>
-
-  <tbody id="users">
-    <%= for user <- @page.entries do %>
-      <tr id="user-<%= user.id %>">
-        <td class="align-middle"><%= user.email %></td>
-        <td class="align-middle"><%= user.role |> Atom.to_string() |> String.capitalize() %></td>
-        <td class="align-middle" style="white-space: nowrap;"><%= dt_out(user.inserted_at) %></td>
-        <td class="align-middle">
-          <%= if user.confirmed_at do %>
-            <span class="visually-hidden">Yes</span>
-            <%= icon_div @socket, "bi-check", [class: "icon baseline fs-4 text-success"], [role: "img", aria_hidden: false] %>
-          <% else %>
-            <span class="visually-hidden">No</span>
-            <%= icon_div @socket, "bi-x", [class: "icon baseline fs-4 text-warning"], [role: "img", aria_hidden: false] %>
-          <% end %>
-        </td>
-        <td class="align-middle text-end">
-
-          <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-outline-primary btn-sm" do %>
-            <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
-            Edit
-          <% end %>
-
-          <%= if Roles.can?(@current_user, user, :delete) do %>
-            <%= link to: "#",
-                phx_click: "delete",
-                phx_value_id: user.id,
-                phx_value_email: user.email,
-                data: [confirm: "Are you sure you want to delete this user? \"#{user.email}\""],
-                class: "btn btn-outline-danger btn-sm" do %>
-              <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
-              Delete
-            <% end %>
-          <% end %>
-
-        </td>
+        <th></th>
 
       </tr>
-    <% end %>
-  </tbody>
+    </thead>
 
-</table>
+    <tbody id="users">
+      <%= if !@page do %>
+        <tr>
+          <td class="text-center" colspan="5">
+            <div class="spinner-border text-primary my-5" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+        </tr>
+      <% else %>
+        <%= for user <- @page.entries do %>
+          <tr id="user-<%= user.id %>">
+            <td class="align-middle"><%= user.email %></td>
+            <td class="align-middle"><%= user.role |> Atom.to_string() |> String.capitalize() %></td>
+            <td class="align-middle" style="white-space: nowrap;"><%= dt_out(user.inserted_at) %></td>
+            <td class="align-middle">
+              <%= if user.confirmed_at do %>
+                <span class="visually-hidden">Yes</span>
+                <%= icon_div @socket, "bi-check", [class: "icon baseline fs-4 text-success"], [role: "img", aria_hidden: false] %>
+              <% else %>
+                <span class="visually-hidden">No</span>
+                <%= icon_div @socket, "bi-x", [class: "icon baseline fs-4 text-warning"], [role: "img", aria_hidden: false] %>
+              <% end %>
+            </td>
+            <td class="align-middle text-end text-nowrap">
+
+              <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
+                <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                Edit
+              <% end %>
+
+              <%= if Roles.can?(@current_user, user, :delete) do %>
+
+                <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= user.id %>">
+                  <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  Delete
+                </button>
+
+              <% end %>
+
+            </td>
+
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+
+  </table>
+</div>
 
 <%# pagination interface %>
-<div class="d-flex justify-content-between d-flex align-items-start">
+<%= if @page do %>
+<div class="d-flex flex-column flex-sm-row justify-content-between d-flex align-items-start my-3">
+
+<%# <div class="d-flex justify-content-between d-flex align-items-start"> %>
 
   <%# items per page selector %>
-  <div class="d-flex align-items-center">
+  <div class="d-flex align-items-center mb-3 mb-sm-0">
     <%= form_for :page_size, "#", [phx_change: "page-size-change"], fn pgsz -> %>
       <%= select pgsz, :page_size,
           [10, 15, 20, 30, 50, 100] |> Enum.map(fn n -> {"#{n} per page", n} end),
@@ -193,3 +213,4 @@
   </nav>
 
 </div>
+<% end %>

@@ -11,7 +11,7 @@ defmodule Bones73kWeb.ModalComponent do
       phx-target="#<%= @id %>"
       phx-page-loading>
 
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
           <div class="modal-header">
@@ -19,9 +19,7 @@ defmodule Bones73kWeb.ModalComponent do
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
-          <div class="modal-body">
-            <%= live_component @socket, @component, @opts %>
-          </div>
+          <%= live_component @socket, @component, @opts %>
 
         </div>
       </div>
