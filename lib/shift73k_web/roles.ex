@@ -4,7 +4,7 @@ defmodule Shift73kWeb.Roles do
   """
 
   alias Shift73k.Accounts.User
-  alias Shift73k.Properties.Property
+  # alias Shift73k.Properties.Property
 
   @type entity :: struct()
   @type action :: :new | :index | :edit | :show | :delete | :edit_role
@@ -12,13 +12,13 @@ defmodule Shift73kWeb.Roles do
 
   def can?(user, entity, action)
 
-  # Properties / Property
-  def can?(%User{role: :admin}, %Property{}, _any), do: true
-  def can?(%User{}, %Property{}, :index), do: true
-  def can?(%User{}, %Property{}, :new), do: true
-  def can?(%User{}, %Property{}, :show), do: true
-  def can?(%User{id: id}, %Property{user_id: id}, :edit), do: true
-  def can?(%User{id: id}, %Property{user_id: id}, :delete), do: true
+  # # Properties / Property
+  # def can?(%User{role: :admin}, %Property{}, _any), do: true
+  # def can?(%User{}, %Property{}, :index), do: true
+  # def can?(%User{}, %Property{}, :new), do: true
+  # def can?(%User{}, %Property{}, :show), do: true
+  # def can?(%User{id: id}, %Property{user_id: id}, :edit), do: true
+  # def can?(%User{id: id}, %Property{user_id: id}, :delete), do: true
 
   # Accounts / User
   def can?(%User{role: :admin}, %User{}, _any), do: true

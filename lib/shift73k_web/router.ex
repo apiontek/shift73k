@@ -92,12 +92,6 @@ defmodule Shift73kWeb.Router do
     pipe_through([:browser, :require_authenticated_user, :user])
 
     live("/user_dashboard", UserDashboardLive, :index)
-
-    live("/properties", PropertyLive.Index, :index)
-    live("/properties/new", PropertyLive.Index, :new)
-    live("/properties/:id/edit", PropertyLive.Index, :edit)
-    live("/properties/:id", PropertyLive.Show, :show)
-    live("/properties/:id/show/edit", PropertyLive.Show, :edit)
   end
 
   scope "/", Shift73kWeb do

@@ -10,11 +10,9 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-import Ecto.Query
 alias Shift73k.Repo
 alias Shift73k.Accounts
 alias Shift73k.Accounts.User
-alias Shift73k.Properties.Property
 
 ############################################################################
 ## INSERTING MOCK USER DATA
@@ -48,7 +46,7 @@ this_path = Path.dirname(__ENV__.file)
 
 users_json = Path.join(this_path, "MOCK_DATA_users.json")
 
-count_to_take = 123
+count_to_take = 65
 
 mock_users = users_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
 
@@ -73,63 +71,4 @@ mock_users =
   end)
 
 Repo.insert_all(User, mock_users)
-# end
-
-############################################################################
-## IF ENV IS DEV
-## INSERTING MOCK PROPERTIES DATA
-
-Enum.each(1..10, fn i ->
-  %{
-    name: "Property #{i} - User 1",
-    price: :rand.uniform(5) * 100_000,
-    description: "Property that belongs to user 1",
-    user_id: user_1.id
-  }
-  |> Shift73k.Properties.create_property()
-
-  %{
-    name: "Property #{i} - User 2",
-    price: :rand.uniform(5) * 100_000,
-    description: "Property that belongs to user 2",
-    user_id: user_2.id
-  }
-  |> Shift73k.Properties.create_property()
-
-  %{
-    name: "Property #{i} - Admin",
-    price: :rand.uniform(5) * 100_000,
-    description: "Property that belongs to admin",
-    user_id: admin.id
-  }
-  |> Shift73k.Properties.create_property()
-end)
-
-# if Mix.env() == :dev do
-# this_path = Path.dirname(__ENV__.file)
-
-props_json = Path.join(this_path, "MOCK_DATA_properties.json")
-
-count_to_take = 123
-
-mock_props = props_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
-
-random_user_query = from(User, order_by: fragment("RANDOM()"), limit: 1)
-
-mock_props =
-  Enum.map(mock_props, fn e ->
-    add_dt = NaiveDateTime.from_iso8601!(e["inserted_at"])
-    rand_user = Repo.one(random_user_query)
-
-    %{
-      name: e["name"],
-      price: e["price"],
-      description: e["description"],
-      user_id: rand_user.id,
-      inserted_at: add_dt,
-      updated_at: add_dt
-    }
-  end)
-
-Repo.insert_all(Property, mock_props)
 # end
