@@ -22,7 +22,7 @@
             maxlength: User.max_email,
             autofocus: true,
             phx_debounce: "blur",
-            aria_describedby: error_id(f, :email)
+            aria_describedby: error_ids(f, :email)
           %>
         <%= error_tag f, :email %>
       </div>
@@ -39,7 +39,7 @@
             class: input_class(f, :password, "form-control"),
             maxlength: User.max_password,
             phx_debounce: "250",
-            aria_describedby: error_id(f, :password)
+            aria_describedby: error_ids(f, :password)
           %>
         <%= error_tag f, :password %>
       </div>

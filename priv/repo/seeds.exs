@@ -20,24 +20,24 @@ alias Shift73k.Accounts.User
 {:ok, _admin} =
   Accounts.register_user(%{
     email: "admin@company.com",
-    password: "123456789abc",
-    password_confirmation: "123456789abc",
+    password: "123456789abC",
+    password_confirmation: "123456789abC",
     role: Accounts.registration_role()
   })
 
 {:ok, _user_1} =
   Accounts.register_user(%{
     email: "user1@company.com",
-    password: "123456789abc",
-    password_confirmation: "123456789abc",
+    password: "123456789abC",
+    password_confirmation: "123456789abC",
     role: Accounts.registration_role()
   })
 
 {:ok, _user_2} =
   Accounts.register_user(%{
     email: "user2@company.com",
-    password: "123456789abc",
-    password_confirmation: "123456789abc",
+    password: "123456789abC",
+    password_confirmation: "123456789abC",
     role: Accounts.registration_role()
   })
 
@@ -46,14 +46,15 @@ this_path = Path.dirname(__ENV__.file)
 
 users_json = Path.join(this_path, "MOCK_DATA_users.json")
 
-count_to_take = 15
+# count_to_take = 15
 
-mock_users = users_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
+mock_users = users_json |> File.read!() |> Jason.decode!()
+#  |> Enum.take_random(count_to_take)
 
 mock_users = ~s([
-      {"email":"adam@73k.us","password":"adamadam","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
-      {"email":"karen@73k.us","password":"karenkaren","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
-      {"email":"kat@73k.us","password":"katkat","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
+      {"email":"adam@73k.us","password":"adamadamA1","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
+      {"email":"karen@73k.us","password":"karenkarenA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
+      {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
     ]) |> Jason.decode!() |> Enum.concat(mock_users)
 
 mock_users =

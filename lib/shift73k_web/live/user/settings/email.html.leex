@@ -16,7 +16,7 @@
             placeholder: "e.g., babka@73k.us",
             maxlength: User.max_email,
             phx_debounce: "500",
-            aria_describedby: error_id(f, :email)
+            aria_describedby: error_ids(f, :email)
           %>
         <%= error_tag f, :email %>
       </div>
@@ -32,7 +32,7 @@
         <%= password_input f, :current_password,
             value: input_value(f, :current_password),
             class: "form-control",
-            aria_describedby: error_id(f, :current_password)
+            aria_describedby: error_ids(f, :current_password)
           %>
         <%= error_tag f, :current_password %>
       </div>

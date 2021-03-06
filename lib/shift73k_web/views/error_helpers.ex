@@ -8,26 +8,41 @@ defmodule Shift73kWeb.ErrorHelpers do
   @doc """
   Generates tag for inlined form input errors.
   """
-  def error_tag(form, field, opts \\ []) do
-    opts = error_opts(form, field, opts)
+  def error_tag(%Phoenix.HTML.Form{} = form, field, opts \\ []) do
+    opts = error_common_opts(form, field, "invalid-feedback", opts)
 
     form.errors
     |> Keyword.get_values(field)
-    |> Enum.map(fn error -> content_tag(:span, translate_error(error), opts) end)
+    |> Stream.with_index()
+    |> Enum.map(fn err_with_index -> error_tag_span(err_with_index, opts) end)
   end
 
-  defp error_opts(form, field, opts) do
-    append = "invalid-feedback"
-    input_id = input_id(form, field)
+  defp error_tag_span({err, _} = err_with_index, opts) do
+    opts = error_tag_opts(err_with_index, opts)
+    content_tag(:span, translate_error(err), opts)
+  end
 
-    opts
-    |> Keyword.put_new(:id, error_id(input_id))
-    |> Keyword.put_new(:phx_feedback_for, input_id)
+
+  defp error_common_opts(form, field, append, opts) do
+    Keyword.put(opts, :phx_feedback_for, input_id(form, field))
     |> Keyword.update(:class, append, fn c -> "#{append} #{c}" end)
   end
 
-  def error_id(%Phoenix.HTML.Form{} = form, field), do: input_id(form, field) |> error_id()
-  def error_id(input_id) when is_binary(input_id), do: "#{input_id}_feedback"
+  defp error_tag_opts({_err, err_index}, opts) do
+    input_id = Keyword.get(opts, :phx_feedback_for, "")
+    Keyword.put(opts, :id, error_id(input_id, err_index))
+  end
+
+  defp error_id(input_id, err_index), do: "#{input_id}_feedback-#{err_index}"
+
+  def error_ids(%Phoenix.HTML.Form{} = form, field) do
+    input_id = input_id(form, field)
+    form.errors
+    |> Keyword.get_values(field)
+    |> Stream.with_index()
+    |> Stream.map(fn {_, index} -> error_id(input_id, index) end)
+    |> Enum.join(" ")
+  end
 
   def input_class(form, field, classes \\ "") do
     case form.source.action do

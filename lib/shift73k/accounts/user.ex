@@ -14,7 +14,7 @@ defmodule Shift73k.Accounts.User do
   defenum(RolesEnum, :role, Keyword.keys(@roles))
 
   @max_email 254
-  @min_password 6
+  @min_password 8
   @max_password 80
 
   @derive {Inspect, except: [:password]}
@@ -29,7 +29,6 @@ defmodule Shift73k.Accounts.User do
     field(:role, RolesEnum, default: :user)
 
     has_many(:shift_templates, ShiftTemplate)
-    # has_one(:default_shift_template, ShiftTemplate, references: :default_shift_template_id)
     belongs_to(:default_shift_template, ShiftTemplate)
 
     timestamps()
@@ -122,9 +121,11 @@ defmodule Shift73k.Accounts.User do
   defp validate_password_not_required(changeset, opts) do
     changeset
     |> validate_length(:password, min: @min_password, max: @max_password)
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
+    |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
+      message: "at least one digit or punctuation character"
+    )
     |> maybe_hash_password(opts)
   end
 
