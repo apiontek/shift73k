@@ -17,7 +17,7 @@ alias Shift73k.Accounts.User
 ############################################################################
 ## INSERTING MOCK USER DATA
 
-{:ok, admin} =
+{:ok, _admin} =
   Accounts.register_user(%{
     email: "admin@company.com",
     password: "123456789abc",
@@ -25,7 +25,7 @@ alias Shift73k.Accounts.User
     role: Accounts.registration_role()
   })
 
-{:ok, user_1} =
+{:ok, _user_1} =
   Accounts.register_user(%{
     email: "user1@company.com",
     password: "123456789abc",
@@ -33,7 +33,7 @@ alias Shift73k.Accounts.User
     role: Accounts.registration_role()
   })
 
-{:ok, user_2} =
+{:ok, _user_2} =
   Accounts.register_user(%{
     email: "user2@company.com",
     password: "123456789abc",
