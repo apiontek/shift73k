@@ -10,6 +10,9 @@ use Mix.Config
 config :shift73k,
   ecto_repos: [Shift73k.Repo]
 
+# Configure the time zone database
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
+
 # Custom application global variables
 config :shift73k, :app_global_vars,
   time_zone: "America/New_York",

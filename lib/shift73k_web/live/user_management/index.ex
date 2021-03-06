@@ -187,5 +187,5 @@ defmodule Shift73kWeb.UserManagementLive.Index do
     ]
   end
 
-  def dt_out(ndt), do: format_ndt(ndt, "{YYYY} {Mshort} {0D}, {h12}:{0m} {am}")
+  def dt_out(ndt), do: format_ndt(ndt, "%Y %b %d, %I:%M %p")
 end
