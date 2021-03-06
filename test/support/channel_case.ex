@@ -1,4 +1,4 @@
-defmodule Bones73kWeb.ChannelCase do
+defmodule Shift73kWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule Bones73kWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Bones73kWeb.ChannelCase, async: true`, although
+  by setting `use Shift73kWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule Bones73kWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import Bones73kWeb.ChannelCase
+      import Shift73kWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint Bones73kWeb.Endpoint
+      @endpoint Shift73kWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bones73k.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Shift73k.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Bones73k.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Shift73k.Repo, {:shared, self()})
     end
 
     :ok

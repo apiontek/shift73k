@@ -1,0 +1,46 @@
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, Shift73kWeb.PropertyLive.FormComponent,
+    id: @property.id || :new,
+    title: @page_title,
+    action: @live_action,
+    property: @property,
+    current_user: @current_user %>
+<% end %>
+
+<div class="d-flex justify-content-between d-flex align-items-end">
+  <h2>Listing Properties</h2>
+  <span><%= live_patch "New Property", to: Routes.property_index_path(@socket, :new), class: "btn btn-primary" %></span>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Description</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="properties">
+    <%= for property <- @properties do %>
+      <tr id="property-<%= property.id %>">
+        <td><%= property.name %></td>
+        <td><%= property.price %></td>
+        <td><%= property.description %></td>
+
+        <td>
+          <%= if Roles.can?(@current_user, property, :show) do %>
+            <%= live_redirect "Show", to: Routes.property_show_path(@socket, :show, property), class: "link-secondary mx-1" %>
+          <% end %>
+          <%= if Roles.can?(@current_user, property, :edit) do %>
+            <%= live_patch "Edit", to: Routes.property_index_path(@socket, :edit, property), class: "mx-1" %>
+          <% end %>
+          <%= if Roles.can?(@current_user, property, :delete) do %>
+            <%= link "Delete", to: "#", phx_click: "delete", phx_value_id: property.id, data: [confirm: "Are you sure?"], class: "link-danger mx-1" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

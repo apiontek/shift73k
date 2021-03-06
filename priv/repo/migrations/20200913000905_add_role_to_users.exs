@@ -1,7 +1,7 @@
-defmodule Bones73k.Repo.Migrations.AddRoleToUsers do
+defmodule Shift73k.Repo.Migrations.AddRoleToUsers do
   use Ecto.Migration
 
-  alias Bones73k.Accounts.User.RolesEnum
+  alias Shift73k.Accounts.User.RolesEnum
 
   def up do
     RolesEnum.create_type()

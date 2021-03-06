@@ -1,9 +1,9 @@
-defmodule Bones73k.MixProject do
+defmodule Shift73k.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :bones73k,
+      app: :shift73k,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Bones73k.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Bones73k.Application, []},
+      mod: {Shift73k.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

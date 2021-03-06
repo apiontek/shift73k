@@ -1,9 +1,0 @@
-<h2 class="mb-3">
-  <%= icon_div @socket, "bi-sliders", [class: "icon baseline"] %>
-  User Settings
-</h2>
-
-<div class="row">
-  <%= live_component @socket, Bones73kWeb.UserLive.Settings.Email, id: "email-#{@current_user.id}", current_user: @current_user %>
-  <%= live_component @socket, Bones73kWeb.UserLive.Settings.Password, id: "password-#{@current_user.id}", current_user: @current_user %>
-</div>

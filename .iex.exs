@@ -1,5 +1,5 @@
 import Ecto.Query
-# alias Bones73kWeb.Router.Helpers, as: Routes
-alias Bones73k.Repo
-alias Bones73k.Accounts
-alias Bones73k.Accounts.User
+# alias Shift73kWeb.Router.Helpers, as: Routes
+alias Shift73k.Repo
+alias Shift73k.Accounts
+alias Shift73k.Accounts.User

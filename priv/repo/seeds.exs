@@ -5,16 +5,16 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     Bones73k.Repo.insert!(%Bones73k.SomeSchema{})
+#     Shift73k.Repo.insert!(%Shift73k.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
 import Ecto.Query
-alias Bones73k.Repo
-alias Bones73k.Accounts
-alias Bones73k.Accounts.User
-alias Bones73k.Properties.Property
+alias Shift73k.Repo
+alias Shift73k.Accounts
+alias Shift73k.Accounts.User
+alias Shift73k.Properties.Property
 
 ############################################################################
 ## INSERTING MOCK USER DATA
@@ -86,7 +86,7 @@ Enum.each(1..10, fn i ->
     description: "Property that belongs to user 1",
     user_id: user_1.id
   }
-  |> Bones73k.Properties.create_property()
+  |> Shift73k.Properties.create_property()
 
   %{
     name: "Property #{i} - User 2",
@@ -94,7 +94,7 @@ Enum.each(1..10, fn i ->
     description: "Property that belongs to user 2",
     user_id: user_2.id
   }
-  |> Bones73k.Properties.create_property()
+  |> Shift73k.Properties.create_property()
 
   %{
     name: "Property #{i} - Admin",
@@ -102,7 +102,7 @@ Enum.each(1..10, fn i ->
     description: "Property that belongs to admin",
     user_id: admin.id
   }
-  |> Bones73k.Properties.create_property()
+  |> Shift73k.Properties.create_property()
 end)
 
 # if Mix.env() == :dev do
@@ -114,7 +114,7 @@ count_to_take = 123
 
 mock_props = props_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
 
-random_user_query = from User, order_by: fragment("RANDOM()"), limit: 1
+random_user_query = from(User, order_by: fragment("RANDOM()"), limit: 1)
 
 mock_props =
   Enum.map(mock_props, fn e ->

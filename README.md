@@ -1,4 +1,4 @@
-# Bones73k
+# Shift73k
 
 See full article [here](https://www.leanpanda.com/blog/authentication-and-authorisation-in-phoenix-liveview/).
 

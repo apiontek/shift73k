@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :bones73k, Bones73k.Repo,
+config :shift73k, Shift73k.Repo,
   username: "postgres",
   password: "postgres",
-  database: "bones73k_dev",
+  database: "shift73k_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :bones73k, Bones73k.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :bones73k, Bones73kWeb.Endpoint,
+config :shift73k, Shift73kWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -56,13 +56,13 @@ config :bones73k, Bones73kWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :bones73k, Bones73kWeb.Endpoint,
+config :shift73k, Shift73kWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/bones73k_web/(live|views)/.*(ex)$",
-      ~r"lib/bones73k_web/templates/.*(eex)$"
+      ~r"lib/shift73k_web/(live|views)/.*(ex)$",
+      ~r"lib/shift73k_web/templates/.*(eex)$"
     ]
   ]
 

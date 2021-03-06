@@ -1,4 +1,4 @@
-defmodule Bones73k.Repo.Migrations.CreateProperties do
+defmodule Shift73k.Repo.Migrations.CreateProperties do
   use Ecto.Migration
 
   def change do

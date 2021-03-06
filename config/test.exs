@@ -8,16 +8,16 @@ config :bcrypt_elixir, :log_rounds, 1
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :bones73k, Bones73k.Repo,
+config :shift73k, Shift73k.Repo,
   username: "postgres",
   password: "postgres",
-  database: "bones73k_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "shift73k_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :bones73k, Bones73kWeb.Endpoint,
+config :shift73k, Shift73kWeb.Endpoint,
   http: [port: 4002],
   server: false
 
@@ -25,7 +25,7 @@ config :bones73k, Bones73kWeb.Endpoint,
 config :logger, level: :warn
 
 # Bamboo test mailer config
-config :bones73k, Bones73k.Mailer, adapter: Bamboo.TestAdapter
+config :shift73k, Shift73k.Mailer, adapter: Bamboo.TestAdapter
 
 # Import secret config
 import_config "test.secret.exs"

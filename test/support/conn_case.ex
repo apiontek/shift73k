@@ -1,4 +1,4 @@
-defmodule Bones73kWeb.ConnCase do
+defmodule Shift73kWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule Bones73kWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Bones73kWeb.ConnCase, async: true`, although
+  by setting `use Shift73kWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -22,20 +22,20 @@ defmodule Bones73kWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import Bones73kWeb.ConnCase
+      import Shift73kWeb.ConnCase
 
-      alias Bones73kWeb.Router.Helpers, as: Routes
+      alias Shift73kWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint Bones73kWeb.Endpoint
+      @endpoint Shift73kWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Bones73k.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Shift73k.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Bones73k.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Shift73k.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
@@ -50,7 +50,7 @@ defmodule Bones73kWeb.ConnCase do
   test context.
   """
   def register_and_log_in_user(%{conn: conn}) do
-    user = Bones73k.AccountsFixtures.user_fixture()
+    user = Shift73k.AccountsFixtures.user_fixture()
     %{conn: log_in_user(conn, user), user: user}
   end
 
@@ -60,7 +60,7 @@ defmodule Bones73kWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_user(conn, user) do
-    token = Bones73k.Accounts.generate_user_session_token(user)
+    token = Shift73k.Accounts.generate_user_session_token(user)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
