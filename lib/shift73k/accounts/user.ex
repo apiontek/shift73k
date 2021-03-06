@@ -3,6 +3,8 @@ defmodule Shift73k.Accounts.User do
   import Ecto.Changeset
   import EctoEnum
 
+  alias Shift73k.ShiftTemplates.ShiftTemplate
+
   @roles [
     user: "Basic user level",
     manager: "Can create users, update user emails & passwords",
@@ -25,6 +27,11 @@ defmodule Shift73k.Accounts.User do
     field(:confirmed_at, :naive_datetime)
 
     field(:role, RolesEnum, default: :user)
+
+    has_many(:shift_templates, ShiftTemplate)
+    # has_one(:default_shift_template, ShiftTemplate, references: :default_shift_template_id)
+    belongs_to(:default_shift_template, ShiftTemplate)
+
     timestamps()
   end
 

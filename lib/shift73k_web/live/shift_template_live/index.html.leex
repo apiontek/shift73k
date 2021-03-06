@@ -1,0 +1,49 @@
+<h1>Listing Shift templates</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, Shift73kWeb.ShiftTemplateLive.FormComponent,
+    id: @shift_template.id || :new,
+    title: @page_title,
+    action: @live_action,
+    shift_template: @shift_template,
+    return_to: Routes.shift_template_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>Subject</th>
+      <th>Description</th>
+      <th>Location</th>
+      <th>Timezone</th>
+      <th>Start time</th>
+      <th>Length hours</th>
+      <th>Length minutes</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="shift_templates">
+    <%= for shift_template <- @shift_templates do %>
+      <tr id="shift_template-<%= shift_template.id %>">
+        <td><%= shift_template.label %></td>
+        <td><%= shift_template.subject %></td>
+        <td><%= shift_template.description %></td>
+        <td><%= shift_template.location %></td>
+        <td><%= shift_template.timezone %></td>
+        <td><%= shift_template.start_time %></td>
+        <td><%= shift_template.length_hours %></td>
+        <td><%= shift_template.length_minutes %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.shift_template_show_path(@socket, :show, shift_template) %></span>
+          <span><%= live_patch "Edit", to: Routes.shift_template_index_path(@socket, :edit, shift_template) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift_template.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Shift template", to: Routes.shift_template_index_path(@socket, :new) %></span>

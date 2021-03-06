@@ -46,7 +46,7 @@ this_path = Path.dirname(__ENV__.file)
 
 users_json = Path.join(this_path, "MOCK_DATA_users.json")
 
-count_to_take = 65
+count_to_take = 15
 
 mock_users = users_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
 
