@@ -88,17 +88,13 @@ defmodule Shift73kWeb.Router do
     get("/users/confirm/:token", UserConfirmationController, :confirm)
   end
 
-  scope "/", Shift73kWeb do
-    pipe_through([:browser, :require_authenticated_user, :user])
+  # scope "/", Shift73kWeb do
+  #   pipe_through([:browser, :require_authenticated_user, :user])
+  # end
 
-    live("/user_dashboard", UserDashboardLive, :index)
-  end
-
-  scope "/", Shift73kWeb do
-    pipe_through([:browser, :require_authenticated_user, :admin])
-
-    live("/admin_dashboard", AdminDashboardLive, :index)
-  end
+  # scope "/", Shift73kWeb do
+  #   pipe_through([:browser, :require_authenticated_user, :admin])
+  # end
 
   # Users Management
   scope "/users", Shift73kWeb do
