@@ -17,9 +17,8 @@ import "../node_modules/bootstrap-icons/icons/at.svg"; // email field
 import "../node_modules/bootstrap-icons/icons/key.svg"; // new password field
 import "../node_modules/bootstrap-icons/icons/key-fill.svg"; // pw confirm field
 import "../node_modules/bootstrap-icons/icons/lock.svg"; // current pw field
-import "../node_modules/bootstrap-icons/icons/shield-shaded.svg"; // role
+import "../node_modules/bootstrap-icons/icons/shield.svg"; // role
 // live tables
-import "../node_modules/bootstrap-icons/icons/filter.svg";
 import "../node_modules/bootstrap-icons/icons/backspace.svg"; // clear filter
 import "../node_modules/bootstrap-icons/icons/sort-down-alt.svg";
 import "../node_modules/bootstrap-icons/icons/sort-up-alt.svg";

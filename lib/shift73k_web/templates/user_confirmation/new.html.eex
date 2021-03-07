@@ -9,11 +9,7 @@
 
   <%= form_for :user, Routes.user_confirmation_path(@conn, :create), [class: "needs-validation", novalidate: true], fn f -> %>
 
-    <%= label f, :email, class: "form-label" %>
-    <div class="input-group has-validation mb-3">
-      <span class="input-group-text">
-        <%= icon_div @conn, "bi-at", [class: "icon fs-5"] %>
-      </span>
+    <div class="form-floating mb-3">
       <%= email_input f, :email,
           value: @current_user && @current_user.email || "",
           placeholder: "e.g., babka@73k.us",
@@ -22,6 +18,10 @@
           required: true,
           autofocus: !@current_user
         %>
+      <%= label f, :email do %>
+        <%= icon_div @conn, "bi-at", [class: "icon baseline text-muted"] %>
+        Email
+      <% end %>
       <span class="invalid-feedback">must be a valid email address</span>
     </div>
 

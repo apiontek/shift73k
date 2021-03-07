@@ -6,32 +6,49 @@
 
   <div class="modal-body">
 
-    <div class="mb-3" phx-feedback-for="<%= input_id(f, :email)%>">
-      <%= label f, :email, class: "form-label" %>
-      <div class="input-group has-validation">
-        <span class="input-group-text">
-          <%= icon_div @socket, "bi-at", [class: "icon"] %>
-        </span>
-        <%= email_input f, :email,
-            value: input_value(f, :email),
-            class: input_class(f, :email, "form-control"),
-            placeholder: "e.g., babka@73k.us",
-            maxlength: User.max_email,
-            autofocus: true,
-            phx_debounce: "250",
-            aria_describedby: error_ids(f, :email)
-          %>
-        <%= error_tag f, :email %>
-      </div>
+    <div class="form-floating mb-3" phx-feedback-for="<%= input_id(f, :email) %>">
+      <%= email_input f, :email,
+          value: input_value(f, :email),
+          class: input_class(f, :email, "form-control"),
+          placeholder: "e.g., babka@73k.us",
+          maxlength: User.max_email,
+          autofocus: true,
+          phx_debounce: "250",
+          aria_describedby: error_ids(f, :email)
+        %>
+      <%= label f, :email do %>
+        <%= icon_div @socket, "bi-at", [class: "icon baseline text-muted"] %>
+        Email
+      <% end %>
+      <%= error_tag f, :email %>
     </div>
 
+
+    <div class="form-floating mb-3" phx-feedback-for="<%= input_id(f, :password) %>">
+      <%= password_input f, :password,
+          value: input_value(f, :password),
+          class: input_class(f, :password, "form-control"),
+          placeholder: "Password",
+          maxlength: User.max_password,
+          aria_describedby: error_ids(f, :password)
+        %>
+      <%= label f, :password do %>
+        <%= icon_div @socket, "bi-key", [class: "icon baseline text-muted"] %>
+        Password
+      <% end %>
+      <%= error_tag f, :password %>
+    </div>
+
+
+
+
     <%= if Roles.can?(@current_user, %User{}, :edit_role) do %>
-      <%= label f, :role, class: "form-label" %>
-      <div class="input-group mb-3">
-        <span class="input-group-text">
-          <%= icon_div @socket, "bi-shield-shaded", [class: "icon"] %>
-        </span>
+      <div class="form-floating">
         <%= select f, :role, Enum.map(User.roles(), fn {k, _v} -> {String.capitalize(Atom.to_string(k)), k} end), class: "form-select" %>
+        <%= label f, :role do %>
+          <%= icon_div @socket, "bi-shield", [class: "icon baseline text-muted"] %>
+          User role
+        <% end %>
         <span class="valid-feedback text-primary" style="display: block;">
           <%= role_description(input_value(f, :role)) %>
         </span>
@@ -40,21 +57,6 @@
       <%= hidden_input f, :role, value: input_value(f, :role) %>
     <% end %>
 
-    <div phx-feedback-for="<%= input_id(f, :password) %>">
-      <%= label f, :password, class: "form-label" %>
-      <div class="input-group has-validation">
-        <span class="input-group-text">
-          <%= icon_div @socket, "bi-key", [class: "icon"] %>
-        </span>
-        <%= password_input f, :password,
-            value: input_value(f, :password),
-            class: input_class(f, :password, "form-control"),
-            maxlength: User.max_password,
-            aria_describedby: error_ids(f, :password)
-          %>
-        <%= error_tag f, :password %>
-      </div>
-    </div>
 
   </div>
   <div class="modal-footer">

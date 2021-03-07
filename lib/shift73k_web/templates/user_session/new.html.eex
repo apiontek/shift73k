@@ -15,31 +15,35 @@
       </div>
     <% end %>
 
-    <%= label f, :email, class: "form-label" %>
-    <div class="input-group has-validation mb-3">
-      <span class="input-group-text">
-        <%= icon_div @conn, "bi-at", [class: "icon"] %>
-      </span>
+
+    <div class="form-floating mb-3">
       <%= email_input f, :email,
           class: "form-control",
           placeholder: "e.g., babka@73k.us",
           maxlength: User.max_email,
           required: true
         %>
+      <%= label f, :email do %>
+        <%= icon_div @conn, "bi-at", [class: "icon baseline text-muted"] %>
+        Email
+      <% end %>
       <span class="invalid-feedback">must be a valid email address</span>
     </div>
 
-    <%= label f, :password, class: "form-label" %>
-    <div class="input-group has-validation mb-3">
-      <span class="input-group-text">
-        <%= icon_div @conn, "bi-lock", [class: "icon"] %>
-      </span>
+
+    <div class="form-floating mb-3">
       <%= password_input f, :password,
           class: "form-control",
+          placeholder: "Password",
           required: true
         %>
+      <%= label f, :password do %>
+        <%= icon_div @conn, "bi-lock", [class: "icon baseline text-muted"] %>
+        Password
+      <% end %>
       <span class="invalid-feedback">password is required</span>
     </div>
+
 
     <div class="form-check mb-3 no-valid-style">
       <%= checkbox f, :remember_me, class: "form-check-input" %>

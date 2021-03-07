@@ -33,18 +33,12 @@
   <%= form_for :filter, "#", [phx_change: "filter-change"], fn flt -> %>
   <div class="input-group">
 
-    <span class="input-group-text">
-      <%= icon_div @socket, "bi-filter", [class: "icon"] %>
-    </span>
-
     <%= text_input flt, :filter, name: "filter", class: "form-control", placeholder: "Filter users...", value: @query.filter %>
 
-    </button>
-
     <%= if @query.filter == "" do %>
-      <button class="btn btn-outline-secondary" type="button" aria-label="Clear filter" aria-disabled="true" disabled>
+    <button class="btn btn-outline-primary" type="button" aria-label="Clear filter" aria-disabled="true" disabled>
     <% else %>
-      <button class="btn btn-outline-secondary" type="button" aria-label="Clear filter" phx-click="filter-clear">
+    <button class="btn btn-primary" type="button" aria-label="Clear filter" phx-click="filter-clear">
     <% end %>
       <%= icon_div @socket, "bi-backspace", [class: "icon baseline"], [role: "img", aria_hidden: false] %>
     </button>
