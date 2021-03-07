@@ -21,6 +21,11 @@ defmodule Shift73k.ShiftTemplates do
     Repo.all(ShiftTemplate)
   end
 
+  def list_shift_templates_by_user_id(user_id) do
+    (from s in ShiftTemplate, where: s.user_id == ^user_id)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single shift_template.
 

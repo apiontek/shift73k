@@ -3,7 +3,7 @@
 
     <h1 class="fs-4 my-0 py-0 lh-base">
     <%= link to: Routes.page_path(@conn, :index), class: "navbar-brand fs-4" do %>
-      <%= icon_div @conn, "mdi-skull-crossbones", [class: "icon baseline fs-3"] %>
+      <%= icon_div @conn, "bi-calendar3-week", [class: "icon baseline me-1"] %>
       <span class="fw-light">Shift73k</span>
     <% end %>
     </h1>

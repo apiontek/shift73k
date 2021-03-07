@@ -1,15 +1,24 @@
-<h1>Listing Shift templates</h1>
-
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, Shift73kWeb.ShiftTemplateLive.FormComponent,
     id: @shift_template.id || :new,
     title: @page_title,
     action: @live_action,
     shift_template: @shift_template,
-    return_to: Routes.shift_template_index_path(@socket, :index) %>
+    current_user: @current_user %>
 <% end %>
 
-<table>
+
+<div class="d-flex justify-content-between d-flex align-items-center">
+  <h2>
+    <%= icon_div @socket, "bi-clock-history", [class: "icon baseline"] %>
+    My Shift Templates
+  </h2>
+  <%= live_patch "New Shift Template", to: Routes.shift_template_index_path(@socket, :new), class: "btn btn-primary" %>
+</div>
+
+
+<div class="table-responsive">
+<table class="table">
   <thead>
     <tr>
       <th>Label</th>
@@ -18,8 +27,7 @@
       <th>Location</th>
       <th>Timezone</th>
       <th>Start time</th>
-      <th>Length hours</th>
-      <th>Length minutes</th>
+      <th>Length</th>
 
       <th></th>
     </tr>
@@ -32,9 +40,8 @@
         <td><%= shift_template.description %></td>
         <td><%= shift_template.location %></td>
         <td><%= shift_template.timezone %></td>
-        <td><%= shift_template.start_time %></td>
-        <td><%= shift_template.length_hours %></td>
-        <td><%= shift_template.length_minutes %></td>
+        <td><%= shift_template.start_time |> Calendar.strftime("%I:%M %p") %></td>
+        <td><%= shift_template.length_hours %>h <%= shift_template.length_minutes || 0 %>m</td>
 
         <td>
           <span><%= live_redirect "Show", to: Routes.shift_template_show_path(@socket, :show, shift_template) %></span>
@@ -45,5 +52,4 @@
     <% end %>
   </tbody>
 </table>
-
-<span><%= live_patch "New Shift template", to: Routes.shift_template_index_path(@socket, :new) %></span>
+</div>

@@ -5,7 +5,7 @@ import "../css/app.scss";
 
 // Import icons for sprite-loader
 // navbar brand icon
-import "../node_modules/@mdi/svg/svg/skull-crossbones.svg"; // brand
+import "../node_modules/bootstrap-icons/icons/calendar3-week.svg"; // brand
 // menus etc
 import "../node_modules/bootstrap-icons/icons/person-circle.svg"; // accounts menu
 import "../node_modules/bootstrap-icons/icons/person-plus.svg"; // new user / register
@@ -35,6 +35,9 @@ import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg"; // resend confi
 import "../node_modules/bootstrap-icons/icons/door-open.svg"; // log in header
 import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // forgot password
 import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
+// calendar/event icons
+import "../node_modules/bootstrap-icons/icons/calendar3-event.svg"; // brand
+import "../node_modules/bootstrap-icons/icons/clock-history.svg"; // brand
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
