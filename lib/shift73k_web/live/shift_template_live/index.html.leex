@@ -11,7 +11,7 @@
 <div class="row justify-content-center">
   <div class="col-md-12 col-lg-10 col-xl-9 ">
 
-    <div class="d-flex justify-content-between d-flex align-items-center mb-3">
+    <div class="d-flex justify-content-between d-flex align-items-center mb-4">
       <h2>
         <%= icon_div @socket, "bi-clock-history", [class: "icon baseline"] %>
         My Shift Templates
@@ -21,15 +21,49 @@
 
 
     <div class="row justify-content-center">
-      <div class="col-12 col-sm-10 col-md-9 col-lg-7 col-xl-6 ">
+      <div class="col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7 ">
 
         <%= for shift <- @shift_templates do %>
 
-          <div class="card">
+          <div class="card mt-4">
             <div class="card-body">
-              <h5 class="card-title"><%= shift.subject %></h5>
-              <h6 class="card-subtitle mb-2 text-muted"><%= shift.description %></h6>
-              <p class="card-text">huh ok</p>
+              <h4 class="card-title"><%= shift.subject %></h4>
+              <h5 class="card-subtitle mb-2 text-muted">
+                <%= shift.start_time |> Calendar.strftime("%I:%M %p") %>
+                &mdash;
+                <%=
+                  shift.start_time
+                  |> Time.add((60 * 60 * shift.length_hours) + ((shift.length_minutes || 0) * 60))
+                  |> Calendar.strftime("%I:%M %p")
+                  %>
+                <span class="fs-6">[<%= shift.timezone %>]</span>
+              </h5>
+              <p class="card-text">
+                <table class="table table-borderless table-nonfluid">
+                  <tbody>
+                    <tr>
+                      <th scope="row" class="text-end">Description</th>
+                      <td>
+                        <%= if shift.description do %>
+                          <%= shift.description %>
+                        <% else %>
+                          <span class="text-muted fst-italic">empty</span>
+                        <% end %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">Location</th>
+                      <td>
+                        <%= if shift.location do %>
+                          <%= shift.location %>
+                        <% else %>
+                          <span class="text-muted fst-italic">empty</span>
+                        <% end %>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </p>
               <a href="#" class="card-link">Card link</a>
               <a href="#" class="card-link">Another link</a>
             </div>
@@ -40,7 +74,6 @@
 
       </div>
     </div>
-
 
 
 
