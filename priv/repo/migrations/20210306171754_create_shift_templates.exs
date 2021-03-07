@@ -4,7 +4,6 @@ defmodule Shift73k.Repo.Migrations.CreateShiftTemplates do
   def change do
     create table(:shift_templates, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :label, :string
       add :subject, :string, null: false
       add :description, :string
       add :location, :string

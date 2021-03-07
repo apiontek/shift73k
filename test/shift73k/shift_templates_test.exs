@@ -32,7 +32,6 @@ defmodule Shift73k.ShiftTemplatesTest do
     test "create_shift_template/1 with valid data creates a shift_template" do
       assert {:ok, %ShiftTemplate{} = shift_template} = ShiftTemplates.create_shift_template(@valid_attrs)
       assert shift_template.description == "some description"
-      assert shift_template.label == "some label"
       assert shift_template.length_hours == 42
       assert shift_template.length_minutes == 42
       assert shift_template.location == "some location"
@@ -49,7 +48,6 @@ defmodule Shift73k.ShiftTemplatesTest do
       shift_template = shift_template_fixture()
       assert {:ok, %ShiftTemplate{} = shift_template} = ShiftTemplates.update_shift_template(shift_template, @update_attrs)
       assert shift_template.description == "some updated description"
-      assert shift_template.label == "some updated label"
       assert shift_template.length_hours == 43
       assert shift_template.length_minutes == 43
       assert shift_template.location == "some updated location"

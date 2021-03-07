@@ -43,22 +43,23 @@ alias Shift73k.Accounts.User
 
 # if Mix.env() == :dev do
 this_path = Path.dirname(__ENV__.file)
-
 users_json = Path.join(this_path, "MOCK_DATA_users.json")
 
-# count_to_take = 15
+count_to_take = 15
 
-mock_users = users_json |> File.read!() |> Jason.decode!()
-#  |> Enum.take_random(count_to_take)
+mock_users = users_json |> File.read!() |> Jason.decode!() |> Enum.take_random(count_to_take)
 
-mock_users = ~s([
-      {"email":"adam@73k.us","password":"adamadamA1","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
-      {"email":"karen@73k.us","password":"karenkarenA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
-      {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
-    ]) |> Jason.decode!() |> Enum.concat(mock_users)
+extra_mock_users = ~s([
+  {"email":"adam@73k.us","password":"adamadamA1","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
+  {"email":"karen@73k.us","password":"karenkarenA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
+  {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
+])
 
 mock_users =
-  Enum.map(mock_users, fn e ->
+  extra_mock_users
+  |> Jason.decode!()
+  |> Enum.concat(mock_users)
+  |> Enum.map(fn e ->
     add_dt = NaiveDateTime.from_iso8601!(e["inserted_at"])
 
     %{
@@ -73,3 +74,48 @@ mock_users =
 
 Repo.insert_all(User, mock_users)
 # end
+
+
+#####
+# shift tepmlates
+alias Shift73k.ShiftTemplates.ShiftTemplate
+
+shifts_json = Path.join(this_path, "MOCK_DATA_shift-templates.json")
+mock_shifts = shifts_json |> File.read!() |> Jason.decode!()
+
+time_from_mock = fn mock_time ->
+  case String.length(mock_time) do
+    4 -> Time.from_iso8601!("T0#{mock_time}:00")
+    5 -> Time.from_iso8601!("T#{mock_time}:00")
+  end
+end
+
+seconds_day = 86_400
+seconds_days_14 = seconds_day * 14
+seconds_half_day = Integer.floor_div(seconds_day, 2)
+
+for user <- Accounts.list_users() do
+  user_shifts =
+    mock_shifts
+    |> Enum.take_random(:rand.uniform(15) + 5)
+    |> Enum.map(fn e ->
+      seconds_to_add = :rand.uniform(seconds_days_14) + seconds_half_day
+      add_dt = NaiveDateTime.add(user.inserted_at, seconds_to_add)
+
+      %{
+        subject: e["subject"],
+        description: e["description"],
+        location: e["location"],
+        timezone: (Tzdata.zone_list() |> Enum.random()),
+        start_time: time_from_mock.(e["start_time"]),
+        length_hours: e["length_hours"],
+        length_minutes: e["length_minutes"],
+        user_id: user.id,
+        inserted_at: add_dt,
+        updated_at: add_dt
+      }
+    end)
+
+  Repo.insert_all(ShiftTemplate, user_shifts)
+
+end

@@ -5,9 +5,9 @@ defmodule Shift73kWeb.ShiftTemplateLiveTest do
 
   alias Shift73k.ShiftTemplates
 
-  @create_attrs %{description: "some description", label: "some label", length_hours: 42, length_minutes: 42, location: "some location", start_time: ~T[14:00:00], subject: "some subject", timezone: "some timezone"}
-  @update_attrs %{description: "some updated description", label: "some updated label", length_hours: 43, length_minutes: 43, location: "some updated location", start_time: ~T[15:01:01], subject: "some updated subject", timezone: "some updated timezone"}
-  @invalid_attrs %{description: nil, label: nil, length_hours: nil, length_minutes: nil, location: nil, start_time: nil, subject: nil, timezone: nil}
+  @create_attrs %{description: "some description", length_hours: 12, length_minutes: 42, location: "some location", start_time: ~T[14:00:00], subject: "some subject", timezone: "some timezone"}
+  @update_attrs %{description: "some updated description", length_hours: 12, length_minutes: 43, location: "some updated location", start_time: ~T[15:01:01], subject: "some updated subject", timezone: "some updated timezone"}
+  @invalid_attrs %{description: nil, length_hours: nil, length_minutes: nil, location: nil, start_time: nil, subject: nil, timezone: nil}
 
   defp fixture(:shift_template) do
     {:ok, shift_template} = ShiftTemplates.create_shift_template(@create_attrs)

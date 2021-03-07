@@ -8,48 +8,76 @@
 <% end %>
 
 
-<div class="d-flex justify-content-between d-flex align-items-center">
-  <h2>
-    <%= icon_div @socket, "bi-clock-history", [class: "icon baseline"] %>
-    My Shift Templates
-  </h2>
-  <%= live_patch "New Shift Template", to: Routes.shift_template_index_path(@socket, :new), class: "btn btn-primary" %>
-</div>
+<div class="row justify-content-center">
+  <div class="col-md-12 col-lg-10 col-xl-9 ">
+
+    <div class="d-flex justify-content-between d-flex align-items-center mb-3">
+      <h2>
+        <%= icon_div @socket, "bi-clock-history", [class: "icon baseline"] %>
+        My Shift Templates
+      </h2>
+      <%= live_patch "New Shift Template", to: Routes.shift_template_index_path(@socket, :new), class: "btn btn-primary" %>
+    </div>
 
 
-<div class="table-responsive">
-<table class="table">
-  <thead>
-    <tr>
-      <th>Label</th>
-      <th>Subject</th>
-      <th>Description</th>
-      <th>Location</th>
-      <th>Timezone</th>
-      <th>Start time</th>
-      <th>Length</th>
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-9 col-lg-7 col-xl-6 ">
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="shift_templates">
-    <%= for shift_template <- @shift_templates do %>
-      <tr id="shift_template-<%= shift_template.id %>">
-        <td><%= shift_template.label %></td>
-        <td><%= shift_template.subject %></td>
-        <td><%= shift_template.description %></td>
-        <td><%= shift_template.location %></td>
-        <td><%= shift_template.timezone %></td>
-        <td><%= shift_template.start_time |> Calendar.strftime("%I:%M %p") %></td>
-        <td><%= shift_template.length_hours %>h <%= shift_template.length_minutes || 0 %>m</td>
+        <%= for shift <- @shift_templates do %>
 
-        <td>
-          <span><%= live_redirect "Show", to: Routes.shift_template_show_path(@socket, :show, shift_template) %></span>
-          <span><%= live_patch "Edit", to: Routes.shift_template_index_path(@socket, :edit, shift_template) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift_template.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%= shift.subject %></h5>
+              <h6 class="card-subtitle mb-2 text-muted"><%= shift.description %></h6>
+              <p class="card-text">huh ok</p>
+              <a href="#" class="card-link">Card link</a>
+              <a href="#" class="card-link">Another link</a>
+            </div>
+          </div>
+
+        <% end %>
+
+
+      </div>
+    </div>
+
+
+
+
+    <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Description</th>
+          <th>Location</th>
+          <th>Timezone</th>
+          <th>Start time</th>
+          <th>Length</th>
+
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="shift_templates">
+        <%= for shift <- @shift_templates do %>
+          <tr id="shift_template-<%= shift.id %>">
+            <td><%= shift.subject %></td>
+            <td><%= shift.description %></td>
+            <td><%= shift.location %></td>
+            <td><%= shift.timezone %></td>
+            <td><%= shift.start_time |> Calendar.strftime("%I:%M %p") %></td>
+            <td><%= shift.length_hours %>h <%= shift.length_minutes || 0 %>m</td>
+
+            <td>
+              <span><%= live_redirect "Show", to: Routes.shift_template_show_path(@socket, :show, shift) %></span>
+              <span><%= live_patch "Edit", to: Routes.shift_template_index_path(@socket, :edit, shift) %></span>
+              <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    </div>
+
+  </div>
 </div>

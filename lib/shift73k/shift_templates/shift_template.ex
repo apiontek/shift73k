@@ -8,7 +8,6 @@ defmodule Shift73k.ShiftTemplates.ShiftTemplate do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "shift_templates" do
-    field :label, :string
     field :subject, :string, default: "My Work Shift"
     field :description, :string
     field :location, :string
@@ -26,7 +25,6 @@ defmodule Shift73k.ShiftTemplates.ShiftTemplate do
   def changeset(shift_template, attrs) do
     shift_template
     |> cast(attrs, [
-      :label,
       :subject,
       :description,
       :location,

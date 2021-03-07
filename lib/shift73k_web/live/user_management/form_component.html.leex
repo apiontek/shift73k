@@ -59,7 +59,7 @@
   </div>
   <div class="modal-footer">
 
-    <%= link "Cancel", to: "#", class: "btn btn-secondary", phx_click: "cancel", phx_target: @myself %>
+    <%= link "Cancel", to: "#", class: "btn", phx_click: "cancel", phx_target: @myself %>
     <%= submit "Save",
         class: "btn btn-primary ",
         disabled: !@changeset.valid?,
