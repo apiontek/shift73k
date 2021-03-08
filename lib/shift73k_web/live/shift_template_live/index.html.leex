@@ -20,59 +20,92 @@
     </div>
 
 
-    <div class="row justify-content-center">
-      <div class="col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7 ">
+    <div class="row">
 
-        <%= for shift <- @shift_templates do %>
+      <%= for shift <- @shift_templates do %>
+
+        <div class="col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6 ">
 
           <div class="card mt-4">
+            <h5 class="card-header">
+              <span class="visually-hidden">Subject:</span>
+              <%= shift.subject %>
+            </h5>
             <div class="card-body">
-              <h4 class="card-title"><%= shift.subject %></h4>
-              <h5 class="card-subtitle mb-2 text-muted">
-                <%= shift.start_time |> Calendar.strftime("%I:%M %p") %>
-                &mdash;
-                <%=
-                  shift.start_time
-                  |> Time.add((60 * 60 * shift.length_hours) + ((shift.length_minutes || 0) * 60))
-                  |> Calendar.strftime("%I:%M %p")
-                  %>
-                <span class="fs-6">[<%= shift.timezone %>]</span>
-              </h5>
-              <p class="card-text">
-                <table class="table table-borderless table-nonfluid">
-                  <tbody>
-                    <tr>
-                      <th scope="row" class="text-end">Description</th>
-                      <td>
-                        <%= if shift.description do %>
-                          <%= shift.description %>
-                        <% else %>
-                          <span class="text-muted fst-italic">empty</span>
-                        <% end %>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row" class="text-end">Location</th>
-                      <td>
-                        <%= if shift.location do %>
-                          <%= shift.location %>
-                        <% else %>
-                          <span class="text-muted fst-italic">empty</span>
-                        <% end %>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </p>
-              <a href="#" class="card-link">Card link</a>
-              <a href="#" class="card-link">Another link</a>
+
+              <table class="table table-borderless table-nonfluid table-sm">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="text-end">
+                      <%= icon_div @socket, "bi-hourglass", [class: "icon baseline text-muted"] %>
+                      <span class="visually-hidden">Hours</span>
+                    </th>
+                    <td>
+                      <%= shift.start_time |> Calendar.strftime("%I:%M%P") %>
+                      &mdash;
+                      <%=
+                        shift.start_time
+                        |> Time.add((60 * 60 * shift.length_hours) + ((shift.length_minutes || 0) * 60))
+                        |> Calendar.strftime("%I:%M%P")
+                        %>
+                    </td>
+                  </tr>
+
+
+
+
+                  <tr>
+                    <th scope="row" class="text-end">
+                      <%= icon_div @socket, "bi-geo", [class: "icon baseline text-muted"] %>
+                      <span class="visually-hidden">Location</span>
+                    </th>
+                    <td>
+                      <%= if shift.location do %>
+                        <%= shift.location %>
+                      <% else %>
+                        <span class="text-muted fst-italic">none</span>
+                      <% end %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="text-end">
+                      <%= icon_div @socket, "bi-justify-left", [class: "icon baseline text-muted"] %>
+                      <span class="visually-hidden">Description</span>
+                    </th>
+                    <td>
+                      <%= if shift.description do %>
+                        <%= shift.description %>
+                      <% else %>
+                        <span class="text-muted fst-italic">none</span>
+                      <% end %>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="text-end">
+
+                <%= if Roles.can?(@current_user, shift, :delete) do %>
+                  <%= link to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger" do %>
+                    <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                    Delete
+                  <% end %>
+                <% end %>
+
+                <%= if Roles.can?(@current_user, shift, :edit) do %>
+                  <%= live_patch to: Routes.shift_template_index_path(@socket, :edit, shift), class: "btn btn-primary" do %>
+                    <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                    Edit
+                  <% end %>
+                <% end %>
+              </div>
             </div>
           </div>
 
-        <% end %>
+        </div>
 
+      <% end %>
 
-      </div>
     </div>
 
 
@@ -102,7 +135,6 @@
             <td><%= shift.length_hours %>h <%= shift.length_minutes || 0 %>m</td>
 
             <td>
-              <span><%= live_redirect "Show", to: Routes.shift_template_show_path(@socket, :show, shift) %></span>
               <span><%= live_patch "Edit", to: Routes.shift_template_index_path(@socket, :edit, shift) %></span>
               <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
             </td>

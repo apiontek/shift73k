@@ -37,6 +37,9 @@ import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
 // calendar/event icons
 import "../node_modules/bootstrap-icons/icons/calendar3-event.svg"; // brand
 import "../node_modules/bootstrap-icons/icons/clock-history.svg"; // brand
+import "../node_modules/bootstrap-icons/icons/hourglass.svg"; // brand
+import "../node_modules/bootstrap-icons/icons/geo.svg"; // brand
+import "../node_modules/bootstrap-icons/icons/justify-left.svg"; // brand
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

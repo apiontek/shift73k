@@ -94,9 +94,6 @@ defmodule Shift73kWeb.Router do
     live "/my_shifts", ShiftTemplateLive.Index, :index
     live "/my_shifts/new", ShiftTemplateLive.Index, :new
     live "/my_shifts/:id/edit", ShiftTemplateLive.Index, :edit
-
-    live "/my_shifts/:id", ShiftTemplateLive.Show, :show
-    live "/my_shifts/:id/show/edit", ShiftTemplateLive.Show, :edit
   end
 
   # scope "/", Shift73kWeb do
