@@ -9,8 +9,8 @@ import "../node_modules/bootstrap-icons/icons/calendar3-week.svg"; // brand
 // menus etc
 import "../node_modules/bootstrap-icons/icons/person-circle.svg"; // accounts menu
 import "../node_modules/bootstrap-icons/icons/person-plus.svg"; // new user / register
-import "../node_modules/bootstrap-icons/icons/box-arrow-in-left.svg"; // log in
-import "../node_modules/bootstrap-icons/icons/box-arrow-right.svg"; // log out
+import "../node_modules/bootstrap-icons/icons/door-open.svg"; // log in
+import "../node_modules/bootstrap-icons/icons/door-closed.svg"; // log out
 import "../node_modules/bootstrap-icons/icons/sliders.svg"; // new user / register
 // forms etc
 import "../node_modules/bootstrap-icons/icons/at.svg"; // email field
@@ -31,7 +31,6 @@ import "../node_modules/bootstrap-icons/icons/trash.svg";
 // page headers
 import "../node_modules/bootstrap-icons/icons/shield-lock.svg"; // reset password
 import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg"; // resend confirmation
-import "../node_modules/bootstrap-icons/icons/door-open.svg"; // log in header
 import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // forgot password
 import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
 // calendar/event icons

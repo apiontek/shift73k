@@ -1,3 +1,12 @@
+<%= if !@current_user do %>
+
+  <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light") do %>
+    <%= icon_div @conn, "bi-door-open", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+    Log in
+  <% end %>
+
+<% else %>
+
 <li class="nav-item dropdown">
 
   <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
@@ -7,48 +16,32 @@
 
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUserMenu">
 
-    <%= if @current_user do %>
-
-      <li><%= content_tag :span, @current_user.email, class: "dropdown-item-text" %></li>
+    <li><%= content_tag :span, @current_user.email, class: "dropdown-item-text" %></li>
+    <li><hr class="dropdown-divider"></li>
+    <%= if Roles.can?(@current_user, %User{}, :index) do %>
+      <li>
+        <%= link nav_link_opts(@conn, to: Routes.user_management_index_path(@conn, :index), class: "dropdown-item") do %>
+          <%= icon_div @conn, "bi-people", [class: "icon baseline me-1"] %>
+          Users
+        <% end %>
+      </li>
       <li><hr class="dropdown-divider"></li>
-      <%= if Roles.can?(@current_user, %User{}, :index) do %>
-        <li>
-          <%= link nav_link_opts(@conn, to: Routes.user_management_index_path(@conn, :index), class: "dropdown-item") do %>
-            <%= icon_div @conn, "bi-people", [class: "icon baseline me-1"] %>
-            Users
-          <% end %>
-        </li>
-        <li><hr class="dropdown-divider"></li>
-      <% end %>
-      <li>
-        <%= link nav_link_opts(@conn, to: Routes.user_settings_path(@conn, :edit), class: "dropdown-item") do %>
-          <%= icon_div @conn, "bi-sliders", [class: "icon baseline me-1"] %>
-          Settings
-        <% end %>
-      </li>
-      <li>
-        <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :delete), method: :delete, class: "dropdown-item") do %>
-          <%= icon_div @conn, "bi-box-arrow-right", [class: "icon baseline me-1"] %>
-          Log out
-        <% end %>
-      </li>
-
-    <% else %>
-
-      <li>
-        <%= link nav_link_opts(@conn, to: Routes.user_registration_path(@conn, :new), class: "dropdown-item") do %>
-          <%= icon_div @conn, "bi-person-plus", [class: "icon baseline me-1"] %>
-          Register
-        <% end %>
-      </li>
-      <li>
-        <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "dropdown-item") do %>
-          <%= icon_div @conn, "bi-box-arrow-in-left", [class: "icon baseline me-1"] %>
-          Log in
-        <% end %>
-      </li>
-
     <% end %>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.user_settings_path(@conn, :edit), class: "dropdown-item") do %>
+        <%= icon_div @conn, "bi-sliders", [class: "icon baseline me-1"] %>
+        Settings
+      <% end %>
+    </li>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :delete), method: :delete, class: "dropdown-item") do %>
+        <%= icon_div @conn, "bi-door-closed", [class: "icon baseline me-1"] %>
+        Log out
+      <% end %>
+    </li>
+
   </ul>
 
 </li>
+
+<% end %>
