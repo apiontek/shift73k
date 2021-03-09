@@ -22,7 +22,6 @@ defmodule Shift73kWeb.ErrorHelpers do
     content_tag(:span, translate_error(err), opts)
   end
 
-
   defp error_common_opts(form, field, append, opts) do
     Keyword.put(opts, :phx_feedback_for, input_id(form, field))
     |> Keyword.update(:class, append, fn c -> "#{append} #{c}" end)
@@ -37,6 +36,7 @@ defmodule Shift73kWeb.ErrorHelpers do
 
   def error_ids(%Phoenix.HTML.Form{} = form, field) do
     input_id = input_id(form, field)
+
     form.errors
     |> Keyword.get_values(field)
     |> Stream.with_index()
@@ -45,15 +45,13 @@ defmodule Shift73kWeb.ErrorHelpers do
   end
 
   def input_class(form, field, classes \\ "") do
-    case form.source.action do
-      nil ->
-        classes
-
-      _ ->
-        case Keyword.has_key?(form.errors, field) do
-          true -> "#{classes} is-invalid"
-          _ -> "#{classes} is-valid"
-        end
+    if form.source.action do
+      case Keyword.has_key?(form.errors, field) do
+        true -> "#{classes} is-invalid"
+        _ -> "#{classes} is-valid"
+      end
+    else
+      classes
     end
   end
 

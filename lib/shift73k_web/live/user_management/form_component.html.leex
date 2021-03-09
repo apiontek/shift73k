@@ -6,7 +6,9 @@
 
   <div class="modal-body">
 
-    <div class="form-floating mb-3" phx-feedback-for="<%= input_id(f, :email) %>">
+    <%= label f, :email, class: "form-label" %>
+    <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(f, :email) %>">
+      <%= icon_div @socket, "bi-at", [class: "icon is-left text-muted fs-5"] %>
       <%= email_input f, :email,
           value: input_value(f, :email),
           class: input_class(f, :email, "form-control"),
@@ -16,39 +18,26 @@
           phx_debounce: "250",
           aria_describedby: error_ids(f, :email)
         %>
-      <%= label f, :email do %>
-        <%= icon_div @socket, "bi-at", [class: "icon baseline text-muted"] %>
-        Email
-      <% end %>
       <%= error_tag f, :email %>
     </div>
 
-
-    <div class="form-floating mb-3" phx-feedback-for="<%= input_id(f, :password) %>">
+    <%= label f, :password, class: "form-label" %>
+    <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(f, :password) %>">
+      <%= icon_div @socket, "bi-key", [class: "icon is-left text-muted fs-5"] %>
       <%= password_input f, :password,
           value: input_value(f, :password),
           class: input_class(f, :password, "form-control"),
-          placeholder: "Password",
           maxlength: User.max_password,
           aria_describedby: error_ids(f, :password)
         %>
-      <%= label f, :password do %>
-        <%= icon_div @socket, "bi-key", [class: "icon baseline text-muted"] %>
-        Password
-      <% end %>
       <%= error_tag f, :password %>
     </div>
 
-
-
-
     <%= if Roles.can?(@current_user, %User{}, :edit_role) do %>
-      <div class="form-floating">
+      <%= label f, :role, class: "form-label" %>
+      <div class="inner-addon left-addon mb-3">
+        <%= icon_div @socket, "bi-shield", [class: "icon is-left text-muted fs-5"] %>
         <%= select f, :role, Enum.map(User.roles(), fn {k, _v} -> {String.capitalize(Atom.to_string(k)), k} end), class: "form-select" %>
-        <%= label f, :role do %>
-          <%= icon_div @socket, "bi-shield", [class: "icon baseline text-muted"] %>
-          User role
-        <% end %>
         <span class="valid-feedback text-primary" style="display: block;">
           <%= role_description(input_value(f, :role)) %>
         </span>
@@ -56,7 +45,6 @@
     <% else %>
       <%= hidden_input f, :role, value: input_value(f, :role) %>
     <% end %>
-
 
   </div>
   <div class="modal-footer">

@@ -22,34 +22,100 @@
 </h2>
 
 <%# filtering and new item creation %>
-<div class="d-flex flex-column flex-sm-row justify-content-between d-flex align-items-start mb-3">
+<div class="row justify-content-between align-items-start align-items-sm-end mb-3">
 
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
   <%= live_patch to: Routes.user_management_index_path(@socket, :new, Enum.into(@query, [])),
       class: "btn btn-primary mb-3 mb-sm-0" do %>
     <%= icon_div @socket, "bi-person-plus", [class: "icon baseline me-1"] %>
     New User
   <% end %>
-
-  <%= form_for :filter, "#", [phx_change: "filter-change"], fn flt -> %>
-  <div class="input-group">
-
-    <%= text_input flt, :filter, name: "filter", class: "form-control", placeholder: "Filter users...", value: @query.filter %>
-
-    <%= if @query.filter == "" do %>
-    <button class="btn btn-outline-primary" type="button" aria-label="Clear filter" aria-disabled="true" disabled>
-    <% else %>
-    <button class="btn btn-primary" type="button" aria-label="Clear filter" phx-click="filter-clear">
-    <% end %>
-      <%= icon_div @socket, "bi-backspace", [class: "icon baseline"], [role: "img", aria_hidden: false] %>
-    </button>
-
   </div>
+
+  <div class="col-12 d-block d-sm-none">
+  <%= form_for :sort, "#", [phx_change: "sort-by-change"], fn srt -> %>
+    <%= label srt, :sort_by, class: "visually-hidden" %>
+    <div class="input-group inner-addon left-addon mb-3 mb-sm-0">
+      <%= icon_div @socket, "bi-arrow-down-up", [class: "icon is-left text-muted fs-5", style: "z-index:1001;"], [style: "padding: 1px;"] %>
+      <%= Phoenix.HTML.Form.select srt, :sort_by, ["Email": "email", "Role": "role", "Created at": "inserted_at"], value: @query.sort_by, class: "form-select" %>
+      <button class="btn btn-primary" type="button" aria-label="Change sort order" phx-click="sort-order-change">
+      <%= icon_div @socket, (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"), [class: "icon baseline"] %>
+      </button>
+    </div>
+  <% end %>
+  </div>
+
+  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+  <%= form_for :filter, "#", [phx_change: "filter-change"], fn flt -> %>
+    <%= label flt, :filter, class: "visually-hidden" %>
+    <div class="inner-addon left-addon right-addon">
+      <%= icon_div @socket, "bi-funnel", [class: "icon is-left text-muted fs-5"] %>
+      <%= if @query.filter != "" do %>
+        <%= icon_div @socket, "bi-x-circle-fill", [class: "icon is-right text-primary fs-5"], [role: "img", aria_hidden: false, aria_label: "Clear filter", class: "cursor-pointer pe-auto", phx_click: "filter-clear"] %>
+      <% end %>
+      <%= text_input flt, :filter,
+          name: "filter",
+          value: @query.filter,
+          class: "form-control",
+          placeholder: "Filter users",
+          aria_label: "Filter users"
+        %>
+    </div>
+  <% end %>
+  </div>
+</div>
+
+<%# mobile data cards %>
+<div class="d-block d-sm-none">
+
+
+  <%= if !@page do %>
+    <div class="card">
+      <div class="spinner-border text-primary my-5 mx-auto" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  <% else %>
+    <%= for user <- @page.entries do %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9"><%= user.email %></dd>
+            <dt class="col-sm-3">Role</dt>
+            <dd class="col-sm-9"><%= user.role |> Atom.to_string() |> String.capitalize() %></dd>
+            <dt class="col-sm-3">Created at</dt>
+            <dd class="col-sm-9"><%= dt_out(user.inserted_at) %></dd>
+            <dt class="col-sm-3">
+              Confirmed?
+              <span class="visually-hidden"><%= user.confirmed_at && "Yes" || "No" %></span>
+              <input type="checkbox" class="form-check-input ms-1" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %>>
+            </dt>
+          </dl>
+
+          <%= if Roles.can?(@current_user, user, :edit) do %>
+            <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
+              <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+              Edit
+            <% end %>
+          <% end %>
+
+          <%= if Roles.can?(@current_user, user, :delete) do %>
+            <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= user.id %>">
+              <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+              Delete
+            </button>
+          <% end %>
+
+        </div>
+      </div>
+    <% end %>
   <% end %>
 
 </div>
 
-<%# main data table %>
-<div class="table-responsive">
+<%# non-mobile main data table %>
+<div class="table-responsive d-none d-sm-block">
   <table class="table">
 
     <thead>
@@ -102,13 +168,8 @@
             <td class="align-middle"><%= user.role |> Atom.to_string() |> String.capitalize() %></td>
             <td class="align-middle" style="white-space: nowrap;"><%= dt_out(user.inserted_at) %></td>
             <td class="align-middle">
-              <%= if user.confirmed_at do %>
-                <span class="visually-hidden">Yes</span>
-                <%= icon_div @socket, "bi-check", [class: "icon baseline fs-4 text-success"], [role: "img", aria_hidden: false] %>
-              <% else %>
-                <span class="visually-hidden">No</span>
-                <%= icon_div @socket, "bi-x", [class: "icon baseline fs-4 text-warning"], [role: "img", aria_hidden: false] %>
-              <% end %>
+              <span class="visually-hidden"><%= user.confirmed_at && "Confirmed" || "Not confirmed" %></span>
+              <input type="checkbox" class="form-check-input" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %>>
             </td>
             <td class="align-middle text-end text-nowrap">
 
@@ -153,7 +214,7 @@
           class: "form-select"
         %>
     <% end %>
-    <span class="ms-2"><%= @page.total_entries %> found</span>
+    <span class="ms-2"><%= @page.total_entries %> total</span>
   </div>
 
   <%# main pagination %>

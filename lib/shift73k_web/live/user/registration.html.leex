@@ -9,8 +9,9 @@
 
   <%= form_for @changeset, "#", [phx_change: :validate, phx_submit: :save, novalidate: true, id: "reg_form"], fn f -> %>
 
-
-    <div class="form-floating mb-3" phx-feedback-for="<%= input_id(f, :email) %>">
+    <%= label f, :email, class: "form-label" %>
+    <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(f, :email) %>">
+      <%= icon_div @socket, "bi-at", [class: "icon is-left text-muted fs-5"] %>
       <%= email_input f, :email,
           value: input_value(f, :email),
           class: input_class(f, :email, "form-control"),
@@ -20,30 +21,21 @@
           phx_debounce: "blur",
           aria_describedby: error_ids(f, :email)
         %>
-      <%= label f, :email do %>
-        <%= icon_div @socket, "bi-at", [class: "icon baseline text-muted"] %>
-        Email
-      <% end %>
       <%= error_tag f, :email %>
     </div>
 
-
-    <div class="form-floating mb-3" phx-feedback-for="<%= input_id(f, :password) %>">
+    <%= label f, :password, class: "form-label" %>
+    <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(f, :password) %>">
+      <%= icon_div @socket, "bi-key", [class: "icon is-left text-muted fs-5"] %>
       <%= password_input f, :password,
           value: input_value(f, :password),
           class: input_class(f, :password, "form-control"),
-          placeholder: "Password",
           maxlength: User.max_password,
           phx_debounce: "250",
           aria_describedby: error_ids(f, :password)
         %>
-      <%= label f, :password do %>
-        <%= icon_div @socket, "bi-key", [class: "icon baseline text-muted"] %>
-        Password
-      <% end %>
       <%= error_tag f, :password %>
     </div>
-
 
     <div class="mb-3">
       <%= submit (@trigger_submit && "Saving..." || "Register"),

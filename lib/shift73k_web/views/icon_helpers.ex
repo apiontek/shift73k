@@ -16,7 +16,10 @@ defmodule Shift73kWeb.IconHelpers do
     opts = aria_hidden?(opts)
 
     content_tag(:svg, tag_opts(name, opts)) do
-      tag(:use, "xlink:href": Routes.static_path(conn, "/images/icons.svg##{name}"))
+      ~E"""
+      <%= if title = Keyword.get(opts, :aria_label), do: content_tag(:title, title) %>
+      <%= tag(:use, "xlink:href": Routes.static_path(conn, "/images/icons.svg##{name}")) %>
+      """
     end
   end
 

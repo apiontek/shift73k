@@ -19,7 +19,9 @@ import "../node_modules/bootstrap-icons/icons/key-fill.svg"; // pw confirm field
 import "../node_modules/bootstrap-icons/icons/lock.svg"; // current pw field
 import "../node_modules/bootstrap-icons/icons/shield.svg"; // role
 // live tables
-import "../node_modules/bootstrap-icons/icons/backspace.svg"; // clear filter
+import "../node_modules/bootstrap-icons/icons/arrow-down-up.svg"; // sort
+import "../node_modules/bootstrap-icons/icons/funnel.svg"; // filter
+import "../node_modules/bootstrap-icons/icons/x-circle-fill.svg"; // clear filter
 import "../node_modules/bootstrap-icons/icons/sort-down-alt.svg";
 import "../node_modules/bootstrap-icons/icons/sort-up-alt.svg";
 import "../node_modules/bootstrap-icons/icons/chevron-left.svg";

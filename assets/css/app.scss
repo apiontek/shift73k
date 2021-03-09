@@ -31,3 +31,36 @@
 .cursor-pointer {
   cursor: pointer !important;
 }
+
+/*
+  icons in input fields
+  */
+/* enable absolute positioning */
+.inner-addon {
+  position: relative;
+}
+
+/* style icon */
+.inner-addon > .icon {
+  position: absolute;
+  padding: 0.5625rem 0.5rem;
+  pointer-events: none;
+}
+
+/* align icon */
+.inner-addon > .icon.is-left {
+  left: 0px;
+}
+.inner-addon > .icon.is-right {
+  right: 0px;
+}
+
+/* add padding  */
+.left-addon input,
+.left-addon select {
+  padding-left: 2rem;
+}
+.right-addon input,
+.right-addon select {
+  padding-right: 2rem;
+}

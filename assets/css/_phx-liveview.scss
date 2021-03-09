@@ -9,7 +9,6 @@
 /* sets default bootstrap form-control styles if field not touched yet */
 .phx-no-feedback .form-control.is-valid,
 .phx-no-feedback .form-control.is-invalid {
-  padding: $input-padding-y $input-padding-x;
   border: $input-border-width solid $input-border-color;
   background-image: none;
 
