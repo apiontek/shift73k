@@ -23,13 +23,13 @@ defmodule Shift73kWeb.ErrorHelpers do
   end
 
   defp error_common_opts(form, field, append, opts) do
-    Keyword.put(opts, :phx_feedback_for, input_id(form, field))
+    Keyword.put_new(opts, :phx_feedback_for, input_id(form, field))
     |> Keyword.update(:class, append, fn c -> "#{append} #{c}" end)
   end
 
   defp error_tag_opts({_err, err_index}, opts) do
     input_id = Keyword.get(opts, :phx_feedback_for, "")
-    Keyword.put(opts, :id, error_id(input_id, err_index))
+    Keyword.put_new(opts, :id, error_id(input_id, err_index))
   end
 
   defp error_id(input_id, err_index), do: "#{input_id}_feedback-#{err_index}"
