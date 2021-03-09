@@ -28,8 +28,6 @@ import "../node_modules/bootstrap-icons/icons/chevron-left.svg";
 import "../node_modules/bootstrap-icons/icons/chevron-right.svg";
 import "../node_modules/bootstrap-icons/icons/pencil.svg";
 import "../node_modules/bootstrap-icons/icons/trash.svg";
-import "../node_modules/bootstrap-icons/icons/check.svg";
-import "../node_modules/bootstrap-icons/icons/x.svg";
 // page headers
 import "../node_modules/bootstrap-icons/icons/shield-lock.svg"; // reset password
 import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg"; // resend confirmation
