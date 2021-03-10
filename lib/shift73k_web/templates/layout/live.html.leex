@@ -2,7 +2,7 @@
 
   <%# liveview flash alerts: %>
   <div class="row justify-content-center">
-    <div class="col-md-12 col-lg-10 col-xl-9 ">
+    <div class="col-md-12 col-lg-10 col-xxl-8 ">
       <%= for {kind, class} <- alert_kinds() do %>
         <%= if flash_content = live_flash(@flash, kind) do %>
           <div class="alert <%= class %> alert-dismissible fade show" role="alert" id="lv-alert-<%= kind %>" phx-hook="AlertRemover" data-key="<%= kind %>">

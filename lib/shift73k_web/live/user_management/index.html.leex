@@ -1,5 +1,5 @@
 <%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, Shift73kWeb.UserManagement.FormComponent,
+  <%= live_modal @socket, Bones73kWeb.UserManagement.FormComponent,
       id: @user.id || :new,
       title: @page_title,
       action: @live_action,
@@ -8,7 +8,7 @@
 <% end %>
 
 <%= if @delete_user do %>
-  <%= live_modal @socket, Shift73kWeb.UserManagement.DeleteComponent,
+  <%= live_modal @socket, Bones73kWeb.UserManagement.DeleteComponent,
       id: @delete_user.id,
       title: "Delete User",
       delete_user: @delete_user,
@@ -22,20 +22,20 @@
 </h2>
 
 <%# filtering and new item creation %>
-<div class="row justify-content-between align-items-start align-items-sm-end mb-3">
+<div class="row justify-content-between align-items-start align-items-md-end mb-3">
 
-  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+  <div class="col-12 col-md-6 col-lg-4 col-xl-3">
   <%= live_patch to: Routes.user_management_index_path(@socket, :new, Enum.into(@query, [])),
-      class: "btn btn-primary mb-3 mb-sm-0" do %>
+      class: "btn btn-primary mb-3 mb-md-0" do %>
     <%= icon_div @socket, "bi-person-plus", [class: "icon baseline me-1"] %>
     New User
   <% end %>
   </div>
 
-  <div class="col-12 d-block d-sm-none">
+  <div class="col-12 col-sm-5 d-block d-md-none">
   <%= form_for :sort, "#", [phx_change: "sort-by-change"], fn srt -> %>
     <%= label srt, :sort_by, class: "visually-hidden" %>
-    <div class="input-group inner-addon left-addon mb-3 mb-sm-0">
+    <div class="input-group inner-addon left-addon mb-3 mb-md-0">
       <%= icon_div @socket, "bi-arrow-down-up", [class: "icon is-left text-muted fs-5", style: "z-index:1001;"], [style: "padding: 1px;"] %>
       <%= Phoenix.HTML.Form.select srt, :sort_by, ["Email": "email", "Role": "role", "Created at": "inserted_at"], value: @query.sort_by, class: "form-select" %>
       <button class="btn btn-primary" type="button" aria-label="Change sort order" phx-click="sort-order-change">
@@ -45,7 +45,7 @@
   <% end %>
   </div>
 
-  <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+  <div class="col-12 col-sm-7 col-md-6 col-lg-4 col-xl-3">
   <%= form_for :filter, "#", [phx_change: "filter-change"], fn flt -> %>
     <%= label flt, :filter, class: "visually-hidden" %>
     <div class="inner-addon left-addon right-addon">
@@ -66,9 +66,9 @@
 </div>
 
 <%# mobile data cards %>
-<div class="d-block d-sm-none">
+<div class="d-block d-md-none">
 
-
+  <div class="row justify-content-center">
   <%= if !@page do %>
     <div class="card">
       <div class="spinner-border text-primary my-5 mx-auto" role="status">
@@ -77,20 +77,23 @@
     </div>
   <% else %>
     <%= for user <- @page.entries do %>
+      <div class="col-12 col-sm-10">
       <div class="card mb-3">
         <div class="card-body">
           <dl class="row">
-            <dt class="col-sm-3">Email</dt>
+            <dt class="col-sm-3 text-sm-end">Email</dt>
             <dd class="col-sm-9"><%= user.email %></dd>
-            <dt class="col-sm-3">Role</dt>
+            <dt class="col-sm-3 text-sm-end">Role</dt>
             <dd class="col-sm-9"><%= user.role |> Atom.to_string() |> String.capitalize() %></dd>
-            <dt class="col-sm-3">Created at</dt>
+            <dt class="col-sm-3 text-sm-end">Created at</dt>
             <dd class="col-sm-9"><%= dt_out(user.inserted_at) %></dd>
-            <dt class="col-sm-3">
-              Confirmed?
-              <span class="visually-hidden"><%= user.confirmed_at && "Yes" || "No" %></span>
-              <input type="checkbox" class="form-check-input ms-1" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %>>
+            <dt class="d-inline d-sm-block col-auto text-sm-end">
+              <span>Confirmed?</span>
             </dt>
+            <dd class="d-inline d-sm-block col-auto">
+              <span class="visually-hidden"><%= user.confirmed_at && "Yes" || "No" %></span>
+              <input type="checkbox" class="form-check-input" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %>>
+            </dd>
           </dl>
 
           <%= if Roles.can?(@current_user, user, :edit) do %>
@@ -109,13 +112,15 @@
 
         </div>
       </div>
+      </div>
     <% end %>
   <% end %>
+  </div>
 
 </div>
 
 <%# non-mobile main data table %>
-<div class="table-responsive d-none d-sm-block">
+<div class="table-responsive d-none d-md-block">
   <table class="table">
 
     <thead>

@@ -19,12 +19,14 @@
       <%# nav LEFT items %>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-        <li class="nav-item">
-          <%= link nav_link_opts(@conn, to: Routes.shift_template_index_path(@conn, :index), class: "nav-link") do %>
-            <%= icon_div @conn, "bi-clock-history", [class: "icon baseline me-1"] %>
-            Templates
-          <% end %>
-        </li>
+        <%= if @current_user do %>
+          <li class="nav-item">
+            <%= link nav_link_opts(@conn, to: Routes.shift_template_index_path(@conn, :index), class: "nav-link") do %>
+              <%= icon_div @conn, "bi-clock-history", [class: "icon baseline me-1"] %>
+              Templates
+            <% end %>
+          </li>
+        <% end %>
 
         <%# normal navbar link example %>
         <%# <li class="nav-item"> %>

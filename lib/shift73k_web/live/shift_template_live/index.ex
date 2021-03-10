@@ -36,13 +36,13 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Shift template")
+    |> assign(:page_title, "Edit Shift Template")
     |> assign(:shift_template, ShiftTemplates.get_shift_template!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Shift template")
+    |> assign(:page_title, "New Shift Template")
     |> assign(:shift_template, %ShiftTemplate{})
   end
 

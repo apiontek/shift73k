@@ -1,38 +1,45 @@
-<h2><%= @title %></h2>
-
 <%= f = form_for @changeset, "#",
   id: "shift_template-form",
   phx_target: @myself,
   phx_change: "validate",
   phx_submit: "save" %>
 
-  <%= label f, :subject %>
-  <%= text_input f, :subject %>
-  <%= error_tag f, :subject %>
+  <div class="modal-body">
 
-  <%= label f, :description %>
-  <%= text_input f, :description %>
-  <%= error_tag f, :description %>
 
-  <%= label f, :location %>
-  <%= text_input f, :location %>
-  <%= error_tag f, :location %>
+    <%= label f, :subject %>
+    <%= text_input f, :subject %>
+    <%= error_tag f, :subject %>
 
-  <%= label f, :timezone %>
-  <%= text_input f, :timezone %>
-  <%= error_tag f, :timezone %>
+    <%= label f, :description %>
+    <%= text_input f, :description %>
+    <%= error_tag f, :description %>
 
-  <%= label f, :start_time %>
-  <%= time_select f, :start_time %>
-  <%= error_tag f, :start_time %>
+    <%= label f, :location %>
+    <%= text_input f, :location %>
+    <%= error_tag f, :location %>
 
-  <%= label f, :length_hours %>
-  <%= number_input f, :length_hours %>
-  <%= error_tag f, :length_hours %>
+    <%= label f, :timezone %>
+    <%= text_input f, :timezone %>
+    <%= error_tag f, :timezone %>
 
-  <%= label f, :length_minutes %>
-  <%= number_input f, :length_minutes %>
-  <%= error_tag f, :length_minutes %>
+    <%= label f, :start_time %>
+    <%= time_select f, :start_time %>
+    <%= error_tag f, :start_time %>
 
-  <%= submit "Save", phx_disable_with: "Saving..." %>
+    <%= label f, :length_hours %>
+    <%= number_input f, :length_hours %>
+    <%= error_tag f, :length_hours %>
+
+    <%= label f, :length_minutes %>
+    <%= number_input f, :length_minutes %>
+    <%= error_tag f, :length_minutes %>
+
+  </div>
+  <div class="modal-footer">
+
+    <%= submit "Save", phx_disable_with: "Saving..." %>
+
+  </div>
+
 </form>

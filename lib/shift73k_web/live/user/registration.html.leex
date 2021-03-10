@@ -1,11 +1,11 @@
 <div class="row justify-content-center">
-  <div class="col-sm-9 col-md-7 col-lg-5 col-xl-4 ">
+  <div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3">
 
   <h2>
     <%= icon_div @socket, "bi-person-plus", [class: "icon baseline"] %>
     Register
   </h2>
-  <p class="lead">Registration gains additional features, like remembering your song request history.</p>
+  <p class="lead">Create an account to manage your work shifts with us.</p>
 
   <%= form_for @changeset, "#", [phx_change: :validate, phx_submit: :save, novalidate: true, id: "reg_form"], fn f -> %>
 

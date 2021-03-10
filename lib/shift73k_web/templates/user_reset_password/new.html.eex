@@ -1,5 +1,5 @@
 <div class="row justify-content-center">
-  <div class="col-sm-9 col-md-7 col-lg-5 col-xl-4 ">
+  <div class="col-11 col-sm-10 col-md-8 col-lg-7 col-xl-6 col-xxl-5">
 
   <h2>
     <%= icon_div @conn, "mdi-head-question-outline", [class: "icon baseline"] %>
