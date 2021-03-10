@@ -8,11 +8,18 @@
     <% end %>
     </h1>
 
-    <button class="hamburger hamburger--squeeze collapsed navbar-toggler" id="navbarSupportedContentToggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="hamburger-box d-flex">
-        <span class="hamburger-inner"></span>
-      </span>
-    </button>
+    <%= if @current_user do %>
+      <button class="hamburger hamburger--squeeze collapsed navbar-toggler" id="navbarSupportedContentToggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="hamburger-box d-flex">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>
+    <% else %>
+      <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light") do %>
+        <%= icon_div @conn, "bi-door-open", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+        Log in
+      <% end %>
+    <% end %>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
