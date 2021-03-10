@@ -97,7 +97,7 @@ defmodule Shift73kWeb.UserManagementLive.Index do
 
   @impl true
   def handle_event("delete-modal", %{"id" => id}, socket) do
-    {:noreply, assign(socket, :delete_user, Accounts.get_user(id))}
+    {:noreply, assign(socket, :delete_user, Accounts.get_user!(id))}
   end
 
   @impl true

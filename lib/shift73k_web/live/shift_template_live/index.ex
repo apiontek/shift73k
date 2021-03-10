@@ -19,7 +19,6 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
     live_action = socket.assigns.live_action
     shift_template = shift_template_from_params(params)
 
-
     if Roles.can?(current_user, shift_template, live_action) do
       socket
       |> assign_shift_templates()
@@ -66,14 +65,18 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
 
   defp shift_template_from_params(_params), do: %ShiftTemplate{}
 
-
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
-    shift_template = ShiftTemplates.get_shift_template!(id)
-    {:ok, _} = ShiftTemplates.delete_shift_template(shift_template)
-
-    {:noreply, assign_shift_templates(socket)}
+  def handle_event("delete-modal", %{"id" => id}, socket) do
+    {:noreply, assign(socket, :delete_shift_template, ShiftTemplates.get_shift_template!(id))}
   end
+
+  # @impl true
+  # def handle_event("delete", %{"id" => id}, socket) do
+  #   shift_template = ShiftTemplates.get_shift_template!(id)
+  #   {:ok, _} = ShiftTemplates.delete_shift_template(shift_template)
+
+  #   {:noreply, assign_shift_templates(socket)}
+  # end
 
   @impl true
   def handle_info({:close_modal, _}, %{assigns: %{modal_return_to: to}} = socket) do
@@ -84,5 +87,4 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
   def handle_info({:put_flash_message, {flash_type, msg}}, socket) do
     socket |> put_flash(flash_type, msg) |> live_noreply()
   end
-
 end

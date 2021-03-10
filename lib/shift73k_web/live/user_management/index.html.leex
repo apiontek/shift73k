@@ -94,7 +94,7 @@
           </dl>
 
           <%= if Roles.can?(@current_user, user, :edit) do %>
-            <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
+            <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-primary btn-sm text-nowrap" do %>
               <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
               Edit
             <% end %>

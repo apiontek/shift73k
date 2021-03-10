@@ -22,7 +22,7 @@ defmodule Shift73k.ShiftTemplates do
   end
 
   def list_shift_templates_by_user_id(user_id) do
-    (from s in ShiftTemplate, where: s.user_id == ^user_id)
+    from(s in ShiftTemplate, where: s.user_id == ^user_id)
     |> Repo.all()
   end
 
@@ -41,6 +41,8 @@ defmodule Shift73k.ShiftTemplates do
 
   """
   def get_shift_template!(id), do: Repo.get!(ShiftTemplate, id)
+
+  def get_shift_template(id), do: Repo.get(ShiftTemplate, id)
 
   @doc """
   Creates a shift_template.

@@ -7,6 +7,14 @@
     current_user: @current_user %>
 <% end %>
 
+<%= if @delete_shift_template do %>
+  <%= live_modal @socket, Shift73kWeb.ShiftTemplateLive.DeleteComponent,
+      id: @delete_shift_template.id,
+      title: "Delete Shift Template",
+      delete_shift_template: @delete_shift_template,
+      current_user: @current_user %>
+<% end %>
+
 
 <div class="row justify-content-start justify-content-sm-center">
   <div class="col-md-12 col-lg-10 col-xl-9">
@@ -83,22 +91,20 @@
                 </tbody>
               </table>
 
-              <div class="text-end">
-
-                <%= if Roles.can?(@current_user, shift, :delete) do %>
-                  <%= link to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm text-nowrap" do %>
-                    <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
-                    Delete
-                  <% end %>
+              <%= if Roles.can?(@current_user, shift, :edit) do %>
+                <%= live_patch to: Routes.shift_template_index_path(@socket, :edit, shift), class: "btn btn-primary btn-sm text-nowrap" do %>
+                  <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  Edit
                 <% end %>
+              <% end %>
 
-                <%= if Roles.can?(@current_user, shift, :edit) do %>
-                  <%= live_patch to: Routes.shift_template_index_path(@socket, :edit, shift), class: "btn btn-primary btn-sm text-nowrap" do %>
-                    <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
-                    Edit
-                  <% end %>
-                <% end %>
-              </div>
+              <%= if Roles.can?(@current_user, shift, :delete) do %>
+                <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= shift.id %>">
+                  <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  Delete
+                </button>
+              <% end %>
+
             </div>
           </div>
 
@@ -106,42 +112,6 @@
 
       <% end %>
 
-    </div>
-
-
-
-    <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Subject</th>
-          <th>Description</th>
-          <th>Location</th>
-          <th>Timezone</th>
-          <th>Start time</th>
-          <th>Length</th>
-
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="shift_templates">
-        <%= for shift <- @shift_templates do %>
-          <tr id="shift_template-<%= shift.id %>">
-            <td><%= shift.subject %></td>
-            <td><%= shift.description %></td>
-            <td><%= shift.location %></td>
-            <td><%= shift.timezone %></td>
-            <td><%= shift.start_time |> Calendar.strftime("%I:%M %p") %></td>
-            <td><%= shift.length_hours %>h <%= shift.length_minutes || 0 %>m</td>
-
-            <td>
-              <span><%= live_patch "Edit", to: Routes.shift_template_index_path(@socket, :edit, shift) %></span>
-              <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
     </div>
 
   </div>
