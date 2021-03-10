@@ -8,15 +8,18 @@
 <% end %>
 
 
-<div class="row justify-content-center">
-  <div class="col-md-12 col-lg-10 col-xl-9 ">
+<div class="row justify-content-start justify-content-sm-center">
+  <div class="col-md-12 col-lg-10 col-xl-9">
 
-    <div class="d-flex justify-content-between d-flex align-items-center mb-4">
-      <h2>
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center">
+      <h2 class="mb-3 mb-sm-0">
         <%= icon_div @socket, "bi-clock-history", [class: "icon baseline"] %>
         My Shift Templates
       </h2>
-      <%= live_patch "New Shift Template", to: Routes.shift_template_index_path(@socket, :new), class: "btn btn-primary" %>
+      <%= live_patch to: Routes.shift_template_index_path(@socket, :new), class: "btn btn-primary" do %>
+        <%= icon_div @socket, "bi-plus-circle-dotted", [class: "icon baseline me-1"] %>
+        New Shift Template
+      <% end %>
     </div>
 
 
@@ -24,7 +27,7 @@
 
       <%= for shift <- @shift_templates do %>
 
-        <div class="col-12 col-sm-11 col-md-9 col-lg-7 col-xl-6 ">
+        <div class="col-12 col-md-6 col-xl-4 ">
 
           <div class="card mt-4">
             <h5 class="card-header">
@@ -50,9 +53,6 @@
                         %>
                     </td>
                   </tr>
-
-
-
 
                   <tr>
                     <th scope="row" class="text-end">
@@ -86,14 +86,14 @@
               <div class="text-end">
 
                 <%= if Roles.can?(@current_user, shift, :delete) do %>
-                  <%= link to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger" do %>
+                  <%= link to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm text-nowrap" do %>
                     <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
                     Delete
                   <% end %>
                 <% end %>
 
                 <%= if Roles.can?(@current_user, shift, :edit) do %>
-                  <%= live_patch to: Routes.shift_template_index_path(@socket, :edit, shift), class: "btn btn-primary" do %>
+                  <%= live_patch to: Routes.shift_template_index_path(@socket, :edit, shift), class: "btn btn-primary btn-sm text-nowrap" do %>
                     <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
                     Edit
                   <% end %>
