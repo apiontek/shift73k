@@ -15,7 +15,7 @@
         </span>
       </button>
     <% else %>
-      <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light") do %>
+      <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light d-block d-lg-none") do %>
         <%= icon_div @conn, "bi-door-open", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
         Log in
       <% end %>
@@ -67,6 +67,13 @@
       <ul class="navbar-nav">
 
         <%= render "navbar/_user_menu.html", assigns %>
+
+        <%= if !@current_user do %>
+          <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light d-none d-lg-block") do %>
+            <%= icon_div @conn, "bi-door-open", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+            Log in
+          <% end %>
+        <% end %>
 
       </ul>
 

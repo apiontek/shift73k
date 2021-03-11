@@ -34,12 +34,14 @@ import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg"; // resend confi
 import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // forgot password
 import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
 // calendar/event icons
-import "../node_modules/bootstrap-icons/icons/calendar3-event.svg"; // brand
-import "../node_modules/bootstrap-icons/icons/clock-history.svg"; // brand
-import "../node_modules/bootstrap-icons/icons/hourglass.svg"; // brand
-import "../node_modules/bootstrap-icons/icons/geo.svg"; // brand
-import "../node_modules/bootstrap-icons/icons/justify-left.svg"; // brand
-import "../node_modules/bootstrap-icons/icons/plus-circle-dotted.svg"; // brand
+import "../node_modules/bootstrap-icons/icons/calendar3-event.svg";
+import "../node_modules/bootstrap-icons/icons/clock-history.svg"; // shift template
+import "../node_modules/bootstrap-icons/icons/tag.svg";
+import "../node_modules/bootstrap-icons/icons/hourglass.svg";
+import "../node_modules/bootstrap-icons/icons/map.svg";
+import "../node_modules/bootstrap-icons/icons/geo.svg";
+import "../node_modules/bootstrap-icons/icons/justify-left.svg";
+import "../node_modules/bootstrap-icons/icons/plus-circle-dotted.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

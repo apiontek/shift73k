@@ -4,13 +4,12 @@ defmodule Shift73k.Repo.Migrations.CreateShiftTemplates do
   def change do
     create table(:shift_templates, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :subject, :string, null: false
-      add :description, :string
-      add :location, :string
-      add :timezone, :string, null: false
-      add :start_time, :time, null: false
-      add :length_hours, :integer, null: false
-      add :length_minutes, :integer
+      add :subject, :string, size: 280, null: false
+      add :location, :string, size: 280
+      add :description, :text
+      add :time_zone, :string, null: false
+      add :time_start, :time, null: false
+      add :time_end, :time, null: false
       add :user_id, references(:users, on_delete: :nothing, type: :binary_id)
 
       timestamps()

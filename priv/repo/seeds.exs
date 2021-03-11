@@ -75,7 +75,6 @@ mock_users =
 Repo.insert_all(User, mock_users)
 # end
 
-
 #####
 # shift tepmlates
 alias Shift73k.ShiftTemplates.ShiftTemplate
@@ -101,15 +100,18 @@ for user <- Accounts.list_users() do
     |> Enum.map(fn e ->
       seconds_to_add = :rand.uniform(seconds_days_14) + seconds_half_day
       add_dt = NaiveDateTime.add(user.inserted_at, seconds_to_add)
+      time_start = time_from_mock.(e["time_start"])
+      shift_len_min = e["length_minutes"] || 0
+      shift_length = e["length_hours"] * 60 * 60 + shift_len_min * 60
+      time_end = Time.add(time_start, shift_length) |> Time.truncate(:second)
 
       %{
         subject: e["subject"],
         description: e["description"],
         location: e["location"],
-        timezone: (Tzdata.zone_list() |> Enum.random()),
-        start_time: time_from_mock.(e["start_time"]),
-        length_hours: e["length_hours"],
-        length_minutes: e["length_minutes"],
+        time_zone: Tzdata.zone_list() |> Enum.random(),
+        time_start: time_start,
+        time_end: time_end,
         user_id: user.id,
         inserted_at: add_dt,
         updated_at: add_dt
@@ -117,5 +119,4 @@ for user <- Accounts.list_users() do
     end)
 
   Repo.insert_all(ShiftTemplate, user_shifts)
-
 end

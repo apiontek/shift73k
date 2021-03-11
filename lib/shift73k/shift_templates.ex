@@ -22,8 +22,8 @@ defmodule Shift73k.ShiftTemplates do
   end
 
   def list_shift_templates_by_user_id(user_id) do
-    from(s in ShiftTemplate, where: s.user_id == ^user_id)
-    |> Repo.all()
+    q = from s in ShiftTemplate, where: s.user_id == ^user_id, order_by: s.subject
+    Repo.all(q)
   end
 
   @doc """

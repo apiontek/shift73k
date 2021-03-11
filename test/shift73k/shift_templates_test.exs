@@ -6,9 +6,9 @@ defmodule Shift73k.ShiftTemplatesTest do
   describe "shift_templates" do
     alias Shift73k.ShiftTemplates.ShiftTemplate
 
-    @valid_attrs %{description: "some description", label: "some label", length_hours: 42, length_minutes: 42, location: "some location", start_time: ~T[14:00:00], subject: "some subject", timezone: "some timezone"}
-    @update_attrs %{description: "some updated description", label: "some updated label", length_hours: 43, length_minutes: 43, location: "some updated location", start_time: ~T[15:01:01], subject: "some updated subject", timezone: "some updated timezone"}
-    @invalid_attrs %{description: nil, label: nil, length_hours: nil, length_minutes: nil, location: nil, start_time: nil, subject: nil, timezone: nil}
+    @valid_attrs %{description: "some description", location: "some location", time_start: ~T[08:00:00], time_end: ~T[16:00:00], subject: "some subject", time_zone: "some time_zone"}
+    @update_attrs %{description: "some updated description", location: "some updated location", time_start: ~T[13:00:00], time_end: ~T[19:30:00], subject: "some updated subject", time_zone: "some updated time_zone"}
+    @invalid_attrs %{description: nil, location: nil, time_start: nil, time_end: nil, subject: nil, time_zone: nil}
 
     def shift_template_fixture(attrs \\ %{}) do
       {:ok, shift_template} =
@@ -32,12 +32,11 @@ defmodule Shift73k.ShiftTemplatesTest do
     test "create_shift_template/1 with valid data creates a shift_template" do
       assert {:ok, %ShiftTemplate{} = shift_template} = ShiftTemplates.create_shift_template(@valid_attrs)
       assert shift_template.description == "some description"
-      assert shift_template.length_hours == 42
-      assert shift_template.length_minutes == 42
       assert shift_template.location == "some location"
-      assert shift_template.start_time == ~T[14:00:00]
+      assert shift_template.time_start == ~T[07:00:00]
+      assert shift_template.time_end == ~T[15:00:00]
       assert shift_template.subject == "some subject"
-      assert shift_template.timezone == "some timezone"
+      assert shift_template.time_zone == "some time_zone"
     end
 
     test "create_shift_template/1 with invalid data returns error changeset" do
@@ -48,12 +47,11 @@ defmodule Shift73k.ShiftTemplatesTest do
       shift_template = shift_template_fixture()
       assert {:ok, %ShiftTemplate{} = shift_template} = ShiftTemplates.update_shift_template(shift_template, @update_attrs)
       assert shift_template.description == "some updated description"
-      assert shift_template.length_hours == 43
-      assert shift_template.length_minutes == 43
       assert shift_template.location == "some updated location"
-      assert shift_template.start_time == ~T[15:01:01]
+      assert shift_template.time_start == ~T[15:00:00]
+      assert shift_template.time_end == ~T[19:30:00]
       assert shift_template.subject == "some updated subject"
-      assert shift_template.timezone == "some updated timezone"
+      assert shift_template.time_zone == "some updated time_zone"
     end
 
     test "update_shift_template/2 with invalid data returns error changeset" do

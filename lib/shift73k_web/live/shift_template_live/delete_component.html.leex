@@ -1,13 +1,9 @@
 <div class="modal-body">
 
   Are you sure you want to delete "<%= @delete_shift_template.subject %>
-    (<%= @delete_shift_template.start_time |> Calendar.strftime("%I:%M%P") %>
+    (<%= @delete_shift_template.time_start |> Calendar.strftime("%I:%M%P") %>
     &mdash;
-    <%=
-      @delete_shift_template.start_time
-      |> Time.add((60 * 60 * @delete_shift_template.length_hours) + ((@delete_shift_template.length_minutes || 0) * 60))
-      |> Calendar.strftime("%I:%M%P")
-      %>)"?
+    <%= @delete_shift_template.time_end |> Calendar.strftime("%I:%M%P") %>)"?
 
 </div>
 <div class="modal-footer">

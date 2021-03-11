@@ -7,30 +7,27 @@ defmodule Shift73kWeb.ShiftTemplateLiveTest do
 
   @create_attrs %{
     description: "some description",
-    length_hours: 12,
-    length_minutes: 42,
     location: "some location",
-    start_time: ~T[14:00:00],
+    time_start: ~T[08:00:00],
+    time_end: ~T[16:00:00],
     subject: "some subject",
-    timezone: "some timezone"
+    time_zone: "some time_zone"
   }
   @update_attrs %{
     description: "some updated description",
-    length_hours: 12,
-    length_minutes: 43,
     location: "some updated location",
-    start_time: ~T[15:01:01],
+    time_start: ~T[15:00:00],
+    time_end: ~T[19:30:00],
     subject: "some updated subject",
-    timezone: "some updated timezone"
+    time_zone: "some updated time_zone"
   }
   @invalid_attrs %{
     description: nil,
-    length_hours: nil,
-    length_minutes: nil,
     location: nil,
-    start_time: nil,
+    time_start: nil,
+    time_end: nil,
     subject: nil,
-    timezone: nil
+    time_zone: nil
   }
 
   defp fixture(:shift_template) do

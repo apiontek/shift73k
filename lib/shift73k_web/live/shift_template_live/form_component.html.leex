@@ -6,39 +6,107 @@
 
   <div class="modal-body">
 
+    <%= label f, :subject, "Subject/Title", class: "form-label" %>
+    <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(f, :subject) %>">
+      <%= icon_div @socket, "bi-tag", [class: "icon is-left text-muted fs-5"] %>
+      <%= text_input f, :subject,
+          value: input_value(f, :subject),
+          class: input_class(f, :subject, "form-control"),
+          autofocus: true,
+          aria_describedby: error_ids(f, :subject)
+        %>
+      <%= error_tag f, :subject %>
+    </div>
 
-    <%= label f, :subject %>
-    <%= text_input f, :subject %>
-    <%= error_tag f, :subject %>
+    <div class="row gx-2 gx-sm-3">
 
-    <%= label f, :description %>
-    <%= text_input f, :description %>
-    <%= error_tag f, :description %>
+      <div class="col-6" phx-feedback-for="<%= input_id(f, :time_start) %>">
+        <%= label f, :time_start, "Start", class: "form-label" %>
+        <%= time_input f, :time_start,
+            precision: :minute,
+            value: input_value(f, :time_start),
+            class: input_class(f, :time_start, "form-control"),
+            aria_describedby: error_ids(f, :time_start)
+          %>
+      </div>
 
-    <%= label f, :location %>
-    <%= text_input f, :location %>
-    <%= error_tag f, :location %>
+      <div class="col-6" phx-feedback-for="<%= input_id(f, :time_end) %>">
+        <%= label f, :time_end, "End", class: "form-label" %>
+        <%= time_input f, :time_end,
+            precision: :minute,
+            value: input_value(f, :time_end),
+            class: input_class(f, :time_end, "form-control"),
+            aria_describedby: error_ids(f, :time_end)
+          %>
+      </div>
 
-    <%= label f, :timezone %>
-    <%= text_input f, :timezone %>
-    <%= error_tag f, :timezone %>
+    </div>
 
-    <%= label f, :start_time %>
-    <%= time_select f, :start_time %>
-    <%= error_tag f, :start_time %>
+    <div class="valid-feedback d-block text-primary">Shift length: <%= @shift_length |> elem(0) %>h <%= @shift_length |> elem(1) %>m</div>
 
-    <%= label f, :length_hours %>
-    <%= number_input f, :length_hours %>
-    <%= error_tag f, :length_hours %>
+    <div class="phx-orphaned-feedback" phx-feedback-for="<%= input_id(f, :time_start) %>">
+      <%= error_tag f, :time_start %>
+    </div>
+    <div class="phx-orphaned-feedback" phx-feedback-for="<%= input_id(f, :time_end) %>">
+      <%= error_tag f, :time_end %>
+    </div>
 
-    <%= label f, :length_minutes %>
-    <%= number_input f, :length_minutes %>
-    <%= error_tag f, :length_minutes %>
+
+
+    <%= label f, :location, class: "form-label mt-3" %>
+    <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(f, :location) %>">
+      <%= icon_div @socket, "bi-geo", [class: "icon is-left text-muted fs-5"] %>
+      <%= text_input f, :location,
+          value: input_value(f, :location),
+          class: input_class(f, :location, "form-control"),
+          aria_describedby: error_ids(f, :location)
+        %>
+      <%= error_tag f, :location %>
+    </div>
+
+
+    <%= label f, :description, class: "form-label" %>
+    <div class="mb-3" phx-feedback-for="<%= input_id(f, :description) %>">
+
+      <%= textarea f, :description,
+          value: input_value(f, :description),
+          class: input_class(f, :description, "form-control"),
+          aria_describedby: error_ids(f, :description)
+        %>
+      <%= error_tag f, :description %>
+    </div>
+
+
+    <%= label f, :time_zone, class: "form-label" %>
+    <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(f, :time_zone) %>">
+      <%= icon_div @socket, "bi-map", [class: "icon is-left text-muted fs-5"] %>
+      <%= text_input f, :time_zone,
+          value: input_value(f, :time_zone),
+          class: "form-control",
+          list: "tz_list"
+        %>
+        <datalist id="tz_list">
+          <%= for tz_name <- Tzdata.zone_list() do %>
+            <option value="<%= tz_name %>"></option>
+          <% end %>
+          end
+        </datalist>
+      <div class="valid-feedback d-block text-primary">Type to search & select from list of known time zones (<%= link "formatted per IANA", to: "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", target: "_blank" %>)</div>
+      <%= error_tag f, :time_zone %>
+    </div>
+
+
 
   </div>
   <div class="modal-footer">
 
-    <%= submit "Save", phx_disable_with: "Saving..." %>
+    <%= link "Cancel", to: "#", class: "btn", phx_click: "cancel", phx_target: @myself %>
+    <%= submit "Save",
+        class: "btn btn-primary ",
+        disabled: !@changeset.valid?,
+        aria_disabled: !@changeset.valid? && "true" || false,
+        phx_disable_with: "Saving..."
+      %>
 
   </div>
 

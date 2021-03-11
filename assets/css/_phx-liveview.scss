@@ -2,8 +2,12 @@
 
 /* hides the feedback field help if liveview indicates field not touched yet */
 .phx-no-feedback.invalid-feedback,
-.phx-no-feedback .invalid-feedback {
+.phx-no-feedback .invalid-feedback,
+.phx-orphaned-feedback.phx-no-feedback .invalid-feedback {
   display: none;
+}
+.phx-orphaned-feedback .invalid-feedback {
+  display: block !important;
 }
 
 /* sets default bootstrap form-control styles if field not touched yet */

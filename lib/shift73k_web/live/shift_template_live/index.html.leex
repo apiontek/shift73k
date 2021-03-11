@@ -17,7 +17,7 @@
 
 
 <div class="row justify-content-start justify-content-sm-center">
-  <div class="col-md-12 col-lg-10 col-xxl-8">
+  <div class="col-md-10 col-xl-10">
 
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center">
       <h2 class="mb-3 mb-sm-0">
@@ -35,7 +35,7 @@
 
       <%= for shift <- @shift_templates do %>
 
-        <div class="col-12 col-md-6 col-xl-4 ">
+        <div class="col-12 col-lg-6">
 
           <div class="card mt-4">
             <h5 class="card-header">
@@ -49,23 +49,25 @@
                   <tr>
                     <th scope="row" class="text-end">
                       <%= icon_div @socket, "bi-hourglass", [class: "icon baseline text-muted"] %>
-                      <span class="visually-hidden">Hours</span>
+                      <span class="visually-hidden">Hours:</span>
                     </th>
                     <td>
-                      <%= shift.start_time |> Calendar.strftime("%I:%M%P") %>
+                      <%= shift.time_start |> Calendar.strftime("%I:%M%P") %>
                       &mdash;
-                      <%=
-                        shift.start_time
-                        |> Time.add((60 * 60 * shift.length_hours) + ((shift.length_minutes || 0) * 60))
-                        |> Calendar.strftime("%I:%M%P")
-                        %>
+                      <%= shift.time_end |> Calendar.strftime("%I:%M%P") %>
+                      <span class="text-muted">
+                        <span class="visually-hidden">Shift length:</span>
+                        <% shift_length = ShiftTemplate.shift_length_h_m_tuple(shift.time_start, shift.time_end) %>
+                        (<%= shift_length |> elem(0) %>h <%= shift_length |> elem(1) %>m)
+                      </span>
+                      <span class="valid-feedback d-block text-muted mt-n1">TZ: <%= shift.time_zone %></span>
                     </td>
                   </tr>
 
                   <tr>
                     <th scope="row" class="text-end">
                       <%= icon_div @socket, "bi-geo", [class: "icon baseline text-muted"] %>
-                      <span class="visually-hidden">Location</span>
+                      <span class="visually-hidden">Location:</span>
                     </th>
                     <td>
                       <%= if shift.location do %>
@@ -78,11 +80,11 @@
                   <tr>
                     <th scope="row" class="text-end">
                       <%= icon_div @socket, "bi-justify-left", [class: "icon baseline text-muted"] %>
-                      <span class="visually-hidden">Description</span>
+                      <span class="visually-hidden">Description:</span>
                     </th>
                     <td>
                       <%= if shift.description do %>
-                        <%= shift.description %>
+                        <%= text_to_html shift.description %>
                       <% else %>
                         <span class="text-muted fst-italic">none</span>
                       <% end %>
