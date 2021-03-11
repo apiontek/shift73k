@@ -38,9 +38,14 @@
         <div class="col-12 col-lg-6">
 
           <div class="card mt-4">
-            <h5 class="card-header">
-              <span class="visually-hidden">Subject:</span>
+            <h5 class="card-header d-flex justify-content-between align-items-start">
+              <div class="visually-hidden">Subject:</div>
               <%= shift.subject %>
+              <%= if shift.id == @current_user.fave_shift_template_id do %>
+                <%= icon_div @socket, "bi-star-fill", [class: "icon baseline text-primary align-self-start ms-2", phx_click: "unset-user-fave-shift-template"] %>
+              <% else %>
+                <%= icon_div @socket, "bi-star", [class: "icon baseline text-primary align-self-start ms-2", phx_click: "set-user-fave-shift-template", phx_value_id: shift.id] %>
+              <% end %>
             </h5>
             <div class="card-body">
 
@@ -48,7 +53,7 @@
                 <tbody>
                   <tr>
                     <th scope="row" class="text-end">
-                      <%= icon_div @socket, "bi-hourglass", [class: "icon baseline text-muted"] %>
+                      <%= icon_div @socket, "bi-hourglass", [class: "icon text-muted"] %>
                       <span class="visually-hidden">Hours:</span>
                     </th>
                     <td>
@@ -106,6 +111,8 @@
                   Clone
                 <% end %>
               <% end %>
+
+              <%#= button "" %>
 
               <%= if Roles.can?(@current_user, shift, :delete) do %>
                 <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= shift.id %>">

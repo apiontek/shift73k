@@ -1,6 +1,7 @@
 defmodule Shift73kWeb.ShiftTemplateLive.Index do
   use Shift73kWeb, :live_view
 
+  alias Shift73k.Accounts
   alias Shift73k.ShiftTemplates
   alias Shift73k.ShiftTemplates.ShiftTemplate
   alias Shift73kWeb.Roles
@@ -74,6 +75,26 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
   @impl true
   def handle_event("delete-modal", %{"id" => id}, socket) do
     {:noreply, assign(socket, :delete_shift_template, ShiftTemplates.get_shift_template!(id))}
+  end
+
+  def handle_event("set-user-fave-shift-template", %{"id" => shift_template_id}, socket) do
+    user_id = socket.assigns.current_user.id
+    Accounts.set_user_fave_shift_template(user_id, shift_template_id)
+
+    socket
+    |> assign(:current_user, Accounts.get_user!(user_id))
+    |> assign_shift_templates()
+    |> live_noreply()
+  end
+
+  def handle_event("unset-user-fave-shift-template", _params, socket) do
+    user_id = socket.assigns.current_user.id
+    Accounts.unset_user_fave_shift_template(user_id)
+
+    socket
+    |> assign(:current_user, Accounts.get_user!(user_id))
+    |> assign_shift_templates()
+    |> live_noreply()
   end
 
   # @impl true

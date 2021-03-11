@@ -449,21 +449,16 @@ defmodule Shift73k.Accounts do
   @doc """
   Sets a shift template as a user's favorite
   """
-  def set_user_fave_shift_template(%User{id: user_id}, %ShiftTemplate{
-        id: shift_template_id,
-        user_id: user_id
-      }) do
+  def set_user_fave_shift_template(user_id, shift_template_id) do
     User
     |> where(id: ^user_id)
     |> Repo.update_all(set: [fave_shift_template_id: shift_template_id])
   end
 
-  def set_user_fave_shift_template(_, _), do: {0, nil}
-
   @doc """
   Clears a user's favorite shift template
   """
-  def unset_user_fave_shift_template(%User{id: user_id}) do
+  def unset_user_fave_shift_template(user_id) do
     User
     |> where(id: ^user_id)
     |> Repo.update_all(set: [fave_shift_template_id: nil])
