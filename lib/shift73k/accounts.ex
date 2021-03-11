@@ -7,6 +7,7 @@ defmodule Shift73k.Accounts do
   alias Shift73k.Repo
   alias Shift73k.Accounts.{User, UserToken, UserNotifier}
   alias Shift73kWeb.UserAuth
+  alias Shift73k.ShiftTemplates.ShiftTemplate
 
   ## Database getters
 
@@ -161,13 +162,6 @@ defmodule Shift73k.Accounts do
   def change_user_update(%User{} = user, attrs) do
     User.update_changeset(user, attrs, hash_password: true)
   end
-
-  # @doc """
-  # Returns an `%Ecto.Changeset{}` for tracking singer_name updates.
-  # """
-  # def change_singer_name_update(%User{} = user, attrs \\ %{}) do
-  #   User.update_singer_name_changeset(user, attrs)
-  # end
 
   @doc """
   Updates the user given with attributes given
@@ -449,4 +443,29 @@ defmodule Shift73k.Accounts do
   """
   def delete_user(nil), do: {:error, false}
   def delete_user(%User{} = user), do: Repo.delete(user)
+
+  ## Favorite Shift Template
+
+  @doc """
+  Sets a shift template as a user's favorite
+  """
+  def set_user_fave_shift_template(%User{id: user_id}, %ShiftTemplate{
+        id: shift_template_id,
+        user_id: user_id
+      }) do
+    User
+    |> where(id: ^user_id)
+    |> Repo.update_all(set: [fave_shift_template_id: shift_template_id])
+  end
+
+  def set_user_fave_shift_template(_, _), do: {0, nil}
+
+  @doc """
+  Clears a user's favorite shift template
+  """
+  def unset_user_fave_shift_template(%User{id: user_id}) do
+    User
+    |> where(id: ^user_id)
+    |> Repo.update_all(set: [fave_shift_template_id: nil])
+  end
 end

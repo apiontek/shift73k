@@ -29,7 +29,7 @@ defmodule Shift73k.Accounts.User do
     field(:role, RolesEnum, default: :user)
 
     has_many(:shift_templates, ShiftTemplate)
-    belongs_to(:default_shift_template, ShiftTemplate)
+    belongs_to(:fave_shift_template, ShiftTemplate)
 
     timestamps()
   end
