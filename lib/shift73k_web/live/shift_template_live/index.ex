@@ -2,8 +2,8 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
   use Shift73kWeb, :live_view
 
   alias Shift73k.Accounts
-  alias Shift73k.ShiftTemplates
-  alias Shift73k.ShiftTemplates.ShiftTemplate
+  alias Shift73k.Shifts.Templates
+  alias Shift73k.Shifts.Templates.ShiftTemplate
   alias Shift73kWeb.Roles
 
   @impl true
@@ -38,13 +38,13 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
   defp apply_action(socket, :clone, %{"id" => id}) do
     socket
     |> assign(:page_title, "Clone Shift Template")
-    |> assign(:shift_template, ShiftTemplates.get_shift_template!(id))
+    |> assign(:shift_template, Templates.get_shift_template!(id))
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Shift Template")
-    |> assign(:shift_template, ShiftTemplates.get_shift_template!(id))
+    |> assign(:shift_template, Templates.get_shift_template!(id))
   end
 
   defp apply_action(socket, :new, _params) do
@@ -61,20 +61,20 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
 
   defp assign_shift_templates(socket) do
     %User{id: uid} = socket.assigns.current_user
-    user_shifts = ShiftTemplates.list_shift_templates_by_user_id(uid)
+    user_shifts = Templates.list_shift_templates_by_user_id(uid)
     assign(socket, :shift_templates, user_shifts)
   end
 
   defp shift_template_from_params(params)
 
   defp shift_template_from_params(%{"id" => id}),
-    do: ShiftTemplates.get_shift_template!(id)
+    do: Templates.get_shift_template!(id)
 
   defp shift_template_from_params(_params), do: %ShiftTemplate{}
 
   @impl true
   def handle_event("delete-modal", %{"id" => id}, socket) do
-    {:noreply, assign(socket, :delete_shift_template, ShiftTemplates.get_shift_template!(id))}
+    {:noreply, assign(socket, :delete_shift_template, Templates.get_shift_template!(id))}
   end
 
   def handle_event("set-user-fave-shift-template", %{"id" => shift_template_id}, socket) do
@@ -99,8 +99,8 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
 
   # @impl true
   # def handle_event("delete", %{"id" => id}, socket) do
-  #   shift_template = ShiftTemplates.get_shift_template!(id)
-  #   {:ok, _} = ShiftTemplates.delete_shift_template(shift_template)
+  #   shift_template = Templates.get_shift_template!(id)
+  #   {:ok, _} = Templates.delete_shift_template(shift_template)
 
   #   {:noreply, assign_shift_templates(socket)}
   # end

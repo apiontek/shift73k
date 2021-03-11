@@ -4,7 +4,7 @@ defmodule Shift73kWeb.Roles do
   """
 
   alias Shift73k.Accounts.User
-  alias Shift73k.ShiftTemplates.ShiftTemplate
+  alias Shift73k.Shifts.Templates.ShiftTemplate
 
   @type entity :: struct()
   @type action :: :new | :index | :edit | :show | :delete | :edit_role
@@ -12,7 +12,7 @@ defmodule Shift73kWeb.Roles do
 
   def can?(user, entity, action)
 
-  # ShiftTemplates / ShiftTemplate
+  # Shifts.Templates / ShiftTemplate
   def can?(%User{role: :admin}, %ShiftTemplate{}, _any), do: true
   def can?(%User{}, %ShiftTemplate{}, :index), do: true
   def can?(%User{}, %ShiftTemplate{}, :new), do: true

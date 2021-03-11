@@ -1,12 +1,12 @@
 defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
   use Shift73kWeb, :live_component
 
-  alias Shift73k.ShiftTemplates
-  alias Shift73k.ShiftTemplates.ShiftTemplate
+  alias Shift73k.Shifts.Templates
+  alias Shift73k.Shifts.Templates.ShiftTemplate
 
   @impl true
   def update(%{shift_template: shift_template} = assigns, socket) do
-    changeset = ShiftTemplates.change_shift_template(shift_template)
+    changeset = Templates.change_shift_template(shift_template)
 
     socket
     |> assign(assigns)
@@ -37,7 +37,7 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
 
     changeset =
       socket.assigns.shift_template
-      |> ShiftTemplates.change_shift_template(shift_template_params)
+      |> Templates.change_shift_template(shift_template_params)
       |> Map.put(:action, :validate)
 
     socket
@@ -63,7 +63,7 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
   end
 
   defp save_shift_template(socket, :new, shift_template_params) do
-    case ShiftTemplates.create_shift_template(shift_template_params) do
+    case Templates.create_shift_template(shift_template_params) do
       {:ok, _shift_template} ->
         flash = {:info, "Shift template created successfully"}
         send(self(), {:put_flash_message, flash})
@@ -82,7 +82,7 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
   end
 
   defp save_shift_template(socket, :edit, shift_template_params) do
-    case ShiftTemplates.update_shift_template(
+    case Templates.update_shift_template(
            socket.assigns.shift_template,
            shift_template_params
          ) do

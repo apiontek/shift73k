@@ -3,7 +3,7 @@ defmodule Shift73k.Accounts.User do
   import Ecto.Changeset
   import EctoEnum
 
-  alias Shift73k.ShiftTemplates.ShiftTemplate
+  alias Shift73k.Shifts.Templates.ShiftTemplate
 
   @roles [
     user: "Basic user level",

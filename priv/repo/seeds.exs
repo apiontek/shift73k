@@ -77,7 +77,7 @@ Repo.insert_all(User, mock_users)
 
 #####
 # shift tepmlates
-alias Shift73k.ShiftTemplates.ShiftTemplate
+alias Shift73k.Shifts.Templates.ShiftTemplate
 
 shifts_json = Path.join(this_path, "MOCK_DATA_shift-templates.json")
 mock_shifts = shifts_json |> File.read!() |> Jason.decode!()

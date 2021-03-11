@@ -7,7 +7,6 @@ defmodule Shift73k.Accounts do
   alias Shift73k.Repo
   alias Shift73k.Accounts.{User, UserToken, UserNotifier}
   alias Shift73kWeb.UserAuth
-  alias Shift73k.ShiftTemplates.ShiftTemplate
 
   ## Database getters
 

@@ -1,7 +1,7 @@
 defmodule Shift73kWeb.ShiftTemplateLive.DeleteComponent do
   use Shift73kWeb, :live_component
 
-  alias Shift73k.ShiftTemplates
+  alias Shift73k.Shifts.Templates
 
   @impl true
   def update(assigns, socket) do
@@ -18,8 +18,8 @@ defmodule Shift73kWeb.ShiftTemplateLive.DeleteComponent do
   @impl true
   def handle_event("confirm", %{"id" => id, "subject" => subject}, socket) do
     id
-    |> ShiftTemplates.get_shift_template()
-    |> ShiftTemplates.delete_shift_template()
+    |> Templates.get_shift_template()
+    |> Templates.delete_shift_template()
     |> case do
       {:ok, _} ->
         flash = {:info, "Shift template deleted successfully: \"#{subject}\""}

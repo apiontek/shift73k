@@ -1,4 +1,4 @@
-defmodule Shift73k.ShiftTemplates.ShiftTemplate do
+defmodule Shift73k.Shifts.Templates.ShiftTemplate do
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -1,12 +1,12 @@
-defmodule Shift73k.ShiftTemplates do
+defmodule Shift73k.Shifts.Templates do
   @moduledoc """
-  The ShiftTemplates context.
+  The Shifts.Templates context.
   """
 
   import Ecto.Query, warn: false
   alias Shift73k.Repo
 
-  alias Shift73k.ShiftTemplates.ShiftTemplate
+  alias Shift73k.Shifts.Templates.ShiftTemplate
 
   @doc """
   Returns the list of shift_templates.

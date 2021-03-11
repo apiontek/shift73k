@@ -3,7 +3,7 @@ defmodule Shift73kWeb.ShiftTemplateLiveTest do
 
   import Phoenix.LiveViewTest
 
-  alias Shift73k.ShiftTemplates
+  alias Shift73k.Shifts.Templates
 
   @create_attrs %{
     description: "some description",
@@ -31,7 +31,7 @@ defmodule Shift73kWeb.ShiftTemplateLiveTest do
   }
 
   defp fixture(:shift_template) do
-    {:ok, shift_template} = ShiftTemplates.create_shift_template(@create_attrs)
+    {:ok, shift_template} = Templates.create_shift_template(@create_attrs)
     shift_template
   end
 
