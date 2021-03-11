@@ -4,6 +4,7 @@ defmodule Shift73k.Accounts.User do
   import EctoEnum
 
   alias Shift73k.Shifts.Templates.ShiftTemplate
+  alias Shift73k.Shifts.Shift
 
   @roles [
     user: "Basic user level",
@@ -30,6 +31,8 @@ defmodule Shift73k.Accounts.User do
 
     has_many(:shift_templates, ShiftTemplate)
     belongs_to(:fave_shift_template, ShiftTemplate)
+
+    has_many(:shifts, Shift)
 
     timestamps()
   end

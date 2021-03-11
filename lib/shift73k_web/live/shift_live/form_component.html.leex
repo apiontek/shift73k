@@ -1,0 +1,42 @@
+<h2><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "shift-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+  <%= label f, :subject %>
+  <%= text_input f, :subject %>
+  <%= error_tag f, :subject %>
+
+  <%= label f, :location %>
+  <%= text_input f, :location %>
+  <%= error_tag f, :location %>
+
+  <%= label f, :description %>
+  <%= textarea f, :description %>
+  <%= error_tag f, :description %>
+
+  <%= label f, :time_zone %>
+  <%= text_input f, :time_zone %>
+  <%= error_tag f, :time_zone %>
+
+  <%= label f, :date %>
+  <%= date_select f, :date %>
+  <%= error_tag f, :date %>
+
+  <%= label f, :time_zone %>
+  <%= text_input f, :time_zone %>
+  <%= error_tag f, :time_zone %>
+
+  <%= label f, :time_start %>
+  <%= time_select f, :time_start %>
+  <%= error_tag f, :time_start %>
+
+  <%= label f, :time_end %>
+  <%= time_select f, :time_end %>
+  <%= error_tag f, :time_end %>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

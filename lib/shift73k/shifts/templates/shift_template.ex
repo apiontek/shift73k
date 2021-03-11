@@ -36,7 +36,8 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
       :subject,
       :time_zone,
       :time_start,
-      :time_end
+      :time_end,
+      :user_id
     ])
     |> validate_length(:subject, count: :codepoints, max: 280)
     |> validate_length(:location, count: :codepoints, max: 280)

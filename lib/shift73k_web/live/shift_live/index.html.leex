@@ -1,0 +1,49 @@
+<h1>Listing Shifts</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, Shift73kWeb.ShiftLive.FormComponent,
+    id: @shift.id || :new,
+    title: @page_title,
+    action: @live_action,
+    shift: @shift,
+    return_to: Routes.shift_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Subject</th>
+      <th>Location</th>
+      <th>Description</th>
+      <th>Time zone</th>
+      <th>Date</th>
+      <th>Time zone</th>
+      <th>Time start</th>
+      <th>Time end</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="shifts">
+    <%= for shift <- @shifts do %>
+      <tr id="shift-<%= shift.id %>">
+        <td><%= shift.subject %></td>
+        <td><%= shift.location %></td>
+        <td><%= shift.description %></td>
+        <td><%= shift.time_zone %></td>
+        <td><%= shift.date %></td>
+        <td><%= shift.time_zone %></td>
+        <td><%= shift.time_start %></td>
+        <td><%= shift.time_end %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.shift_show_path(@socket, :show, shift) %></span>
+          <span><%= live_patch "Edit", to: Routes.shift_index_path(@socket, :edit, shift) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Shift", to: Routes.shift_index_path(@socket, :new) %></span>

@@ -1,12 +1,13 @@
-defmodule Shift73k.Repo.Migrations.CreateShiftTemplates do
+defmodule Shift73k.Repo.Migrations.CreateShifts do
   use Ecto.Migration
 
   def change do
-    create table(:shift_templates, primary_key: false) do
+    create table(:shifts, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :subject, :string, size: 280, null: false
       add :location, :string, size: 280
       add :description, :text
+      add :date, :date, null: false
       add :time_zone, :string, null: false
       add :time_start, :time, null: false
       add :time_end, :time, null: false
@@ -15,6 +16,6 @@ defmodule Shift73k.Repo.Migrations.CreateShiftTemplates do
       timestamps()
     end
 
-    create index(:shift_templates, [:user_id, :subject])
+    create index(:shifts, [:user_id, :subject])
   end
 end

@@ -91,10 +91,17 @@ defmodule Shift73kWeb.Router do
   scope "/", Shift73kWeb do
     pipe_through([:browser, :require_authenticated_user, :user])
 
-    live "/my_shifts", ShiftTemplateLive.Index, :index
-    live "/my_shifts/new", ShiftTemplateLive.Index, :new
-    live "/my_shifts/:id/edit", ShiftTemplateLive.Index, :edit
-    live "/my_shifts/:id/clone", ShiftTemplateLive.Index, :clone
+    live "/templates", ShiftTemplateLive.Index, :index
+    live "/templates/new", ShiftTemplateLive.Index, :new
+    live "/templates/:id/edit", ShiftTemplateLive.Index, :edit
+    live "/templates/:id/clone", ShiftTemplateLive.Index, :clone
+
+    live "/shifts", ShiftLive.Index, :index
+    live "/shifts/new", ShiftLive.Index, :new
+    live "/shifts/:id/edit", ShiftLive.Index, :edit
+
+    live "/shifts/:id", ShiftLive.Show, :show
+    live "/shifts/:id/show/edit", ShiftLive.Show, :edit
   end
 
   # scope "/", Shift73kWeb do
