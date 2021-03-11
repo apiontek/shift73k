@@ -42,6 +42,7 @@ import "../node_modules/bootstrap-icons/icons/map.svg";
 import "../node_modules/bootstrap-icons/icons/geo.svg";
 import "../node_modules/bootstrap-icons/icons/justify-left.svg";
 import "../node_modules/bootstrap-icons/icons/plus-circle-dotted.svg";
+import "../node_modules/bootstrap-icons/icons/clipboard-plus.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

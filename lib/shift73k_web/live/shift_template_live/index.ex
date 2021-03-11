@@ -34,6 +34,12 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
     end
   end
 
+  defp apply_action(socket, :clone, %{"id" => id}) do
+    socket
+    |> assign(:page_title, "Clone Shift Template")
+    |> assign(:shift_template, ShiftTemplates.get_shift_template!(id))
+  end
+
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Shift Template")

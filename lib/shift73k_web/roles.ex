@@ -18,6 +18,7 @@ defmodule Shift73kWeb.Roles do
   def can?(%User{}, %ShiftTemplate{}, :new), do: true
   # def can?(%User{}, %ShiftTemplate{}, :show), do: true
   def can?(%User{id: id}, %ShiftTemplate{user_id: id}, :edit), do: true
+  def can?(%User{id: id}, %ShiftTemplate{user_id: id}, :clone), do: true
   def can?(%User{id: id}, %ShiftTemplate{user_id: id}, :delete), do: true
 
   # Accounts / User

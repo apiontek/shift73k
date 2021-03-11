@@ -1,4 +1,4 @@
-<%= if @live_action in [:new, :edit] do %>
+<%= if @live_action in [:new, :edit, :clone] do %>
   <%= live_modal @socket, Shift73kWeb.ShiftTemplateLive.FormComponent,
     id: @shift_template.id || :new,
     title: @page_title,
@@ -97,6 +97,13 @@
                 <%= live_patch to: Routes.shift_template_index_path(@socket, :edit, shift), class: "btn btn-primary btn-sm text-nowrap" do %>
                   <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
                   Edit
+                <% end %>
+              <% end %>
+
+              <%= if Roles.can?(@current_user, shift, :clone) do %>
+                <%= live_patch to: Routes.shift_template_index_path(@socket, :clone, shift), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
+                  <%= icon_div @socket, "bi-clipboard-plus", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  Clone
                 <% end %>
               <% end %>
 

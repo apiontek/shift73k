@@ -77,6 +77,10 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
     end
   end
 
+  defp save_shift_template(socket, :clone, shift_template_params) do
+    save_shift_template(socket, :new, shift_template_params)
+  end
+
   defp save_shift_template(socket, :edit, shift_template_params) do
     case ShiftTemplates.update_shift_template(
            socket.assigns.shift_template,
