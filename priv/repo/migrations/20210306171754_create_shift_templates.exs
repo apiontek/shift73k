@@ -1,4 +1,4 @@
-defmodule Shift73k.Repo.Migrations.CreateShifts.Templates do
+defmodule Shift73k.Repo.Migrations.CreateShiftTemplates do
   use Ecto.Migration
 
   def change do
