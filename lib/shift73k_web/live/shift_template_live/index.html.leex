@@ -57,13 +57,12 @@
                       <span class="visually-hidden">Hours:</span>
                     </th>
                     <td>
-                      <%= template.time_start |> Calendar.strftime("%I:%M%P") %>
+                      <%= template.time_start |> Timex.format!("{h12}:{m}{am}") %>
                       &mdash;
-                      <%= template.time_end |> Calendar.strftime("%I:%M%P") %>
+                      <%= template.time_end |> Timex.format!("{h12}:{m}{am}") %>
                       <span class="text-muted">
                         <span class="visually-hidden">Shift length:</span>
-                        <% shift_len = ShiftTemplate.shift_length_h_m(template) %>
-                        (<%= shift_len |> elem(0) %>h <%= shift_len |> elem(1) %>m)
+                        (<%= format_shift_length(template) %>)
                       </span>
                       <span class="valid-feedback d-block text-muted mt-n1">TZ: <%= template.time_zone %></span>
                     </td>

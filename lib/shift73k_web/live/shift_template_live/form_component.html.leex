@@ -42,7 +42,7 @@
 
     </div>
 
-    <div class="valid-feedback d-block text-primary">Shift length: <%= @shift_length |> elem(0) %>h <%= @shift_length |> elem(1) %>m</div>
+    <div class="valid-feedback d-block text-primary">Shift length: <%= @shift_length %></div>
 
     <div class="phx-orphaned-feedback" phx-feedback-for="<%= input_id(f, :time_start) %>">
       <%= error_tag f, :time_start %>

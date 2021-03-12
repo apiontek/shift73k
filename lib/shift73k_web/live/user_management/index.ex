@@ -1,9 +1,10 @@
 defmodule Shift73kWeb.UserManagementLive.Index do
   use Shift73kWeb, :live_view
+  use Timex
 
   import Ecto.Query
-  import Shift73kWeb.Pagination
   import Shift73k.Util.Dt
+  import Shift73kWeb.Pagination
 
   alias Shift73k.Repo
   alias Shift73k.Accounts
@@ -187,5 +188,9 @@ defmodule Shift73kWeb.UserManagementLive.Index do
     ]
   end
 
-  def dt_out(ndt), do: format_ndt(ndt, "%Y %b %d, %I:%M %p")
+  def dt_out(ndt) do
+    ndt
+    |> Timex.to_datetime(app_time_zone())
+    |> Timex.format!("{YYYY} {Mshort} {D}, {h12}:{m} {AM}")
+  end
 end

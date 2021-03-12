@@ -1,6 +1,8 @@
 defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
   use Shift73kWeb, :live_component
 
+  import Shift73kWeb.ShiftTemplateLive.Index, only: [format_shift_length: 1]
+
   alias Shift73k.Shifts.Templates
   alias Shift73k.Shifts.Templates.ShiftTemplate
 
@@ -16,8 +18,7 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
   end
 
   defp assign_shift_length(socket, shift_template) do
-    shift_length = ShiftTemplate.shift_length_h_m(shift_template)
-    assign(socket, :shift_length, shift_length)
+    assign(socket, :shift_length, format_shift_length(shift_template))
   end
 
   defp prep_template_params(params, current_user) do

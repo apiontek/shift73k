@@ -1,6 +1,7 @@
 defmodule Shift73kWeb.UserLive.Settings do
   use Shift73kWeb, :live_view
 
+  alias Shift73k.Accounts
   alias Shift73k.Accounts.User
 
   @impl true
@@ -35,5 +36,12 @@ defmodule Shift73kWeb.UserLive.Settings do
   @impl true
   def handle_info({:clear_flash_message, flash_type}, socket) do
     socket |> clear_flash(flash_type) |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:reload_current_user, _}, socket) do
+    socket
+    |> assign(:current_user, Accounts.get_user!(socket.assigns.current_user.id))
+    |> live_noreply()
   end
 end

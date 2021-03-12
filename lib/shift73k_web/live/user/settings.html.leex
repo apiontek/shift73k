@@ -9,6 +9,7 @@
     <div class="row justify-content-center justify-content-md-start">
       <%= live_component @socket, Shift73kWeb.UserLive.Settings.Email, id: "email-#{@current_user.id}", current_user: @current_user %>
       <%= live_component @socket, Shift73kWeb.UserLive.Settings.Password, id: "password-#{@current_user.id}", current_user: @current_user %>
+      <%= live_component @socket, Shift73kWeb.UserLive.Settings.WeekStart, id: "week_start-#{@current_user.id}", current_user: @current_user %>
     </div>
 
   </div>

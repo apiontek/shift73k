@@ -462,4 +462,15 @@ defmodule Shift73k.Accounts do
     |> where(id: ^user_id)
     |> Repo.update_all(set: [fave_shift_template_id: nil])
   end
+
+  ## Week Start at
+
+  @doc """
+  Sets the "week start at" day for user
+  """
+  def set_user_week_start_at(user_id, day) do
+    User
+    |> where(id: ^user_id)
+    |> Repo.update_all(set: [week_start_at: day])
+  end
 end

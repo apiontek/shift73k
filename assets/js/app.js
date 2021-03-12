@@ -35,6 +35,7 @@ import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // forgot passw
 import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
 // calendar/event icons
 import "../node_modules/bootstrap-icons/icons/calendar3-event.svg";
+import "../node_modules/bootstrap-icons/icons/calendar3-range.svg";
 import "../node_modules/bootstrap-icons/icons/clock-history.svg"; // shift template
 import "../node_modules/bootstrap-icons/icons/tag.svg";
 import "../node_modules/bootstrap-icons/icons/hourglass.svg";

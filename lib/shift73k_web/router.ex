@@ -96,6 +96,8 @@ defmodule Shift73kWeb.Router do
     live "/templates/:id/edit", ShiftTemplateLive.Index, :edit
     live "/templates/:id/clone", ShiftTemplateLive.Index, :clone
 
+    live "/assign", ShiftAssignLive.Index, :index
+
     live "/shifts", ShiftLive.Index, :index
     live "/shifts/new", ShiftLive.Index, :new
     live "/shifts/:id/edit", ShiftLive.Index, :edit
