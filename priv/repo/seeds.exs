@@ -66,6 +66,7 @@ mock_users =
       email: e["email"],
       role: String.to_existing_atom(e["role"]),
       hashed_password: Bcrypt.hash_pwd_salt(e["password"]),
+      week_start_at: :rand.uniform(2),
       inserted_at: add_dt,
       updated_at: add_dt,
       confirmed_at: (e["confirmed_at"] && NaiveDateTime.add(add_dt, 300, :second)) || nil
