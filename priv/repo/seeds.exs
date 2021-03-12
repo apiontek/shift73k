@@ -109,7 +109,7 @@ for user <- Accounts.list_users() do
         subject: e["subject"],
         description: e["description"],
         location: e["location"],
-        time_zone: Tzdata.zone_list() |> Enum.random(),
+        time_zone: Timex.timezones() |> Enum.random(),
         time_start: time_start,
         time_end: time_end,
         user_id: user.id,

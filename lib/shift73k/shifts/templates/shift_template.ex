@@ -1,6 +1,9 @@
 defmodule Shift73k.Shifts.Templates.ShiftTemplate do
+  use Timex
   use Ecto.Schema
   import Ecto.Changeset
+
+  alias Shift73k.Shifts.Templates.ShiftTemplate
 
   @app_vars Application.get_env(:shift73k, :app_global_vars, time_zone: "America/New_York")
   @time_zone @app_vars[:time_zone]
@@ -42,45 +45,42 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
     |> validate_length(:subject, count: :codepoints, max: 280)
     |> validate_length(:location, count: :codepoints, max: 280)
     |> validate_change(:time_end, fn :time_end, time_end ->
-      shift_length = shift_length(get_time_start(attrs), time_end)
+      shift_length = shift_length(time_end, time_start_from_attrs(attrs))
 
       cond do
         shift_length == 0 ->
           [time_end: "end time cannot equal start time"]
 
-        shift_length >= 16 * 3600 ->
+        shift_length >= 16 * 60 ->
           [time_end: "you don't want to work 16 or more hours!"]
 
         true ->
           []
       end
     end)
-    |> validate_inclusion(:time_zone, Tzdata.zone_list())
+    |> validate_inclusion(:time_zone, Timex.timezones())
   end
 
-  defp get_time_start(%{"time_start" => time_start}), do: time_start
-  defp get_time_start(%{time_start: time_start}), do: time_start
-  defp get_time_start(_), do: nil
+  defp time_start_from_attrs(%{"time_start" => time_start}), do: time_start
+  defp time_start_from_attrs(%{time_start: time_start}), do: time_start
+  defp time_start_from_attrs(_), do: nil
 
-  def shift_length(time_start, time_end) do
-    cond do
-      time_end > time_start ->
-        Time.diff(time_end, time_start)
-
-      time_start > time_end ->
-        len1 = Time.diff(~T[23:59:59], time_start) + 1
-        len2 = Time.diff(time_end, ~T[00:00:00])
-        len1 + len2
-
-      true ->
-        0
-    end
+  def shift_length(%ShiftTemplate{time_end: time_end, time_start: time_start}) do
+    time_end
+    |> Timex.diff(time_start, :minute)
+    |> shift_length()
   end
 
-  def shift_length_h_m_tuple(time_start, time_end) do
-    shift_length_seconds = shift_length(time_start, time_end)
-    h = shift_length_seconds |> Integer.floor_div(3600)
-    m = shift_length_seconds |> rem(3600) |> Integer.floor_div(60)
+  def shift_length(len_min) when is_integer(len_min) and len_min >= 0, do: len_min
+  def shift_length(len_min) when is_integer(len_min) and len_min < 0, do: 1440 + len_min
+
+  def shift_length(time_end, time_start),
+    do: shift_length(%ShiftTemplate{time_end: time_end, time_start: time_start})
+
+  def shift_length_h_m(%ShiftTemplate{time_end: _, time_start: _} = template) do
+    shift_length_seconds = shift_length(template)
+    h = shift_length_seconds |> Integer.floor_div(60)
+    m = shift_length_seconds |> rem(60)
     {h, m}
   end
 end

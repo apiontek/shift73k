@@ -11,49 +11,45 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
     socket
     |> assign(assigns)
     |> assign(:changeset, changeset)
-    |> assign_shift_length(shift_template.time_start, shift_template.time_end)
+    |> assign_shift_length(shift_template)
     |> live_okreply()
   end
 
-  defp assign_shift_length(socket, time_start, time_end) do
-    shift_length = ShiftTemplate.shift_length_h_m_tuple(time_start, time_end)
+  defp assign_shift_length(socket, shift_template) do
+    shift_length = ShiftTemplate.shift_length_h_m(shift_template)
     assign(socket, :shift_length, shift_length)
   end
 
-  defp prep_shift_template_params(shift_template_params, current_user) do
-    time_start = Time.from_iso8601!("T#{shift_template_params["time_start"]}:00")
-    time_end = Time.from_iso8601!("T#{shift_template_params["time_end"]}:00")
-
-    shift_template_params
-    |> Map.put("time_start", time_start)
-    |> Map.put("time_end", time_end)
+  defp prep_template_params(params, current_user) do
+    params
+    |> Map.put("time_start", Time.from_iso8601!("T#{params["time_start"]}:00"))
+    |> Map.put("time_end", Time.from_iso8601!("T#{params["time_end"]}:00"))
     |> Map.put("user_id", current_user.id)
   end
 
   @impl true
-  def handle_event("validate", %{"shift_template" => shift_template_params}, socket) do
-    shift_template_params =
-      prep_shift_template_params(shift_template_params, socket.assigns.current_user)
+  def handle_event("validate", %{"shift_template" => params}, socket) do
+    params = prep_template_params(params, socket.assigns.current_user)
 
     changeset =
       socket.assigns.shift_template
-      |> Templates.change_shift_template(shift_template_params)
+      |> Templates.change_shift_template(params)
       |> Map.put(:action, :validate)
 
     socket
     |> assign(:changeset, changeset)
-    |> assign_shift_length(
-      shift_template_params["time_start"],
-      shift_template_params["time_end"]
-    )
+    |> assign_shift_length(%ShiftTemplate{
+      time_end: params["time_end"],
+      time_start: params["time_start"]
+    })
     |> live_noreply()
   end
 
-  def handle_event("save", %{"shift_template" => shift_template_params}, socket) do
+  def handle_event("save", %{"shift_template" => params}, socket) do
     save_shift_template(
       socket,
       socket.assigns.action,
-      prep_shift_template_params(shift_template_params, socket.assigns.current_user)
+      prep_template_params(params, socket.assigns.current_user)
     )
   end
 
@@ -62,8 +58,8 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
     {:noreply, push_event(socket, "modal-please-hide", %{})}
   end
 
-  defp save_shift_template(socket, :new, shift_template_params) do
-    case Templates.create_shift_template(shift_template_params) do
+  defp save_shift_template(socket, :new, params) do
+    case Templates.create_shift_template(params) do
       {:ok, _shift_template} ->
         flash = {:info, "Shift template created successfully"}
         send(self(), {:put_flash_message, flash})
@@ -77,15 +73,12 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
     end
   end
 
-  defp save_shift_template(socket, :clone, shift_template_params) do
-    save_shift_template(socket, :new, shift_template_params)
+  defp save_shift_template(socket, :clone, params) do
+    save_shift_template(socket, :new, params)
   end
 
-  defp save_shift_template(socket, :edit, shift_template_params) do
-    case Templates.update_shift_template(
-           socket.assigns.shift_template,
-           shift_template_params
-         ) do
+  defp save_shift_template(socket, :edit, params) do
+    case Templates.update_shift_template(socket.assigns.shift_template, params) do
       {:ok, _shift_template} ->
         flash = {:info, "Shift template updated successfully"}
         send(self(), {:put_flash_message, flash})

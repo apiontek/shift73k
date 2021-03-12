@@ -8,7 +8,6 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
 
   @impl true
   def mount(_params, session, socket) do
-    # {:ok, assign(socket, :shift_templates, list_shift_templates())}
     socket
     |> assign_defaults(session)
     |> live_okreply()
@@ -96,14 +95,6 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
     |> assign_shift_templates()
     |> live_noreply()
   end
-
-  # @impl true
-  # def handle_event("delete", %{"id" => id}, socket) do
-  #   shift_template = Templates.get_shift_template!(id)
-  #   {:ok, _} = Templates.delete_shift_template(shift_template)
-
-  #   {:noreply, assign_shift_templates(socket)}
-  # end
 
   @impl true
   def handle_info({:close_modal, _}, %{assigns: %{modal_return_to: to}} = socket) do
