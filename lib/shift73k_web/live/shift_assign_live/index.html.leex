@@ -6,7 +6,7 @@
 <%# month navigation %>
 <div class="d-flex justify-content-between align-items-baseline mt-4">
   <h3 class="ms-4 text-muted mb-0">
-    <%= Timex.format!(@current_date, "%B %Y", :strftime) %>
+    <%= Timex.format!(@cursor_date, "%B %Y", :strftime) %>
   </h3>
   <div class="me-4">
     <a href="#" phx-click="prev-month" class="btn btn-primary">
@@ -35,11 +35,19 @@
     <%= for week <- @week_rows do %>
       <tr>
       <%= for day <- week do %>
-        <%= if Timex.compare(day, @current_date, :days) == 0 do %>
-        <td width="14%" style="height: 5rem;" class="bg-info text-white">
-        <% else %>
-        <td width="14%" style="height: 5rem;">
+        <%= cond do %>
+
+          <% Timex.compare(day, @current_date, :days) == 0 -> %>
+            <td width="14%" style="height: 6rem;" class="bg-info text-white">
+
+          <% day.month != @cursor_date.month -> %>
+            <td width="14%" style="height: 6rem;" class="bg-light text-gray">
+
+          <% true -> %>
+            <td width="14%" style="height: 6rem;">
+
         <% end %>
+
           <%= Timex.format!(day, "%d", :strftime) %>
         </td>
       <% end %>

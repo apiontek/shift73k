@@ -1,11 +1,8 @@
 /* Fonts */
 @import "fonts";
 
-/* Bootstrap custom variable overrides */
-@import "bs-custom";
-
-/* Bootstrap v5 scss */
-@import "~bootstrap/scss/bootstrap";
+/* Load Bootstrap v5 and customizations */
+@import "bs-load";
 
 /*SVG ICON SYSTEM*/
 @import "svg-icons";
