@@ -1,4 +1,49 @@
 <h2 class="mb-3 mb-sm-0">
-  <%= icon_div @socket, "bi-clock-history", [class: "icon baseline"] %>
+  <%= icon_div @socket, "bi-calendar3", [class: "icon baseline"] %>
   Assign Shift To Dates
 </h2>
+
+<%# month navigation %>
+<div class="d-flex justify-content-between align-items-baseline mt-4">
+  <h3 class="ms-4 text-muted mb-0">
+    <%= Timex.format!(@current_date, "%B %Y", :strftime) %>
+  </h3>
+  <div class="me-4">
+    <a href="#" phx-click="prev-month" class="btn btn-primary">
+      <%= icon_div @socket, "bi-chevron-left", [class: "icon baseline"] %>
+      Prev
+    </a>
+    <a href="#" phx-click="next-month" class="btn btn-primary">
+      Next
+      <%= icon_div @socket, "bi-chevron-right", [class: "icon baseline"] %>
+    </a>
+  </div>
+</div>
+
+<%# calendar month table display %>
+<table class="table table-rounded shadow mt-3">
+  <thead>
+    <tr>
+      <%= for {day_name, _i} <- Enum.with_index(@day_names) do %>
+        <th width="14%">
+          <%= day_name %>
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for week <- @week_rows do %>
+      <tr>
+      <%= for day <- week do %>
+        <%= if Timex.compare(day, @current_date, :days) == 0 do %>
+        <td width="14%" style="height: 5rem;" class="bg-info text-white">
+        <% else %>
+        <td width="14%" style="height: 5rem;">
+        <% end %>
+          <%= Timex.format!(day, "%d", :strftime) %>
+        </td>
+      <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

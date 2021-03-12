@@ -34,6 +34,7 @@ import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg"; // resend confi
 import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // forgot password
 import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
 // calendar/event icons
+import "../node_modules/bootstrap-icons/icons/calendar3.svg";
 import "../node_modules/bootstrap-icons/icons/calendar3-event.svg";
 import "../node_modules/bootstrap-icons/icons/calendar3-range.svg";
 import "../node_modules/bootstrap-icons/icons/clock-history.svg"; // shift template

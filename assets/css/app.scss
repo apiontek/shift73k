@@ -64,3 +64,59 @@
 .right-addon select {
   padding-right: 2rem;
 }
+
+/* calendar table rounded */
+// table.table.table-rounded,
+// table.table.table-rounded thead,
+// table.table.table-rounded thead tr,
+// table.table.table-rounded thead tr th:first-child {
+//   border-radius: 10px 0 0 10px;
+// }
+
+table.table.table-rounded {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-style: hidden;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
+  thead {
+    tr {
+      th {
+        border-top: 1px solid $table-border-color;
+        border-right: 1px solid $table-border-color;
+        border-bottom: 2px solid $black !important;
+        border-left: none;
+        &:first-child {
+          border-top-left-radius: $border-radius;
+          border-left: 1px solid $table-border-color;
+        }
+        &:last-child {
+          border-top-right-radius: $border-radius;
+        }
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        border-top: none;
+        border-right: 1px solid $table-border-color;
+        border-bottom: 1px solid $table-border-color !important;
+        border-left: none;
+        &:first-child {
+          border-left: 1px solid $table-border-color;
+        }
+      }
+      &:last-child {
+        td:first-child {
+          border-bottom-left-radius: $border-radius;
+        }
+        td:last-child {
+          border-bottom-right-radius: $border-radius;
+        }
+      }
+    }
+  }
+}
