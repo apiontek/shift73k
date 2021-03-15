@@ -5,6 +5,7 @@ defmodule Shift73kWeb.LiveHelpers do
   alias Shift73k.Accounts
   alias Shift73k.Accounts.User
   alias Shift73kWeb.UserAuth
+  alias Shift73k.Shifts.Templates.ShiftTemplate
 
   @doc """
   Performs the {:noreply, socket} for a given socket.
@@ -65,5 +66,18 @@ defmodule Shift73kWeb.LiveHelpers do
     Enum.reduce(flash, socket, fn {k, v}, acc ->
       put_flash(acc, String.to_existing_atom(k), v)
     end)
+  end
+
+  def format_shift_time(time), do: Timex.format!(time, "{h12}:{m}{am}")
+
+  def format_shift_length(shift_template) do
+    shift_template
+    |> ShiftTemplate.shift_length()
+    |> Timex.Duration.from_minutes()
+    |> Timex.format_duration()
+    |> String.replace("PT", "")
+    |> String.replace("H", "h ")
+    |> String.replace("M", "m")
+    |> String.trim()
   end
 end

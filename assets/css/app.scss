@@ -63,12 +63,32 @@
 }
 
 /* calendar table rounded */
-// table.table.table-rounded,
-// table.table.table-rounded thead,
-// table.table.table-rounded thead tr,
-// table.table.table-rounded thead tr th:first-child {
-//   border-radius: 10px 0 0 10px;
-// }
+table.table.table-calendar thead tr th,
+table.table.table-calendar tbody tr td {
+  width: 14%;
+}
+table.table.table-calendar tbody tr td {
+  font-size: $font-size-sm;
+  height: 3.5rem;
+  padding: 0.2rem 0.4rem;
+  @include media-breakpoint-up(md) {
+    height: 4.5rem;
+    padding: 0.2rem 0.5rem;
+  }
+  @include media-breakpoint-up(lg) {
+    font-size: $font-size-base;
+    height: 5.5rem;
+    padding: 0.3rem 0.5rem;
+  }
+  @include media-breakpoint-up(xl) {
+    height: 6.5rem;
+    padding: 0.35rem 0.5rem;
+  }
+  @include media-breakpoint-up(xxl) {
+    height: 7.5rem;
+    padding: 0.4rem 0.75rem;
+  }
+}
 
 table.table.table-rounded {
   border-collapse: separate;
@@ -116,4 +136,42 @@ table.table.table-rounded {
       }
     }
   }
+}
+
+/* selected days background triangle color */
+.bg-triangle-primary {
+  background: linear-gradient(
+    to bottom right,
+    $primary 0%,
+    $primary 50%,
+    $secondary 50%,
+    $secondary 100%
+  );
+}
+.bg-triangle-info {
+  background: linear-gradient(
+    to bottom right,
+    $info 0%,
+    $info 50%,
+    $secondary 50%,
+    $secondary 100%
+  );
+}
+.bg-triangle-light {
+  background: linear-gradient(
+    to bottom right,
+    $light 0%,
+    $light 50%,
+    $secondary 50%,
+    $secondary 100%
+  );
+}
+.bg-triangle-white {
+  background: linear-gradient(
+    to bottom right,
+    $white 0%,
+    $white 50%,
+    $secondary 50%,
+    $secondary 100%
+  );
 }

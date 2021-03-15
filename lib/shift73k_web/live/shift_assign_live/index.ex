@@ -3,15 +3,96 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   use Timex
 
   alias Shift73k.EctoEnums.WeekdayEnum
+  alias Shift73k.Shifts.Templates
+  alias Shift73k.Shifts.Templates.ShiftTemplate
+
+  @custom_shift %ShiftTemplate{subject: "Custom shift", id: "custom-shift"}
+  @custom_shift_opt {@custom_shift.subject, @custom_shift.id}
 
   @impl true
   def mount(_params, session, socket) do
     socket
     |> assign_defaults(session)
-    |> assign_day_names()
-    |> assign_init_dates(Timex.today())
-    |> assign_week_rows()
+    |> assign(:custom_shift, @custom_shift)
+    |> assign(:show_template_btn_active, :false)
+    |> assign(:show_template_details, :false)
+    |> assign(:selected_days, [])
     |> live_okreply()
+  end
+
+  @impl true
+  def handle_params(_params, _url, socket) do
+    socket
+    |> init_shift_templates()
+    |> init_shift_template()
+    |> show_details_if_custom()
+    |> assign_shift_length()
+    |> assign_shift_template_changeset()
+    |> init_today(Timex.today())
+    |> init_calendar()
+    |> init_known_shifts()
+    |> live_noreply()
+  end
+
+  defp get_shift_template("custom-shift"), do: @custom_shift
+  defp get_shift_template(template_id), do: Templates.get_shift_template(template_id)
+
+  defp assign_shift_length(%{assigns: %{shift_template: shift}} = socket) do
+    assign(socket, :shift_length, format_shift_length(shift))
+  end
+
+  defp init_known_shifts(%{assigns: %{current_user: user, week_rows: weeks}} = socket) do
+    days = weeks |> List.flatten()
+    first = weeks |> List.flatten() |> List.first()
+    socket
+  end
+
+  defp init_calendar(%{assigns: %{current_user: user}} = socket) do
+    days = day_names(user.week_start_at)
+    {first, last, rows} = week_rows(socket.assigns.cursor_date, user.week_start_at)
+    assign(socket, [day_names: days, week_rows: rows, day_first: first, day_last: last])
+  end
+
+  defp init_today(socket, today) do
+    assign(socket, [current_date: today, cursor_date: today])
+  end
+
+  defp assign_shift_template_changeset(%{assigns: %{shift_template: shift}} = socket) do
+    cs = Templates.change_shift_template(shift)
+    assign(socket, :shift_template_changeset, cs)
+  end
+
+  defp init_shift_template(socket) do
+    first_list_id = socket.assigns.shift_templates |> hd() |> elem(1)
+    fave_id = socket.assigns.current_user.fave_shift_template_id
+    assign_shift_template(socket, (fave_id || first_list_id))
+  end
+
+  defp assign_shift_template(socket, template_id) do
+    assign(socket, :shift_template, get_shift_template(template_id))
+  end
+
+  defp init_shift_templates(%{assigns: %{current_user: user}} = socket) do
+    shift_templates =
+      Templates.list_shift_templates_by_user_id(user.id)
+      |> Enum.map(fn t -> shift_template_option(t, user.fave_shift_template_id) end)
+      |> Enum.concat([@custom_shift_opt])
+    assign(socket, :shift_templates, shift_templates)
+  end
+
+  defp shift_template_option(template, fave_id) do
+    label =
+      template.subject <> " (" <>
+      format_shift_time(template.time_start) <> "—" <>
+      format_shift_time(template.time_end) <> ")"
+
+    label =
+      case fave_id == template.id do
+        true -> label <> " ★"
+        false -> label
+      end
+
+    {label, template.id}
   end
 
   defp rotate_week(week_start_at) do
@@ -37,46 +118,160 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
       |> Timex.end_of_month()
       |> Timex.end_of_week(week_start_at)
 
-    Interval.new(from: first, until: last, right_open: false)
-    |> Enum.map(& &1)
-    |> Enum.chunk_every(7)
+    week_rows =
+      Interval.new(from: first, until: last, right_open: false)
+      |> Enum.map(& NaiveDateTime.to_date(&1))
+      |> Enum.chunk_every(7)
+
+    {first, last, week_rows}
   end
 
-  defp assign_day_names(socket) do
-    day_names = day_names(socket.assigns.current_user.week_start_at)
-    assign(socket, :day_names, day_names)
+  def day_color(day, current_date, cursor_date, selected_days) do
+    cond do
+      Enum.member?(selected_days, Date.to_string(day)) ->
+        cond do
+          Timex.compare(day, current_date, :days) == 0 -> "bg-triangle-info text-white"
+          day.month != cursor_date.month -> "bg-triangle-light text-gray"
+          true -> "bg-triangle-white"
+        end
+
+      Timex.compare(day, current_date, :days) == 0 -> "bg-info text-white"
+
+      day.month != cursor_date.month -> "bg-light text-gray"
+
+      true -> ""
+    end
   end
 
-  defp assign_init_dates(socket, today) do
-    assign(socket, [current_date: today, cursor_date: today])
+  defp prep_template_params(params, current_user) do
+    params
+    |> Map.put("time_start", Time.from_iso8601!("T#{params["time_start"]}:00"))
+    |> Map.put("time_end", Time.from_iso8601!("T#{params["time_end"]}:00"))
+    |> Map.put("user_id", current_user.id)
   end
 
-  defp assign_week_rows(socket) do
-    cursor_date = socket.assigns.cursor_date
-    week_start_at = socket.assigns.current_user.week_start_at
-
-    assign(socket, :week_rows, week_rows(cursor_date, week_start_at))
+  defp show_details_if_custom(socket) do
+    if (socket.assigns.shift_template.id != @custom_shift.id) || socket.assigns.show_template_details do
+      socket
+    else
+      socket
+      |> assign(:show_template_btn_active, :true)
+      |> push_event("toggle-template-details", %{targetId: "#templateDetailsCol"})
+    end
   end
 
-  def handle_event("prev-month", _, socket) do
-    cursor_date = Timex.shift(socket.assigns.cursor_date, months: -1)
+  defp set_month(socket, new_cursor_date) do
+    {first, last, rows} = week_rows(new_cursor_date, socket.assigns.current_user.week_start_at)
 
     assigns = [
-      cursor_date: cursor_date,
-      week_rows: week_rows(cursor_date, socket.assigns.current_user.week_start_at)
+      cursor_date: new_cursor_date,
+      week_rows: rows,
+      day_first: first,
+      day_last: last
     ]
 
-    {:noreply, assign(socket, assigns)}
+    assign(socket, assigns)
   end
 
-  def handle_event("next-month", _, socket) do
-    cursor_date = Timex.shift(socket.assigns.cursor_date, months: 1)
+  @impl true
+  def handle_event("validate-shift-template", %{"shift_template" => params}, socket) do
+    params = prep_template_params(params, socket.assigns.current_user)
+    shift_template = socket.assigns.shift_template
 
-    assigns = [
-      cursor_date: cursor_date,
-      week_rows: week_rows(cursor_date, socket.assigns.current_user.week_start_at)
-    ]
+    cs =
+      shift_template
+      |> Templates.change_shift_template(params)
+      |> Map.put(:action, :validate)
 
-    {:noreply, assign(socket, assigns)}
+    socket
+    |> assign(:shift_template_changeset, cs)
+    |> assign(:shift_template, Map.merge(shift_template, cs.changes))
+    |> assign_shift_length()
+    |> live_noreply()
+  end
+
+  @impl true
+  def handle_event("change-selected-template", %{"template_select" => %{"template" => template_id}}, socket) do
+    socket
+    |> assign_shift_template(template_id)
+    |> show_details_if_custom()
+    |> assign_shift_length()
+    |> assign_shift_template_changeset()
+    |> live_noreply()
+  end
+
+  @impl true
+  def handle_event("month-nav", %{"month" => direction}, socket) do
+    new_cursor =
+      cond do
+        direction == "now" -> Timex.today()
+        true ->
+          months = m = direction == "prev" && -1 || 1
+          Timex.shift(socket.assigns.cursor_date, months: months)
+      end
+
+    {:noreply, set_month(socket, new_cursor)}
+  end
+
+  # @impl true
+  # def handle_event("prev-month", _, socket) do
+  #   cursor_date = Timex.shift(socket.assigns.cursor_date, months: -1)
+  #   {first, last, rows} = week_rows(cursor_date, socket.assigns.current_user.week_start_at)
+
+  #   assigns = [
+  #     cursor_date: cursor_date,
+  #     week_rows: week_rows(cursor_date, socket.assigns.current_user.week_start_at)
+  #   ]
+
+  #   {:noreply, assign(socket, assigns)}
+  # end
+
+  # @impl true
+  # def handle_event("next-month", _, socket) do
+  #   cursor_date = Timex.shift(socket.assigns.cursor_date, months: 1)
+  #   {first, last, rows} = week_rows(cursor_date, socket.assigns.current_user.week_start_at)
+
+  #   assigns = [
+  #     cursor_date: cursor_date,
+  #     week_rows: rows,
+  #     day_first: first,
+  #     day_last: last
+  #   ]
+
+  #   {:noreply, assign(socket, assigns)}
+  # end
+
+  @impl true
+  def handle_event("toggle-template-details", %{"target_id" => target_id}, socket) do
+    socket
+    |> assign(:show_template_btn_active, !socket.assigns.show_template_btn_active)
+    |> push_event("toggle-template-details", %{targetId: target_id})
+    |> live_noreply()
+  end
+
+  @impl true
+  def handle_event("collapse-shown", %{"target_id" => _target_id}, socket) do
+    {:noreply, assign(socket, :show_template_details, :true)}
+  end
+
+  @impl true
+  def handle_event("collapse-hidden", %{"target_id" => _target_id}, socket) do
+    {:noreply, assign(socket, :show_template_details, :false)}
+  end
+
+  @impl true
+  def handle_event("select-day", %{"day" => day}, socket) do
+    selected_days =
+      case day_index = Enum.find_index(socket.assigns.selected_days, fn d -> d == day end) do
+        nil -> [day | socket.assigns.selected_days]
+        _ -> List.delete_at(socket.assigns.selected_days, day_index)
+      end
+
+    {:noreply, assign(socket, :selected_days, selected_days)}
+  end
+
+  @impl true
+  def handle_event("clear-days", _params, socket) do
+    {:noreply, assign(socket, :selected_days, [])}
   end
 end

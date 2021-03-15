@@ -58,7 +58,7 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
           []
       end
     end)
-    |> validate_inclusion(:time_zone, Timex.timezones())
+    |> validate_inclusion(:time_zone, Timex.timezones(), message: "must be a valid IANA tz database time zone")
   end
 
   defp time_start_from_attrs(%{"time_start" => time_start}), do: time_start

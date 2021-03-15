@@ -1,31 +1,192 @@
 <h2 class="mb-3 mb-sm-0">
-  <%= icon_div @socket, "bi-calendar3", [class: "icon baseline"] %>
+  <%= icon_div @socket, "bi-calendar2-plus", [class: "icon baseline"] %>
   Assign Shift To Dates
 </h2>
 
+<div class="row justify-content-center mt-4">
+  <div class="col-12 col-lg-9 col-xl-8 col-xxl-7 d-flex justify-content-start align-items-end">
+
+      <%= form_for :template_select, "#", [phx_change: "change-selected-template"], fn sts -> %>
+        <%= label sts, :template, "Select shift template to assign to dates", class: "form-label" %>
+        <%= select sts, :template, @shift_templates,
+            value: @shift_template && @shift_template.id || (@shift_template_options |> hd() |> elem(1)),
+            class: "form-select"
+          %>
+      <% end %>
+
+      <button type="button" class="ms-2 btn btn-primary text-nowrap <%= if @show_template_btn_active, do: "active" %>" id="#templateDetailsBtn" phx-click="toggle-template-details" phx-value-target_id="#templateDetailsCol">
+        <%= icon_div @socket, (@show_template_btn_active && "bi-binoculars-fill" || "bi-binoculars"), [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+        Details
+      </button>
+
+  </div>
+
+  <div class="col-12 col-lg-9 col-xl-8 col-xxl-7 <%= @show_template_details && "collapse show" || "collapse" %>" id="#templateDetailsCol" phx-hook="BsCollapse">
+    <div class="card mt-4">
+      <div class="card-body">
+
+        <%= form_for @shift_template_changeset, "#", [phx_change: "validate-shift-template"], fn stf -> %>
+
+          <div class="row">
+
+            <div class="col-12 col-md-6">
+              <%= label stf, :subject, "Subject/Title", class: "form-label" %>
+              <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(stf, :subject) %>">
+                <%= icon_div @socket, "bi-tag", [class: "icon is-left text-muted fs-5"] %>
+                <%= text_input stf, :subject,
+                    value: input_value(stf, :subject),
+                    class: input_class(stf, :subject, "form-control"),
+                    phx_debounce: 250,
+                    disabled: @shift_template.id != @custom_shift.id,
+                    aria_describedby: error_ids(stf, :subject)
+                  %>
+                <%= error_tag stf, :subject %>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 mb-3">
+              <div class="row gx-2 gx-sm-3">
+
+                <div class="col-6" phx-feedback-for="<%= input_id(stf, :time_start) %>">
+                  <%= label stf, :time_start, "Start", class: "form-label" %>
+                  <%= time_input stf, :time_start,
+                      precision: :minute,
+                      value: input_value(stf, :time_start),
+                      class: input_class(stf, :time_start, "form-control"),
+                      disabled: @shift_template.id != @custom_shift.id,
+                      aria_describedby: error_ids(stf, :time_start)
+                    %>
+                </div>
+
+                <div class="col-6" phx-feedback-for="<%= input_id(stf, :time_end) %>">
+                  <%= label stf, :time_end, "End", class: "form-label" %>
+                  <%= time_input stf, :time_end,
+                      precision: :minute,
+                      value: input_value(stf, :time_end),
+                      class: input_class(stf, :time_end, "form-control"),
+                      disabled: @shift_template.id != @custom_shift.id,
+                      aria_describedby: error_ids(stf, :time_end)
+                    %>
+                </div>
+
+              </div>
+
+              <div class="valid-feedback d-block text-primary">Shift length: <%= @shift_length %></div>
+
+              <div class="phx-orphaned-feedback" phx-feedback-for="<%= input_id(stf, :time_start) %>">
+                <%= error_tag stf, :time_start %>
+              </div>
+              <div class="phx-orphaned-feedback" phx-feedback-for="<%= input_id(stf, :time_end) %>">
+                <%= error_tag stf, :time_end %>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <%= label stf, :location, class: "form-label" %>
+              <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(stf, :location) %>">
+                <%= icon_div @socket, "bi-geo", [class: "icon is-left text-muted fs-5"] %>
+                <%= text_input stf, :location,
+                    value: input_value(stf, :location),
+                    class: input_class(stf, :location, "form-control"),
+                    phx_debounce: 250,
+                    disabled: @shift_template.id != @custom_shift.id,
+                    aria_describedby: error_ids(stf, :location)
+                  %>
+                <%= error_tag stf, :location %>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+              <%= label stf, :time_zone, class: "form-label" %>
+              <div class="inner-addon left-addon mb-3 mb-md-0" phx-feedback-for="<%= input_id(stf, :time_zone) %>">
+                <%= icon_div @socket, "bi-map", [class: "icon is-left text-muted fs-5"] %>
+                <%= text_input stf, :time_zone,
+                    value: input_value(stf, :time_zone),
+                    class: input_class(stf, :time_zone, "form-control"),
+                    disabled: @shift_template.id != @custom_shift.id,
+                    phx_debounce: 250,
+                    list: "tz_list"
+                  %>
+                  <datalist id="tz_list">
+                    <%= for tz_name <- Timex.timezones() do %>
+                      <option value="<%= tz_name %>"></option>
+                    <% end %>
+                    end
+                  </datalist>
+                <%= if @shift_template.id == @custom_shift.id do %>
+                  <div class="valid-feedback d-block text-primary">Type to search & select from list of known <%= link "IANA tz database", to: "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", target: "_blank" %> time zones</div>
+                <% end %>
+                <%= error_tag stf, :time_zone %>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <%= label stf, :description, class: "form-label" %>
+              <div phx-feedback-for="<%= input_id(stf, :description) %>">
+
+                <%= textarea stf, :description,
+                    value: input_value(stf, :description),
+                    class: input_class(stf, :description, "form-control"),
+                    disabled: @shift_template.id != @custom_shift.id,
+                    phx_debounce: 250,
+                    aria_describedby: error_ids(stf, :description)
+                  %>
+                <%= error_tag stf, :description %>
+              </div>
+            </div>
+
+          </div>
+
+          <button type="submit" class="d-hidden"></button>
+
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <%# month navigation %>
-<div class="d-flex justify-content-between align-items-baseline mt-4">
-  <h3 class="ms-4 text-muted mb-0">
-    <%= Timex.format!(@cursor_date, "%B %Y", :strftime) %>
+<div class="d-flex justify-content-between align-items-end mt-4">
+  <h3 class="text-muted mb-0">
+    <%= Timex.format!(@cursor_date, "{Mfull} {YYYY}") %>
   </h3>
-  <div class="me-4">
-    <a href="#" phx-click="prev-month" class="btn btn-primary">
-      <%= icon_div @socket, "bi-chevron-left", [class: "icon baseline"] %>
+  <div>
+    <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" <%= if Map.get(@cursor_date, :month) == Map.get(Timex.today(), :month), do: "disabled" %>>
+      <%= icon_div @socket, "bi-asterisk", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+      Today
+    </button>
+    <button type="button" phx-click="month-nav" phx-value-month="prev" class="btn btn-primary">
+      <%= icon_div @socket, "bi-chevron-left", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
       Prev
-    </a>
-    <a href="#" phx-click="next-month" class="btn btn-primary">
+    </button>
+    <button type="button" phx-click="month-nav" phx-value-month="next" class="btn btn-primary">
       Next
-      <%= icon_div @socket, "bi-chevron-right", [class: "icon baseline"] %>
-    </a>
+      <%= icon_div @socket, "bi-chevron-right", [class: "icon baseline", style: "margin-left:0.125rem;"] %>
+    </button>
   </div>
 </div>
 
 <%# calendar month table display %>
-<table class="table table-rounded shadow mt-3">
+<table class="table table-rounded table-calendar shadow mt-3">
   <thead>
     <tr>
       <%= for {day_name, _i} <- Enum.with_index(@day_names) do %>
-        <th width="14%">
+        <th>
           <%= day_name %>
         </th>
       <% end %>
@@ -35,23 +196,29 @@
     <%= for week <- @week_rows do %>
       <tr>
       <%= for day <- week do %>
-        <%= cond do %>
-
-          <% Timex.compare(day, @current_date, :days) == 0 -> %>
-            <td width="14%" style="height: 6rem;" class="bg-info text-white">
-
-          <% day.month != @cursor_date.month -> %>
-            <td width="14%" style="height: 6rem;" class="bg-light text-gray">
-
-          <% true -> %>
-            <td width="14%" style="height: 6rem;">
-
-        <% end %>
-
-          <%= Timex.format!(day, "%d", :strftime) %>
+        <%# day |> NaiveDateTime.to_date() |> IO.inspect() %>
+        <td class="<%= day_color(day, @current_date, @cursor_date, @selected_days) %>" phx-click="select-day" phx-value-day="<%= day %>">
+          <%= Timex.format!(day, "{0D}") %><%= if day.month != @cursor_date.month, do: "-#{Timex.format!(day, "{Mshort}")}" %>
         </td>
       <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+
+<div class="row justify-content-end mt-4">
+  <div class="col-auto">
+
+  <button class="btn btn-warning" phx-click="clear-days">
+    <%= icon_div @socket, "bi-eraser", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+    Clear
+  </button>
+
+  <button class="btn btn-primary" phx-click="save-days">
+    <%= icon_div @socket, "bi-save", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+    Save assigned shifts
+  </button>
+
+  </div>
+</div>

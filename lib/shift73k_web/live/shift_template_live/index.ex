@@ -107,14 +107,4 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
     socket |> put_flash(flash_type, msg) |> live_noreply()
   end
 
-  def format_shift_length(shift_template) do
-    shift_template
-    |> ShiftTemplate.shift_length()
-    |> Timex.Duration.from_minutes()
-    |> Timex.format_duration()
-    |> String.replace("PT", "")
-    |> String.replace("H", "h ")
-    |> String.replace("M", "m")
-    |> String.trim()
-  end
 end

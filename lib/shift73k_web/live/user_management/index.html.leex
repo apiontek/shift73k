@@ -1,5 +1,5 @@
 <%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, Bones73kWeb.UserManagement.FormComponent,
+  <%= live_modal @socket, Shift73kWeb.UserManagement.FormComponent,
       id: @user.id || :new,
       title: @page_title,
       action: @live_action,
@@ -8,7 +8,7 @@
 <% end %>
 
 <%= if @delete_user do %>
-  <%= live_modal @socket, Bones73kWeb.UserManagement.DeleteComponent,
+  <%= live_modal @socket, Shift73kWeb.UserManagement.DeleteComponent,
       id: @delete_user.id,
       title: "Delete User",
       delete_user: @delete_user,

@@ -25,7 +25,7 @@
         My Shift Templates
       </h2>
       <%= live_patch to: Routes.shift_template_index_path(@socket, :new), class: "btn btn-primary" do %>
-        <%= icon_div @socket, "bi-plus-circle-dotted", [class: "icon baseline me-1"] %>
+        <%= icon_div @socket, "bi-plus-circle-dotted", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
         New Shift Template
       <% end %>
     </div>
@@ -38,13 +38,14 @@
         <div class="col-12 col-lg-6">
 
           <div class="card mt-4">
-            <h5 class="card-header d-flex justify-content-between align-items-start">
-              <div class="visually-hidden">Subject:</div>
-              <%= template.subject %>
+            <h5 class="card-header d-flex justify-content-between align-items-center">
+              <span class="visually-hidden">Subject:</span>
+              <%= icon_div @socket, "bi-tag", [class: "icon baseline me-1"] %>
+              <div class="w-100"><%= template.subject %></div>
               <%= if template.id == @current_user.fave_shift_template_id do %>
-                <%= icon_div @socket, "bi-star-fill", [class: "icon baseline text-primary align-self-start ms-2", phx_click: "unset-user-fave-shift-template"] %>
+                <%= icon_div @socket, "bi-star-fill", [class: "icon baseline text-primary align-self-start ms-2"], [role: "img", aria_hidden: false, aria_label: "Unset as favorite", phx_click: "unset-user-fave-shift-template", class: "cursor-pointer"] %>
               <% else %>
-                <%= icon_div @socket, "bi-star", [class: "icon baseline text-primary align-self-start ms-2", phx_click: "set-user-fave-shift-template", phx_value_id: template.id] %>
+                <%= icon_div @socket, "bi-star", [class: "icon baseline text-primary align-self-start ms-2"], [role: "img", aria_hidden: false, aria_label: "Set as favorite", phx_click: "set-user-fave-shift-template", phx_value_id: template.id, class: "cursor-pointer"] %>
               <% end %>
             </h5>
             <div class="card-body">
@@ -53,13 +54,13 @@
                 <tbody>
                   <tr>
                     <th scope="row" class="text-end">
-                      <%= icon_div @socket, "bi-hourglass", [class: "icon text-muted"] %>
+                      <%= icon_div @socket, "bi-hourglass", [class: "icon baseline text-muted"] %>
                       <span class="visually-hidden">Hours:</span>
                     </th>
                     <td>
-                      <%= template.time_start |> Timex.format!("{h12}:{m}{am}") %>
+                      <%= format_shift_time(template.time_start) %>
                       &mdash;
-                      <%= template.time_end |> Timex.format!("{h12}:{m}{am}") %>
+                      <%= format_shift_time(template.time_end) %>
                       <span class="text-muted">
                         <span class="visually-hidden">Shift length:</span>
                         (<%= format_shift_length(template) %>)

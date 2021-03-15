@@ -3,5 +3,7 @@ import Ecto.Query
 alias Shift73k.Repo
 alias Shift73k.Accounts
 alias Shift73k.Accounts.User
+alias Shift73k.Shifts
+alias Shift73k.Shifts.Shift
 alias Shift73k.Shifts.Templates
 alias Shift73k.Shifts.Templates.ShiftTemplate

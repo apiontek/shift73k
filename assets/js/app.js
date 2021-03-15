@@ -5,7 +5,7 @@ import "../css/app.scss";
 
 // Import icons for sprite-loader
 // navbar brand icon
-import "../node_modules/bootstrap-icons/icons/calendar3-week.svg"; // brand
+import "../node_modules/bootstrap-icons/icons/calendar2-week.svg"; // brand
 // menus etc
 import "../node_modules/bootstrap-icons/icons/person-circle.svg"; // accounts menu
 import "../node_modules/bootstrap-icons/icons/person-plus.svg"; // new user / register
@@ -34,9 +34,10 @@ import "../node_modules/bootstrap-icons/icons/arrow-repeat.svg"; // resend confi
 import "../node_modules/@mdi/svg/svg/head-question-outline.svg"; // forgot password
 import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
 // calendar/event icons
-import "../node_modules/bootstrap-icons/icons/calendar3.svg";
-import "../node_modules/bootstrap-icons/icons/calendar3-event.svg";
-import "../node_modules/bootstrap-icons/icons/calendar3-range.svg";
+import "../node_modules/bootstrap-icons/icons/calendar2.svg";
+import "../node_modules/bootstrap-icons/icons/calendar2-plus.svg";
+import "../node_modules/bootstrap-icons/icons/calendar2-event.svg";
+import "../node_modules/bootstrap-icons/icons/calendar2-range.svg";
 import "../node_modules/bootstrap-icons/icons/clock-history.svg"; // shift template
 import "../node_modules/bootstrap-icons/icons/tag.svg";
 import "../node_modules/bootstrap-icons/icons/hourglass.svg";
@@ -47,6 +48,11 @@ import "../node_modules/bootstrap-icons/icons/plus-circle-dotted.svg";
 import "../node_modules/bootstrap-icons/icons/clipboard-plus.svg";
 import "../node_modules/bootstrap-icons/icons/star.svg";
 import "../node_modules/bootstrap-icons/icons/star-fill.svg";
+import "../node_modules/bootstrap-icons/icons/binoculars.svg";
+import "../node_modules/bootstrap-icons/icons/binoculars-fill.svg";
+import "../node_modules/bootstrap-icons/icons/eraser.svg";
+import "../node_modules/bootstrap-icons/icons/save.svg";
+import "../node_modules/bootstrap-icons/icons/asterisk.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -72,11 +78,13 @@ import "./_form-validity";
 // Bootstrap-liveview helpers
 import { AlertRemover } from "./_alert-remover";
 import { BsModal } from "./_bs_modal";
+import { BsCollapse } from "./_bs_collapse";
 
 // LiveSocket setup
 let Hooks = {};
 Hooks.AlertRemover = AlertRemover;
 Hooks.BsModal = BsModal;
+Hooks.BsCollapse = BsCollapse;
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");

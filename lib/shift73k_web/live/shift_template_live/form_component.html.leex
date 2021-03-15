@@ -13,6 +13,7 @@
           value: input_value(f, :subject),
           class: input_class(f, :subject, "form-control"),
           autofocus: true,
+          phx_debounce: 250,
           aria_describedby: error_ids(f, :subject)
         %>
       <%= error_tag f, :subject %>
@@ -59,6 +60,7 @@
       <%= text_input f, :location,
           value: input_value(f, :location),
           class: input_class(f, :location, "form-control"),
+          phx_debounce: 250,
           aria_describedby: error_ids(f, :location)
         %>
       <%= error_tag f, :location %>
@@ -71,6 +73,7 @@
       <%= textarea f, :description,
           value: input_value(f, :description),
           class: input_class(f, :description, "form-control"),
+          phx_debounce: 250,
           aria_describedby: error_ids(f, :description)
         %>
       <%= error_tag f, :description %>
@@ -82,7 +85,8 @@
       <%= icon_div @socket, "bi-map", [class: "icon is-left text-muted fs-5"] %>
       <%= text_input f, :time_zone,
           value: input_value(f, :time_zone),
-          class: "form-control",
+          class: input_class(f, :time_zone, "form-control"),
+          phx_debounce: 250,
           list: "tz_list"
         %>
         <datalist id="tz_list">
@@ -91,7 +95,7 @@
           <% end %>
           end
         </datalist>
-      <div class="valid-feedback d-block text-primary">Type to search & select from list of known time zones (<%= link "formatted per IANA", to: "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", target: "_blank" %>)</div>
+      <div class="valid-feedback d-block text-primary">Type to search & select from list of known <%= link "IANA tz database", to: "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", target: "_blank" %> time zones</div>
       <%= error_tag f, :time_zone %>
     </div>
 

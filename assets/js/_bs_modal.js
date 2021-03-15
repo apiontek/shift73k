@@ -1,7 +1,6 @@
 // Helping bootstrap modals work with liveview
 // preserving animations
 import Modal from "bootstrap/js/dist/modal";
-// import { Modal } from "bootstrap";
 
 export const BsModal = {
   mounted() {

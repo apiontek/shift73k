@@ -40,8 +40,10 @@ defmodule Shift73k.Shifts.Templates do
       ** (Ecto.NoResultsError)
 
   """
+  def get_shift_template!(nil), do: nil
   def get_shift_template!(id), do: Repo.get!(ShiftTemplate, id)
 
+  def get_shift_template(nil), do: nil
   def get_shift_template(id), do: Repo.get(ShiftTemplate, id)
 
   @doc """
