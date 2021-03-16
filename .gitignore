@@ -47,3 +47,6 @@ npm-debug.log
 
 # for vscode elixir_ls extension files
 /.elixir_ls
+
+# dev
+TODO.md
