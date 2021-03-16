@@ -2,7 +2,11 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   use Shift73kWeb, :live_view
   use Timex
 
+  alias Ecto.Multi
+  alias Shift73k.Repo
   alias Shift73k.EctoEnums.WeekdayEnum
+  alias Shift73k.Shifts
+  alias Shift73k.Shifts.Shift
   alias Shift73k.Shifts.Templates
   alias Shift73k.Shifts.Templates.ShiftTemplate
 
@@ -30,7 +34,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> assign_shift_template_changeset()
     |> init_today(Timex.today())
     |> init_calendar()
-    |> init_known_shifts()
+    |> assign_known_shifts()
     |> live_noreply()
   end
 
@@ -41,10 +45,12 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     assign(socket, :shift_length, format_shift_length(shift))
   end
 
-  defp init_known_shifts(%{assigns: %{current_user: user, week_rows: weeks}} = socket) do
-    days = weeks |> List.flatten()
-    first = weeks |> List.flatten() |> List.first()
-    socket
+  defp assign_known_shifts(socket) do
+    user = socket.assigns.current_user
+    first = socket.assigns.day_first
+    last = socket.assigns.day_last
+    known_shifts = Shifts.list_shifts_by_user_between_dates(user.id, first, last)
+    assign(socket, :known_shifts, known_shifts)
   end
 
   defp init_calendar(%{assigns: %{current_user: user}} = socket) do
@@ -170,7 +176,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
       day_last: last
     ]
 
-    assign(socket, assigns)
+    assign(socket, assigns) |> assign_known_shifts()
   end
 
   @impl true
@@ -206,40 +212,12 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
       cond do
         direction == "now" -> Timex.today()
         true ->
-          months = m = direction == "prev" && -1 || 1
+          months = direction == "prev" && -1 || 1
           Timex.shift(socket.assigns.cursor_date, months: months)
       end
 
     {:noreply, set_month(socket, new_cursor)}
   end
-
-  # @impl true
-  # def handle_event("prev-month", _, socket) do
-  #   cursor_date = Timex.shift(socket.assigns.cursor_date, months: -1)
-  #   {first, last, rows} = week_rows(cursor_date, socket.assigns.current_user.week_start_at)
-
-  #   assigns = [
-  #     cursor_date: cursor_date,
-  #     week_rows: week_rows(cursor_date, socket.assigns.current_user.week_start_at)
-  #   ]
-
-  #   {:noreply, assign(socket, assigns)}
-  # end
-
-  # @impl true
-  # def handle_event("next-month", _, socket) do
-  #   cursor_date = Timex.shift(socket.assigns.cursor_date, months: 1)
-  #   {first, last, rows} = week_rows(cursor_date, socket.assigns.current_user.week_start_at)
-
-  #   assigns = [
-  #     cursor_date: cursor_date,
-  #     week_rows: rows,
-  #     day_first: first,
-  #     day_last: last
-  #   ]
-
-  #   {:noreply, assign(socket, assigns)}
-  # end
 
   @impl true
   def handle_event("toggle-template-details", %{"target_id" => target_id}, socket) do
@@ -273,5 +251,56 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   @impl true
   def handle_event("clear-days", _params, socket) do
     {:noreply, assign(socket, :selected_days, [])}
+  end
+
+  @impl true
+  def handle_event("save-days", _params, socket) do
+    # 1. collect attrs from loaded shift template
+    shift_data = shift_data_from_template(socket.assigns.shift_template)
+
+    # 2. create list of shift attrs to insert
+    to_insert = Enum.map(socket.assigns.selected_days, &shift_from_day_and_shift_data(&1, shift_data))
+
+    # 3. insert the data
+    {status, msg} = insert_shifts(to_insert, length(socket.assigns.selected_days))
+
+    socket
+    |> put_flash(status, msg)
+    |> assign(:selected_days, [])
+    |> assign_known_shifts()
+    |> live_noreply()
+  end
+
+  defp shift_data_from_template(shift_template) do
+    shift_template
+    |> Map.from_struct()
+    |> Map.drop([:__meta__, :id, :inserted_at, :updated_at, :user])
+  end
+
+  defp shift_from_day_and_shift_data(day, shift_data) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    date_data = %{date: Date.from_iso8601!(day), inserted_at: now, updated_at: now}
+    Map.merge(shift_data, date_data)
+  end
+
+  defp insert_shifts(to_insert, day_count) do
+    Multi.new()
+    |> Multi.insert_all(:insert_all, Shift, to_insert)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{insert_all: {n, _}}} ->
+        if n == day_count do
+          {:success, "Successfully assigned shift to #{n} day(s)"}
+        else
+          {:warning, "Some error, only #{n} day(s) inserted but #{day_count} were selected"}
+        end
+      _ -> {:error, "Ope, unknown error inserting shifts, page the dev"}
+    end
+  end
+
+  def shifts_to_show(day_shifts) do
+    if length(day_shifts) == 1 || length(day_shifts) > 2,
+      do: Enum.take(day_shifts, 1),
+      else: day_shifts
   end
 end

@@ -25,7 +25,7 @@
         My Shift Templates
       </h2>
       <%= live_patch to: Routes.shift_template_index_path(@socket, :new), class: "btn btn-primary" do %>
-        <%= icon_div @socket, "bi-plus-circle-dotted", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+        <%= icon_div @socket, "bi-plus-circle-dotted", [class: "icon baseline"] %>
         New Shift Template
       <% end %>
     </div>
@@ -100,14 +100,14 @@
 
               <%= if Roles.can?(@current_user, template, :edit) do %>
                 <%= live_patch to: Routes.shift_template_index_path(@socket, :edit, template), class: "btn btn-primary btn-sm text-nowrap" do %>
-                  <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  <%= icon_div @socket, "bi-pencil", [class: "icon baseline"] %>
                   Edit
                 <% end %>
               <% end %>
 
               <%= if Roles.can?(@current_user, template, :clone) do %>
                 <%= live_patch to: Routes.shift_template_index_path(@socket, :clone, template), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
-                  <%= icon_div @socket, "bi-clipboard-plus", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  <%= icon_div @socket, "bi-clipboard-plus", [class: "icon baseline"] %>
                   Clone
                 <% end %>
               <% end %>
@@ -116,7 +116,7 @@
 
               <%= if Roles.can?(@current_user, template, :delete) do %>
                 <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= template.id %>">
-                  <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
                   Delete
                 </button>
               <% end %>

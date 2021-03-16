@@ -98,14 +98,14 @@
 
           <%= if Roles.can?(@current_user, user, :edit) do %>
             <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-primary btn-sm text-nowrap" do %>
-              <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+              <%= icon_div @socket, "bi-pencil", [class: "icon baseline"] %>
               Edit
             <% end %>
           <% end %>
 
           <%= if Roles.can?(@current_user, user, :delete) do %>
             <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= user.id %>">
-              <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+              <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
               Delete
             </button>
           <% end %>
@@ -180,14 +180,14 @@
 
               <%= if Roles.can?(@current_user, user, :edit) do %>
                 <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
-                  <%= icon_div @socket, "bi-pencil", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  <%= icon_div @socket, "bi-pencil", [class: "icon baseline"] %>
                   Edit
                 <% end %>
               <% end %>
 
               <%= if Roles.can?(@current_user, user, :delete) do %>
                 <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= user.id %>">
-                  <%= icon_div @socket, "bi-trash", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+                  <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
                   Delete
                 </button>
               <% end %>

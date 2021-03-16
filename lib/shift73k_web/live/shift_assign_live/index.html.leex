@@ -4,7 +4,7 @@
 </h2>
 
 <div class="row justify-content-center mt-4">
-  <div class="col-12 col-lg-9 col-xl-8 col-xxl-7 d-flex justify-content-start align-items-end">
+  <div class="col-12 col-lg-9 col-xl-8 col-xxl-7 d-flex justify-content-center align-items-end">
 
       <%= form_for :template_select, "#", [phx_change: "change-selected-template"], fn sts -> %>
         <%= label sts, :template, "Select shift template to assign to dates", class: "form-label" %>
@@ -15,8 +15,8 @@
       <% end %>
 
       <button type="button" class="ms-2 btn btn-primary text-nowrap <%= if @show_template_btn_active, do: "active" %>" id="#templateDetailsBtn" phx-click="toggle-template-details" phx-value-target_id="#templateDetailsCol">
-        <%= icon_div @socket, (@show_template_btn_active && "bi-binoculars-fill" || "bi-binoculars"), [class: "icon baseline", style: "margin-right:0.125rem;"] %>
-        Details
+        <%= icon_div @socket, (@show_template_btn_active && "bi-binoculars-fill" || "bi-binoculars"), [class: "icon baseline"] %>
+        <span class="d-none d-sm-inline">Details</span>
       </button>
 
   </div>
@@ -137,8 +137,6 @@
 
           </div>
 
-          <button type="submit" class="d-hidden"></button>
-
         <% end %>
 
       </div>
@@ -167,15 +165,15 @@
   </h3>
   <div>
     <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" <%= if Map.get(@cursor_date, :month) == Map.get(Timex.today(), :month), do: "disabled" %>>
-      <%= icon_div @socket, "bi-asterisk", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
-      Today
+      <%= icon_div @socket, "bi-asterisk", [class: "icon baseline"] %>
+      <span class="d-none d-sm-inline">Today</span>
     </button>
     <button type="button" phx-click="month-nav" phx-value-month="prev" class="btn btn-primary">
-      <%= icon_div @socket, "bi-chevron-left", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
-      Prev
+      <%= icon_div @socket, "bi-chevron-left", [class: "icon baseline"] %>
+      <span class="d-none d-sm-inline">Prev</span>
     </button>
     <button type="button" phx-click="month-nav" phx-value-month="next" class="btn btn-primary">
-      Next
+      <span class="d-none d-sm-inline">Next</span>
       <%= icon_div @socket, "bi-chevron-right", [class: "icon baseline", style: "margin-left:0.125rem;"] %>
     </button>
   </div>
@@ -196,9 +194,27 @@
     <%= for week <- @week_rows do %>
       <tr>
       <%= for day <- week do %>
-        <%# day |> NaiveDateTime.to_date() |> IO.inspect() %>
         <td class="<%= day_color(day, @current_date, @cursor_date, @selected_days) %>" phx-click="select-day" phx-value-day="<%= day %>">
+
           <%= Timex.format!(day, "{0D}") %><%= if day.month != @cursor_date.month, do: "-#{Timex.format!(day, "{Mshort}")}" %>
+
+          <% day_shifts = Enum.filter(@known_shifts, fn s -> s.date == day end) %>
+          <% shifts_to_show = shifts_to_show(day_shifts) %>
+
+          <%= for shift <- shifts_to_show do %>
+            <span class="badge bg-primary text-start d-block">
+              <span>
+              <%= shift.time_start |> Timex.format!("{h12}:{m}{am}") |> String.trim_trailing("m") %>
+              <%= shift.subject %>
+              </span>
+            </span>
+          <% end %>
+
+          <%= if length(day_shifts) > 2 do %>
+            <span class="badge bg-primary text-start d-block"><span><%= length(day_shifts) - 1 %> more&hellip;</span></span>
+          <% end %>
+
+
         </td>
       <% end %>
       </tr>
@@ -207,16 +223,16 @@
 </table>
 
 
-<div class="row justify-content-end mt-4">
+<div class="row justify-content-end my-4">
   <div class="col-auto">
 
-  <button class="btn btn-warning" phx-click="clear-days">
-    <%= icon_div @socket, "bi-eraser", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+  <button class="btn btn-outline-dark" phx-click="clear-days">
+    <%= icon_div @socket, "bi-eraser", [class: "icon baseline"] %>
     Clear
   </button>
 
-  <button class="btn btn-primary" phx-click="save-days">
-    <%= icon_div @socket, "bi-save", [class: "icon baseline", style: "margin-right:0.125rem;"] %>
+  <button class="btn btn-primary" phx-click="save-days" <%= if (!@shift_template_changeset.valid? || Enum.empty?(@selected_days)), do: "disabled" %>>
+    <%= icon_div @socket, "bi-save", [class: "icon baseline"] %>
     Save assigned shifts
   </button>
 

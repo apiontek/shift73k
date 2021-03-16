@@ -21,6 +21,16 @@ defmodule Shift73k.Shifts do
     Repo.all(Shift)
   end
 
+  def list_shifts_by_user_between_dates(user_id, start_date, end_date) do
+    q = from(
+      s in Shift,
+      select: %{date: s.date, subject: s.subject, time_start: s.time_start, time_end: s.time_end},
+      where: s.user_id == ^user_id and s.date >= ^start_date and s.date < ^end_date,
+      order_by: [s.date, s.time_start]
+    )
+    Repo.all(q)
+  end
+
   @doc """
   Gets a single shift.
 
