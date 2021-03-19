@@ -36,7 +36,7 @@
     "purgecss-webpack-plugin": "^4.0.2",
     "sass": "^1.x",
     "sass-loader": "^11.x",
-    "svg-sprite-loader": "^5.2.1",
+    "svg-sprite-loader": "^6.x",
     "webpack": "^5.x",
     "webpack-cli": "^4.x"
   }
