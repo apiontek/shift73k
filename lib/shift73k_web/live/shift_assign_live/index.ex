@@ -18,9 +18,10 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     socket
     |> assign_defaults(session)
     |> assign(:custom_shift, @custom_shift)
-    |> assign(:show_template_btn_active, :false)
-    |> assign(:show_template_details, :false)
+    |> assign(:show_template_btn_active, false)
+    |> assign(:show_template_details, false)
     |> assign(:selected_days, [])
+    |> assign(:delete_days_shifts, nil)
     |> live_okreply()
   end
 
@@ -32,10 +33,16 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> show_details_if_custom()
     |> assign_shift_length()
     |> assign_shift_template_changeset()
+    |> assign_modal_close_handlers()
     |> init_today(Timex.today())
     |> init_calendar()
     |> assign_known_shifts()
     |> live_noreply()
+  end
+
+  defp assign_modal_close_handlers(socket) do
+    to = Routes.shift_assign_index_path(socket, :index)
+    assign(socket, modal_return_to: to, modal_close_action: :return)
   end
 
   defp get_shift_template("custom-shift"), do: @custom_shift
@@ -56,11 +63,11 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   defp init_calendar(%{assigns: %{current_user: user}} = socket) do
     days = day_names(user.week_start_at)
     {first, last, rows} = week_rows(socket.assigns.cursor_date, user.week_start_at)
-    assign(socket, [day_names: days, week_rows: rows, day_first: first, day_last: last])
+    assign(socket, day_names: days, week_rows: rows, day_first: first, day_last: last)
   end
 
   defp init_today(socket, today) do
-    assign(socket, [current_date: today, cursor_date: today])
+    assign(socket, current_date: today, cursor_date: today)
   end
 
   defp assign_shift_template_changeset(%{assigns: %{shift_template: shift}} = socket) do
@@ -71,7 +78,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   defp init_shift_template(socket) do
     first_list_id = socket.assigns.shift_templates |> hd() |> elem(1)
     fave_id = socket.assigns.current_user.fave_shift_template_id
-    assign_shift_template(socket, (fave_id || first_list_id))
+    assign_shift_template(socket, fave_id || first_list_id)
   end
 
   defp assign_shift_template(socket, template_id) do
@@ -83,14 +90,17 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
       Templates.list_shift_templates_by_user_id(user.id)
       |> Enum.map(fn t -> shift_template_option(t, user.fave_shift_template_id) end)
       |> Enum.concat([@custom_shift_opt])
+
     assign(socket, :shift_templates, shift_templates)
   end
 
   defp shift_template_option(template, fave_id) do
     label =
-      template.subject <> " (" <>
-      format_shift_time(template.time_start) <> "—" <>
-      format_shift_time(template.time_end) <> ")"
+      template.subject <>
+        " (" <>
+        format_shift_time(template.time_start) <>
+        "—" <>
+        format_shift_time(template.time_end) <> ")"
 
     label =
       case fave_id == template.id do
@@ -126,7 +136,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
 
     week_rows =
       Interval.new(from: first, until: last, right_open: false)
-      |> Enum.map(& NaiveDateTime.to_date(&1))
+      |> Enum.map(&NaiveDateTime.to_date(&1))
       |> Enum.chunk_every(7)
 
     {first, last, week_rows}
@@ -141,11 +151,14 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
           true -> "bg-triangle-white"
         end
 
-      Timex.compare(day, current_date, :days) == 0 -> "bg-info text-white"
+      Timex.compare(day, current_date, :days) == 0 ->
+        "bg-info text-white"
 
-      day.month != cursor_date.month -> "bg-light text-gray"
+      day.month != cursor_date.month ->
+        "bg-light text-gray"
 
-      true -> ""
+      true ->
+        ""
     end
   end
 
@@ -157,11 +170,12 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   end
 
   defp show_details_if_custom(socket) do
-    if (socket.assigns.shift_template.id != @custom_shift.id) || socket.assigns.show_template_details do
+    if socket.assigns.shift_template.id != @custom_shift.id ||
+         socket.assigns.show_template_details do
       socket
     else
       socket
-      |> assign(:show_template_btn_active, :true)
+      |> assign(:show_template_btn_active, true)
       |> push_event("toggle-template-details", %{targetId: "#templateDetailsCol"})
     end
   end
@@ -197,7 +211,11 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   end
 
   @impl true
-  def handle_event("change-selected-template", %{"template_select" => %{"template" => template_id}}, socket) do
+  def handle_event(
+        "change-selected-template",
+        %{"template_select" => %{"template" => template_id}},
+        socket
+      ) do
     socket
     |> assign_shift_template(template_id)
     |> show_details_if_custom()
@@ -210,9 +228,11 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   def handle_event("month-nav", %{"month" => direction}, socket) do
     new_cursor =
       cond do
-        direction == "now" -> Timex.today()
+        direction == "now" ->
+          Timex.today()
+
         true ->
-          months = direction == "prev" && -1 || 1
+          months = (direction == "prev" && -1) || 1
           Timex.shift(socket.assigns.cursor_date, months: months)
       end
 
@@ -229,12 +249,12 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
 
   @impl true
   def handle_event("collapse-shown", %{"target_id" => _target_id}, socket) do
-    {:noreply, assign(socket, :show_template_details, :true)}
+    {:noreply, assign(socket, :show_template_details, true)}
   end
 
   @impl true
   def handle_event("collapse-hidden", %{"target_id" => _target_id}, socket) do
-    {:noreply, assign(socket, :show_template_details, :false)}
+    {:noreply, assign(socket, :show_template_details, false)}
   end
 
   @impl true
@@ -249,6 +269,14 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   end
 
   @impl true
+  def handle_event("delete-days-shifts", _params, socket) do
+    socket
+    |> assign(:modal_close_action, :delete_days_shifts)
+    |> assign(:delete_days_shifts, socket.assigns.selected_days)
+    |> live_noreply()
+  end
+
+  @impl true
   def handle_event("clear-days", _params, socket) do
     {:noreply, assign(socket, :selected_days, [])}
   end
@@ -259,7 +287,8 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     shift_data = shift_data_from_template(socket.assigns.shift_template)
 
     # 2. create list of shift attrs to insert
-    to_insert = Enum.map(socket.assigns.selected_days, &shift_from_day_and_shift_data(&1, shift_data))
+    to_insert =
+      Enum.map(socket.assigns.selected_days, &shift_from_day_and_shift_data(&1, shift_data))
 
     # 3. insert the data
     {status, msg} = insert_shifts(to_insert, length(socket.assigns.selected_days))
@@ -271,10 +300,37 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> live_noreply()
   end
 
+  @impl true
+  def handle_info({:put_flash_message, {flash_type, msg}}, socket) do
+    socket |> put_flash(flash_type, msg) |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:clear_selected_days, _}, socket) do
+    socket |> assign(:selected_days, []) |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:close_modal, _}, %{assigns: %{modal_close_action: :return}} = socket) do
+    socket
+    |> copy_flash()
+    |> push_patch(to: socket.assigns.modal_return_to)
+    |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:close_modal, _}, %{assigns: %{modal_close_action: assign_key}} = socket) do
+    socket
+    |> assign(assign_key, nil)
+    |> assign_modal_close_handlers()
+    |> assign_known_shifts()
+    |> live_noreply()
+  end
+
   defp shift_data_from_template(shift_template) do
     shift_template
     |> Map.from_struct()
-    |> Map.drop([:__meta__, :id, :inserted_at, :updated_at, :user])
+    |> Map.drop([:__meta__, :id, :inserted_at, :updated_at, :user, :is_fave_of_user])
   end
 
   defp shift_from_day_and_shift_data(day, shift_data) do
@@ -289,12 +345,16 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> Repo.transaction()
     |> case do
       {:ok, %{insert_all: {n, _}}} ->
+        s = (n > 1 && "s") || ""
+
         if n == day_count do
-          {:success, "Successfully assigned shift to #{n} day(s)"}
+          {:success, "Successfully assigned shift to #{n} day#{s}"}
         else
-          {:warning, "Some error, only #{n} day(s) inserted but #{day_count} were selected"}
+          {:warning, "Some error, only #{n} day#{s} inserted but #{day_count} were selected"}
         end
-      _ -> {:error, "Ope, unknown error inserting shifts, page the dev"}
+
+      _ ->
+        {:error, "Ope, unknown error inserting shifts, page the dev"}
     end
   end
 

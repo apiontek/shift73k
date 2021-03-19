@@ -5,14 +5,7 @@ defmodule Shift73kWeb.UserManagement.DeleteComponent do
 
   @impl true
   def update(assigns, socket) do
-    socket
-    |> assign(assigns)
-    |> live_okreply()
-  end
-
-  @impl true
-  def handle_event("cancel", _, socket) do
-    {:noreply, push_event(socket, "modal-please-hide", %{})}
+    socket |> assign(assigns) |> live_okreply()
   end
 
   @impl true

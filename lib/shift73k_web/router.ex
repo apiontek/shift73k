@@ -32,8 +32,7 @@ defmodule Shift73kWeb.Router do
   scope "/", Shift73kWeb do
     pipe_through([:browser])
 
-    live("/", PageLive, :index)
-    get("/other", OtherController, :index)
+    get("/", Redirector, to: "/assign")
   end
 
   # Other scopes may use custom stacks.

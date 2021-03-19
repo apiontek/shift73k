@@ -52,11 +52,6 @@ defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
     )
   end
 
-  @impl true
-  def handle_event("cancel", _, socket) do
-    {:noreply, push_event(socket, "modal-please-hide", %{})}
-  end
-
   defp save_shift_template(socket, :new, params) do
     case Templates.create_shift_template(params) do
       {:ok, _shift_template} ->

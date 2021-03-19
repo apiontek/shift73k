@@ -1,3 +1,13 @@
+<%= if @delete_days_shifts do %>
+  <%= live_modal @socket, Shift73kWeb.ShiftAssignLive.DeleteComponent,
+      id: "delete-days-shifts-#{@current_user.id}",
+      title: "Delete Shifts From Selected Days",
+      delete_days_shifts: @delete_days_shifts,
+      current_user: @current_user
+      %>
+<% end %>
+
+
 <h2 class="mb-3 mb-sm-0">
   <%= icon_div @socket, "bi-calendar2-plus", [class: "icon baseline"] %>
   Assign Shift To Dates
@@ -223,17 +233,22 @@
 </table>
 
 
-<div class="row justify-content-end my-4">
-  <div class="col-auto">
+<div class="row justify-content-center justify-content-lg-end my-5">
+  <div class="col-12 col-sm-10 col-md-8 col-lg-auto d-flex flex-column-reverse flex-lg-row">
 
-  <button class="btn btn-outline-dark" phx-click="clear-days">
-    <%= icon_div @socket, "bi-eraser", [class: "icon baseline"] %>
-    Clear
+  <button class="btn btn-outline-danger mb-1 mb-lg-0 me-lg-1" phx-click="delete-days-shifts" <%= if Enum.empty?(@selected_days), do: "disabled" %>>
+    <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
+    Delete shifts from selected days
   </button>
 
-  <button class="btn btn-primary" phx-click="save-days" <%= if (!@shift_template_changeset.valid? || Enum.empty?(@selected_days)), do: "disabled" %>>
+  <button class="btn btn-outline-dark mb-1 mb-lg-0 me-lg-1" phx-click="clear-days" <%= if Enum.empty?(@selected_days), do: "disabled" %>>
+    <%= icon_div @socket, "bi-eraser", [class: "icon baseline"] %>
+    De-select all selected
+  </button>
+
+  <button class="btn btn-primary mb-1 mb-lg-0" phx-click="save-days" <%= if (!@shift_template_changeset.valid? || Enum.empty?(@selected_days)), do: "disabled" %>>
     <%= icon_div @socket, "bi-save", [class: "icon baseline"] %>
-    Save assigned shifts
+    Assign shifts to selected days
   </button>
 
   </div>

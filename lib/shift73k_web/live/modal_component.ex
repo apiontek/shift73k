@@ -16,15 +16,20 @@ defmodule Shift73kWeb.ModalComponent do
 
           <div class="modal-header">
             <h5 class="modal-title"><%= Keyword.get(@opts, :title, "Modal title") %></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close" phx-click="hide" phx-target="<%= @myself %>" aria-label="Close"></button>
           </div>
 
-          <%= live_component @socket, @component, @opts %>
+          <%= live_component @socket, @component, Keyword.put(@opts, :modal_id, @id) %>
 
         </div>
       </div>
     </div>
     """
+  end
+
+  @impl true
+  def update(assigns, socket) do
+    socket |> assign(assigns) |> live_okreply()
   end
 
   @impl true
@@ -35,6 +40,6 @@ defmodule Shift73kWeb.ModalComponent do
 
   @impl true
   def handle_event("hide", _, socket) do
-    {:noreply, push_event(socket, "modal-please-hide", %{})}
+    socket |> push_event("modal-please-hide", %{}) |> live_noreply()
   end
 end

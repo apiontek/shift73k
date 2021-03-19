@@ -10,7 +10,7 @@ defmodule Shift73k.Repo.Migrations.CreateShiftTemplates do
       add :time_zone, :string, null: false
       add :time_start, :time, null: false
       add :time_end, :time, null: false
-      add :user_id, references(:users, on_delete: :nothing, type: :binary_id)
+      add :user_id, references(:users, on_delete: :delete_all, type: :binary_id)
 
       timestamps()
     end

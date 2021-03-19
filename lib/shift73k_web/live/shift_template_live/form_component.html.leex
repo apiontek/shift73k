@@ -104,7 +104,7 @@
   </div>
   <div class="modal-footer">
 
-    <%= link "Cancel", to: "#", class: "btn", phx_click: "cancel", phx_target: @myself %>
+    <%= link "Cancel", to: "#", class: "btn btn-outline-dark", phx_click: "hide", phx_target: "##{@modal_id}" %>
     <%= submit "Save",
         class: "btn btn-primary ",
         disabled: !@changeset.valid?,

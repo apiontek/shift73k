@@ -19,6 +19,7 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
     field :time_end, :time, default: ~T[17:00:00]
 
     belongs_to(:user, Shift73k.Accounts.User)
+    has_one(:is_fave_of_user, Shift73k.Accounts.User, foreign_key: :fave_shift_template_id)
 
     timestamps()
   end
@@ -58,7 +59,9 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
           []
       end
     end)
-    |> validate_inclusion(:time_zone, Timex.timezones(), message: "must be a valid IANA tz database time zone")
+    |> validate_inclusion(:time_zone, Timex.timezones(),
+      message: "must be a valid IANA tz database time zone"
+    )
   end
 
   defp time_start_from_attrs(%{"time_start" => time_start}), do: time_start

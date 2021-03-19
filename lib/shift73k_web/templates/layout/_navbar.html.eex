@@ -2,7 +2,7 @@
   <div class="container">
 
     <h1 class="fs-4 my-0 py-0 lh-base">
-    <%= link to: Routes.page_path(@conn, :index), class: "navbar-brand fs-4" do %>
+    <%= link to: "/", class: "navbar-brand fs-4" do %>
       <%= icon_div @conn, "bi-calendar2-week", [class: "icon baseline me-1"] %>
       <span class="fw-light">Shift73k</span>
     <% end %>
@@ -26,14 +26,14 @@
       <%# nav LEFT items %>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-        <%= if @current_user do %>
-          <li class="nav-item">
-            <%= link nav_link_opts(@conn, to: Routes.shift_template_index_path(@conn, :index), class: "nav-link") do %>
-              <%= icon_div @conn, "bi-clock-history", [class: "icon baseline me-1"] %>
-              Templates
-            <% end %>
-          </li>
-        <% end %>
+        <%#= if @current_user do %>
+          <%# <li class="nav-item"> %>
+            <%#= link nav_link_opts(@conn, to: Routes.shift_template_index_path(@conn, :index), class: "nav-link") do %>
+              <%#= icon_div @conn, "bi-clock-history", [class: "icon baseline me-1"] %>
+              <%# Templates %>
+            <%# end %>
+          <%# </li> %>
+        <%# end %>
 
         <%# normal navbar link example %>
         <%# <li class="nav-item"> %>
@@ -66,13 +66,19 @@
       <%# nav RIGHT items %>
       <ul class="navbar-nav">
 
-        <%= render "navbar/_user_menu.html", assigns %>
+        <%= if @current_user do %>
 
-        <%= if !@current_user do %>
+          <%= render "navbar/_shifts_menu.html", assigns %>
+
+          <%= render "navbar/_user_menu.html", assigns %>
+
+        <% else %>
+
           <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light d-none d-lg-block") do %>
             <%= icon_div @conn, "bi-door-open", [class: "icon baseline"] %>
             Log in
           <% end %>
+
         <% end %>
 
       </ul>

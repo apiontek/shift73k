@@ -23,7 +23,7 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
     if Roles.can?(current_user, shift_template, live_action) do
       socket
       |> assign_shift_templates()
-      |> assign(:modal_return_to, Routes.shift_template_index_path(socket, :index))
+      |> assign_modal_close_handlers()
       |> assign(:delete_shift_template, nil)
       |> apply_action(socket.assigns.live_action, params)
       |> live_noreply()
@@ -33,6 +33,11 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
       |> redirect(to: "/")
       |> live_noreply()
     end
+  end
+
+  defp assign_modal_close_handlers(socket) do
+    to = Routes.shift_template_index_path(socket, :index)
+    assign(socket, modal_return_to: to, modal_close_action: :return)
   end
 
   defp apply_action(socket, :clone, %{"id" => id}) do
@@ -74,9 +79,13 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
 
   @impl true
   def handle_event("delete-modal", %{"id" => id}, socket) do
-    {:noreply, assign(socket, :delete_shift_template, Templates.get_shift_template!(id))}
+    socket
+    |> assign(:modal_close_action, :delete_shift_template)
+    |> assign(:delete_shift_template, Templates.get_shift_template!(id))
+    |> live_noreply()
   end
 
+  @impl true
   def handle_event("set-user-fave-shift-template", %{"id" => shift_template_id}, socket) do
     user_id = socket.assigns.current_user.id
     Accounts.set_user_fave_shift_template(user_id, shift_template_id)
@@ -87,6 +96,7 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
     |> live_noreply()
   end
 
+  @impl true
   def handle_event("unset-user-fave-shift-template", _params, socket) do
     user_id = socket.assigns.current_user.id
     Accounts.unset_user_fave_shift_template(user_id)
@@ -98,13 +108,24 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
   end
 
   @impl true
-  def handle_info({:close_modal, _}, %{assigns: %{modal_return_to: to}} = socket) do
-    socket |> copy_flash() |> push_patch(to: to) |> live_noreply()
+  def handle_info({:close_modal, _}, %{assigns: %{modal_close_action: :return}} = socket) do
+    socket
+    |> copy_flash()
+    |> push_patch(to: socket.assigns.modal_return_to)
+    |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:close_modal, _}, %{assigns: %{modal_close_action: assign_key}} = socket) do
+    socket
+    |> assign(assign_key, nil)
+    |> assign_modal_close_handlers()
+    |> assign_shift_templates()
+    |> live_noreply()
   end
 
   @impl true
   def handle_info({:put_flash_message, {flash_type, msg}}, socket) do
     socket |> put_flash(flash_type, msg) |> live_noreply()
   end
-
 end

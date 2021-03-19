@@ -80,11 +80,6 @@ defmodule Shift73kWeb.UserManagement.FormComponent do
     save_user(socket, user_params)
   end
 
-  @impl true
-  def handle_event("cancel", _, socket) do
-    {:noreply, push_event(socket, "modal-please-hide", %{})}
-  end
-
   def role_description(role) when is_atom(role) do
     Keyword.get(User.roles(), role)
   end

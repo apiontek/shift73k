@@ -12,11 +12,6 @@ defmodule Shift73kWeb.ShiftTemplateLive.DeleteComponent do
   end
 
   @impl true
-  def handle_event("cancel", _, socket) do
-    {:noreply, push_event(socket, "modal-please-hide", %{})}
-  end
-
-  @impl true
   def handle_event("confirm", %{"id" => id, "subject" => subject}, socket) do
     id
     |> Templates.get_shift_template()

@@ -22,13 +22,26 @@ defmodule Shift73k.Shifts do
   end
 
   def list_shifts_by_user_between_dates(user_id, start_date, end_date) do
-    q = from(
-      s in Shift,
-      select: %{date: s.date, subject: s.subject, time_start: s.time_start, time_end: s.time_end},
-      where: s.user_id == ^user_id and s.date >= ^start_date and s.date < ^end_date,
-      order_by: [s.date, s.time_start]
-    )
-    Repo.all(q)
+    from(s in Shift)
+    |> select([s], %{
+      date: s.date,
+      subject: s.subject,
+      time_start: s.time_start,
+      time_end: s.time_end
+    })
+    |> where([s], s.user_id == ^user_id and s.date >= ^start_date and s.date <= ^end_date)
+    |> order_by([s], [s.date, s.time_start])
+    |> Repo.all()
+  end
+
+  defp query_shifts_by_user_on_list_of_dates(user_id, date_list) do
+    from(s in Shift)
+    |> where([s], s.user_id == ^user_id and s.date in ^date_list)
+  end
+
+  def list_shifts_by_user_on_list_of_dates(user_id, date_list) do
+    query_shifts_by_user_on_list_of_dates(user_id, date_list)
+    |> Repo.all()
   end
 
   @doc """
@@ -97,6 +110,11 @@ defmodule Shift73k.Shifts do
   """
   def delete_shift(%Shift{} = shift) do
     Repo.delete(shift)
+  end
+
+  def delete_shifts_by_user_on_list_of_dates(user_id, date_list) do
+    query_shifts_by_user_on_list_of_dates(user_id, date_list)
+    |> Repo.delete_all()
   end
 
   @doc """

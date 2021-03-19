@@ -1,0 +1,25 @@
+<li class="nav-item dropdown">
+
+  <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
+    <%= icon_div @conn, "bi-calendar2", [class: "icon baseline me-1"] %>
+    Shifts
+  </a>
+
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUserMenu">
+
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.shift_assign_index_path(@conn, :index), class: "dropdown-item") do %>
+        <%= icon_div @conn, "bi-calendar2-plus", [class: "icon baseline me-1"] %>
+        Assign Shift To Dates
+      <% end %>
+    </li>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.shift_template_index_path(@conn, :index), class: "dropdown-item") do %>
+        <%= icon_div @conn, "bi-clock-history", [class: "icon baseline me-1"] %>
+        My Shift Templates
+      <% end %>
+    </li>
+
+  </ul>
+
+</li>
