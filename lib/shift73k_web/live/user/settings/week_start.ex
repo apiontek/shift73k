@@ -3,7 +3,6 @@ defmodule Shift73kWeb.UserLive.Settings.WeekStart do
 
   alias Shift73k.EctoEnums.WeekdayEnum
   alias Shift73k.Accounts
-  # alias Shift73k.Accounts.User
 
   @impl true
   def update(%{current_user: user} = assigns, socket) do
@@ -18,7 +17,7 @@ defmodule Shift73kWeb.UserLive.Settings.WeekStart do
     WeekdayEnum.__enum_map__() |> Enum.map(fn {d, n} -> {Timex.day_name(n), d} end)
   end
 
-  @iml true
+  @impl true
   def handle_event("changed", %{"calendar_view" => %{"week_start_at" => day}}, socket) do
     {:noreply, assign(socket, form_week_start_at: String.to_existing_atom(day))}
   end
