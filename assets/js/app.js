@@ -36,6 +36,7 @@ import "../node_modules/bootstrap-icons/icons/people.svg"; // users management
 // calendar/event icons
 import "../node_modules/bootstrap-icons/icons/calendar2.svg";
 import "../node_modules/bootstrap-icons/icons/calendar2-plus.svg";
+import "../node_modules/bootstrap-icons/icons/calendar2-date.svg";
 import "../node_modules/bootstrap-icons/icons/calendar2-event.svg";
 import "../node_modules/bootstrap-icons/icons/calendar2-range.svg";
 import "../node_modules/bootstrap-icons/icons/clock-history.svg"; // shift template
@@ -53,6 +54,7 @@ import "../node_modules/bootstrap-icons/icons/binoculars-fill.svg";
 import "../node_modules/bootstrap-icons/icons/eraser.svg";
 import "../node_modules/bootstrap-icons/icons/save.svg";
 import "../node_modules/bootstrap-icons/icons/asterisk.svg";
+import "../node_modules/bootstrap-icons/icons/card-list.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured

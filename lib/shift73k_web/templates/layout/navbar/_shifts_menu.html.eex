@@ -10,7 +10,13 @@
     <li>
       <%= link nav_link_opts(@conn, to: Routes.shift_assign_index_path(@conn, :index), class: "dropdown-item") do %>
         <%= icon_div @conn, "bi-calendar2-plus", [class: "icon baseline me-1"] %>
-        Assign Shift To Dates
+        Schedule Shifts
+      <% end %>
+    </li>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.shift_index_path(@conn, :index), class: "dropdown-item") do %>
+        <%= icon_div @conn, "bi-card-list", [class: "icon baseline me-1"] %>
+        My Scheduled Shifts
       <% end %>
     </li>
     <li>

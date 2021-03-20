@@ -29,7 +29,7 @@ defmodule Shift73kWeb.ShiftAssignLive.DeleteComponent do
   def handle_event("confirm-delete-days-shifts", _params, socket) do
     user = socket.assigns.current_user
     date_list = socket.assigns.date_list
-    {n, _} = Shifts.delete_shifts_by_user_on_list_of_dates(user.id, date_list)
+    {n, _} = Shifts.delete_shifts_by_user_from_list_of_dates(user.id, date_list)
     s = (n > 1 && "s") || ""
     flash = {:info, "Successfully deleted #{n} assigned shift#{s}"}
     send(self(), {:put_flash_message, flash})

@@ -1,7 +1,8 @@
 defmodule Shift73k.EctoEnums do
   import EctoEnum
 
-  @weekdays [:mon, :tue, :wed, :thu, :fri, :sat, :sun] |> Enum.with_index(1)
+  @weekdays [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday]
+            |> Enum.with_index(1)
 
   defenum(WeekdayEnum, @weekdays)
 end

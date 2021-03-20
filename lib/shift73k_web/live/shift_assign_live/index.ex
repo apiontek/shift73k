@@ -27,6 +27,8 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
 
   @impl true
   def handle_params(_params, _url, socket) do
+    user = socket.assigns.current_user
+
     socket
     |> init_shift_templates()
     |> init_shift_template()
@@ -34,9 +36,9 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> assign_shift_length()
     |> assign_shift_template_changeset()
     |> assign_modal_close_handlers()
+    |> assign(:day_names, day_names(user.week_start_at))
     |> init_today(Timex.today())
-    |> init_calendar()
-    |> assign_known_shifts()
+    |> update_calendar()
     |> live_noreply()
   end
 
@@ -52,18 +54,10 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     assign(socket, :shift_length, format_shift_length(shift))
   end
 
-  defp assign_known_shifts(socket) do
-    user = socket.assigns.current_user
-    first = socket.assigns.day_first
-    last = socket.assigns.day_last
-    known_shifts = Shifts.list_shifts_by_user_between_dates(user.id, first, last)
+  defp assign_known_shifts(%{assigns: %{current_user: user}} = socket) do
+    date_range = socket.assigns.date_range
+    known_shifts = Shifts.list_shifts_by_user_in_date_range(user.id, date_range)
     assign(socket, :known_shifts, known_shifts)
-  end
-
-  defp init_calendar(%{assigns: %{current_user: user}} = socket) do
-    days = day_names(user.week_start_at)
-    {first, last, rows} = week_rows(socket.assigns.cursor_date, user.week_start_at)
-    assign(socket, day_names: days, week_rows: rows, day_first: first, day_last: last)
   end
 
   defp init_today(socket, today) do
@@ -88,7 +82,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   defp init_shift_templates(%{assigns: %{current_user: user}} = socket) do
     shift_templates =
       Templates.list_shift_templates_by_user_id(user.id)
-      |> Enum.map(fn t -> shift_template_option(t, user.fave_shift_template_id) end)
+      |> Stream.map(fn t -> shift_template_option(t, user.fave_shift_template_id) end)
       |> Enum.concat([@custom_shift_opt])
 
     assign(socket, :shift_templates, shift_templates)
@@ -123,23 +117,31 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> Enum.map(&Timex.day_shortname/1)
   end
 
-  defp week_rows(cursor_date, week_start_at) do
-    first =
-      cursor_date
-      |> Timex.beginning_of_month()
-      |> Timex.beginning_of_week(week_start_at)
-
+  defp date_range(cursor_date, week_start_at) do
     last =
       cursor_date
       |> Timex.end_of_month()
       |> Timex.end_of_week(week_start_at)
 
-    week_rows =
-      Interval.new(from: first, until: last, right_open: false)
-      |> Enum.map(&NaiveDateTime.to_date(&1))
-      |> Enum.chunk_every(7)
+    cursor_date
+    |> Timex.beginning_of_month()
+    |> Timex.beginning_of_week(week_start_at)
+    |> Date.range(last)
+  end
 
-    {first, last, week_rows}
+  defp assign_date_range(%{assigns: %{current_user: user}} = socket) do
+    date_range = date_range(socket.assigns.cursor_date, user.week_start_at)
+    assign(socket, :date_range, date_range)
+  end
+
+  defp week_rows(%Date.Range{} = date_range) do
+    Interval.new(from: date_range.first, until: date_range.last, right_open: false)
+    |> Stream.map(&NaiveDateTime.to_date(&1))
+    |> Enum.chunk_every(7)
+  end
+
+  defp assign_week_rows(%{assigns: %{date_range: date_range}} = socket) do
+    assign(socket, :week_rows, week_rows(date_range))
   end
 
   def day_color(day, current_date, cursor_date, selected_days) do
@@ -180,17 +182,11 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     end
   end
 
-  defp set_month(socket, new_cursor_date) do
-    {first, last, rows} = week_rows(new_cursor_date, socket.assigns.current_user.week_start_at)
-
-    assigns = [
-      cursor_date: new_cursor_date,
-      week_rows: rows,
-      day_first: first,
-      day_last: last
-    ]
-
-    assign(socket, assigns) |> assign_known_shifts()
+  defp update_calendar(socket) do
+    socket
+    |> assign_date_range()
+    |> assign_week_rows()
+    |> assign_known_shifts()
   end
 
   @impl true
@@ -236,7 +232,10 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
           Timex.shift(socket.assigns.cursor_date, months: months)
       end
 
-    {:noreply, set_month(socket, new_cursor)}
+    socket
+    |> assign(:cursor_date, new_cursor)
+    |> update_calendar()
+    |> live_noreply()
   end
 
   @impl true
@@ -260,9 +259,9 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   @impl true
   def handle_event("select-day", %{"day" => day}, socket) do
     selected_days =
-      case day_index = Enum.find_index(socket.assigns.selected_days, fn d -> d == day end) do
-        nil -> [day | socket.assigns.selected_days]
-        _ -> List.delete_at(socket.assigns.selected_days, day_index)
+      case Enum.member?(socket.assigns.selected_days, day) do
+        false -> [day | socket.assigns.selected_days]
+        true -> Enum.reject(socket.assigns.selected_days, fn d -> d == day end)
       end
 
     {:noreply, assign(socket, :selected_days, selected_days)}

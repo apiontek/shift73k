@@ -58,7 +58,7 @@ extra_mock_users = ~s([
 mock_users =
   extra_mock_users
   |> Jason.decode!()
-  |> Enum.concat(mock_users)
+  |> Stream.concat(mock_users)
   |> Enum.map(fn e ->
     add_dt = NaiveDateTime.from_iso8601!(e["inserted_at"])
 

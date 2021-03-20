@@ -1,5 +1,3 @@
-<h1>Listing Shifts</h1>
-
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, Shift73kWeb.ShiftLive.FormComponent,
     id: @shift.id || :new,
@@ -9,41 +7,87 @@
     return_to: Routes.shift_index_path(@socket, :index) %>
 <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Subject</th>
-      <th>Location</th>
-      <th>Description</th>
-      <th>Time zone</th>
-      <th>Date</th>
-      <th>Time zone</th>
-      <th>Time start</th>
-      <th>Time end</th>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="shifts">
-    <%= for shift <- @shifts do %>
-      <tr id="shift-<%= shift.id %>">
-        <td><%= shift.subject %></td>
-        <td><%= shift.location %></td>
-        <td><%= shift.description %></td>
-        <td><%= shift.time_zone %></td>
-        <td><%= shift.date %></td>
-        <td><%= shift.time_zone %></td>
-        <td><%= shift.time_start %></td>
-        <td><%= shift.time_end %></td>
+<div class="row justify-content-start justify-content-sm-center">
+  <div class="col-md-10 col-xl-10">
 
-        <td>
-          <span><%= live_redirect "Show", to: Routes.shift_show_path(@socket, :show, shift) %></span>
-          <span><%= live_patch "Edit", to: Routes.shift_index_path(@socket, :edit, shift) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<h2 class="mb-3 mb-sm-0">
+  <%= icon_div @socket, "bi-calendar2-date", [class: "icon baseline"] %>
+  My Shifts
+</h2>
+
+<%# month navigation %>
+<div class="d-flex justify-content-between align-items-end mt-4">
+  <h3 class="text-muted mb-0">
+    <%= Timex.format!(@cursor_date, "{Mfull} {YYYY}") %>
+  </h3>
+  <div>
+    <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" <%= if Map.get(@cursor_date, :month) == Map.get(Timex.today(), :month), do: "disabled" %>>
+      <%= icon_div @socket, "bi-asterisk", [class: "icon baseline"] %>
+      <span class="d-none d-sm-inline">Today</span>
+    </button>
+    <button type="button" phx-click="month-nav" phx-value-month="prev" class="btn btn-primary">
+      <%= icon_div @socket, "bi-chevron-left", [class: "icon baseline"] %>
+      <span class="d-none d-sm-inline">Prev</span>
+    </button>
+    <button type="button" phx-click="month-nav" phx-value-month="next" class="btn btn-primary">
+      <span class="d-none d-sm-inline">Next</span>
+      <%= icon_div @socket, "bi-chevron-right", [class: "icon baseline", style: "margin-left:0.125rem;"] %>
+    </button>
+  </div>
+</div>
+
+
+<dl>
+<%= for day <- Enum.to_list(@date_range) do %>
+  <% Date.day_of_week(day, @current_user.week_start_at) |> IO.inspect(label: "day in date_range") %>
+  <%= if Date.day_of_week(day, @current_user.week_start_at) == 1 do %>
+  <div class="border-top mt-4 mb-4"></div>
+  <% end %>
+  <dt>
+    <%= Timex.format!(day, "{WDfull}, {Mshort} {D}") %>
+  </dt>
+  <% day_shifts = Enum.filter(@shifts, fn s -> s.date == day end) %>
+  <%= if !Enum.empty?(day_shifts) do %>
+    <dd id="day-<%= day.day %>">
+      <%= for shift <- day_shifts do %>
+        <div class="row gx-2" id="shift-<%= shift.id %>">
+          <div class="col-4 col-md-3 col-lg-2 text-end">
+            <div>
+              <%= format_shift_time(shift.time_start) |> String.trim_trailing("m") %>
+              &mdash;
+              <%= format_shift_time(shift.time_end) |> String.trim_trailing("m") %>
+            </div>
+            <div style="font-size: smaller;"><%= shift.time_zone %></div>
+          </div>
+          <div class="col-8 col-md-9 col-lg-10">
+            <div>
+              <%= shift.subject %>
+              <%= if shift.location do %>
+                <span class="text-muted">(<%= shift.location %>)</span>
+              <% end %>
+            </div>
+            <div style="font-size: smaller;"><%= shift.description %></div>
+            <div style="font-size: smaller;">
+              <span><%= live_redirect "Show", to: Routes.shift_show_path(@socket, :show, shift) %></span>
+              <span><%= live_patch "Edit", to: Routes.shift_index_path(@socket, :edit, shift) %></span>
+              <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+    </dd>
+
+  <% else %>
+    <dd><em>No shift scheduled</em></dd>
+  <% end %>
+<% end %>
+</dl>
+
 
 <span><%= live_patch "New Shift", to: Routes.shift_index_path(@socket, :new) %></span>
+
+
+  </div>
+</div>
