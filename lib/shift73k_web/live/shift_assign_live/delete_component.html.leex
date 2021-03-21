@@ -7,7 +7,7 @@
     <% months = Map.keys(data) %>
     <dd>
       <%= for {m, i} <- Enum.with_index(months, 1) do %>
-        <%= data |> Map.get(m) |> hd() |> Timex.format!("{Mshort}") %>:
+        <%= data |> Map.get(m) |> hd() |> Calendar.strftime("%b") %>:
         <% days = Map.get(data, m) %>
         <%= for {d, i} <- Enum.with_index(days, 1) do %>
           <%= d.day %><%= if i < length(days) do %>,<% end %>

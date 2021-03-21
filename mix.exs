@@ -52,7 +52,8 @@ defmodule Shift73k.MixProject do
       {:bamboo, "~> 2.0"},
       {:bamboo_smtp, "~> 4.0"},
       {:scrivener_ecto, "~> 2.0"},
-      {:timex, "~> 3.6"}
+      {:tzdata, "~> 1.1"},
+      {:nimble_csv, "~> 1.0"}
     ]
   end
 

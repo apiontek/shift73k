@@ -118,7 +118,7 @@
                     list: "tz_list"
                   %>
                   <datalist id="tz_list">
-                    <%= for tz_name <- Timex.timezones() do %>
+                    <%= for tz_name <- Tzdata.zone_list() do %>
                       <option value="<%= tz_name %>"></option>
                     <% end %>
                     end
@@ -171,10 +171,10 @@
 <%# month navigation %>
 <div class="d-flex justify-content-between align-items-end mt-4">
   <h3 class="text-muted mb-0">
-    <%= Timex.format!(@cursor_date, "{Mfull} {YYYY}") %>
+    <%= Calendar.strftime(@cursor_date, "%B %Y") %>
   </h3>
   <div>
-    <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" <%= if Map.get(@cursor_date, :month) == Map.get(Timex.today(), :month), do: "disabled" %>>
+    <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" <%= if Map.get(@cursor_date, :month) == Map.get(Date.utc_today(), :month), do: "disabled" %>>
       <%= icon_div @socket, "bi-asterisk", [class: "icon baseline"] %>
       <span class="d-none d-sm-inline">Today</span>
     </button>
@@ -206,7 +206,7 @@
       <%= for day <- week do %>
         <td class="<%= day_color(day, @current_date, @cursor_date, @selected_days) %>" phx-click="select-day" phx-value-day="<%= day %>">
 
-          <%= Timex.format!(day, "{0D}") %><%= if day.month != @cursor_date.month, do: "-#{Timex.format!(day, "{Mshort}")}" %>
+          <%= Calendar.strftime(day, "%d") %><%= if day.month != @cursor_date.month, do: "-#{Calendar.strftime(day, "%b")}" %>
 
           <% day_shifts = Enum.filter(@known_shifts, fn s -> s.date == day end) %>
           <% shifts_to_show = shifts_to_show(day_shifts) %>
@@ -214,7 +214,7 @@
           <%= for shift <- shifts_to_show do %>
             <span class="badge bg-primary text-start d-block">
               <span>
-              <%= shift.time_start |> Timex.format!("{h12}:{m}{am}") |> String.trim_trailing("m") %>
+              <%= format_shift_time(shift.time_start) %>
               <%= shift.subject %>
               </span>
             </span>

@@ -1,6 +1,5 @@
 defmodule Shift73kWeb.ShiftTemplateLive.DeleteComponent do
   use Shift73kWeb, :live_component
-  use Timex
 
   alias Shift73k.Shifts.Templates
 

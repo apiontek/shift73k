@@ -1,6 +1,5 @@
 defmodule Shift73kWeb.UserManagementLive.Index do
   use Shift73kWeb, :live_view
-  use Timex
 
   import Ecto.Query
   import Shift73k.Util.Dt
@@ -200,7 +199,7 @@ defmodule Shift73kWeb.UserManagementLive.Index do
 
   def dt_out(ndt) do
     ndt
-    |> Timex.to_datetime(app_time_zone())
-    |> Timex.format!("{YYYY} {Mshort} {D}, {h12}:{m} {AM}")
+    |> DateTime.from_naive!(app_time_zone())
+    |> Calendar.strftime("%Y %b %-d, %-I:%M %p")
   end
 end

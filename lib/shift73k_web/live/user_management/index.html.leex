@@ -92,7 +92,7 @@
             </dt>
             <dd class="d-inline d-sm-block col-auto">
               <span class="visually-hidden"><%= user.confirmed_at && "Yes" || "No" %></span>
-              <input type="checkbox" class="form-check-input" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %>>
+              <input type="checkbox" class="form-check-input" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %> disabled>
             </dd>
           </dl>
 
@@ -174,7 +174,7 @@
             <td class="align-middle" style="white-space: nowrap;"><%= dt_out(user.inserted_at) %></td>
             <td class="align-middle">
               <span class="visually-hidden"><%= user.confirmed_at && "Confirmed" || "Not confirmed" %></span>
-              <input type="checkbox" class="form-check-input" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %>>
+              <input type="checkbox" class="form-check-input" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %> disabled>
             </td>
             <td class="align-middle text-end text-nowrap">
 

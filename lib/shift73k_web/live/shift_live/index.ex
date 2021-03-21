@@ -1,6 +1,5 @@
 defmodule Shift73kWeb.ShiftLive.Index do
   use Shift73kWeb, :live_view
-  use Timex
 
   alias Shift73k.Shifts
   alias Shift73k.Shifts.Shift
@@ -21,9 +20,8 @@ defmodule Shift73kWeb.ShiftLive.Index do
 
     if Roles.can?(current_user, shift, live_action) do
       socket
-      |> init_today(Timex.today())
-      |> assign_date_range()
-      |> assign_known_shifts()
+      |> init_today(Date.utc_today())
+      |> update_agenda()
       |> assign(:delete_shift, nil)
       |> apply_action(socket.assigns.live_action, params)
       |> live_noreply()
@@ -49,7 +47,11 @@ defmodule Shift73kWeb.ShiftLive.Index do
   defp shift_from_params(_params), do: %Shift{}
 
   defp init_today(socket, today) do
-    assign(socket, current_date: today, cursor_date: today)
+    assign(socket, current_date: today, cursor_date: cursor_date(today))
+  end
+
+  defp cursor_date(%Date{} = date) do
+    date |> Date.beginning_of_month() |> Date.add(4)
   end
 
   defp assign_date_range(%{assigns: %{cursor_date: cursor_date}} = socket) do
@@ -58,14 +60,20 @@ defmodule Shift73kWeb.ShiftLive.Index do
 
   defp date_range(cursor_date) do
     cursor_date
-    |> Timex.beginning_of_month()
-    |> Date.range(Timex.end_of_month(cursor_date))
+    |> Date.beginning_of_month()
+    |> Date.range(Date.end_of_month(cursor_date))
   end
 
   defp assign_known_shifts(socket) do
     user = socket.assigns.current_user
     shifts = Shifts.list_shifts_by_user_in_date_range(user.id, socket.assigns.date_range)
     assign(socket, :shifts, shifts)
+  end
+
+  defp update_agenda(socket) do
+    socket
+    |> assign_date_range()
+    |> assign_known_shifts()
   end
 
   @impl true
@@ -77,21 +85,21 @@ defmodule Shift73kWeb.ShiftLive.Index do
   end
 
   @impl true
-  def handle_event("month-nav", %{"month" => direction}, socket) do
+  def handle_event("month-nav", %{"month" => nav}, socket) do
     new_cursor =
       cond do
-        direction == "now" ->
-          Timex.today()
+        nav == "now" ->
+          Date.utc_today()
 
         true ->
-          months = (direction == "prev" && -1) || 1
-          Timex.shift(socket.assigns.cursor_date, months: months)
+          socket.assigns.cursor_date
+          |> Date.add((nav == "prev" && -30) || 30)
+          |> cursor_date()
       end
 
     socket
     |> assign(:cursor_date, new_cursor)
-    |> assign_date_range()
-    |> assign_known_shifts()
+    |> update_agenda()
     |> live_noreply()
   end
 end

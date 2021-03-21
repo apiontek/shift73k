@@ -26,8 +26,15 @@ defmodule Shift73k.Shifts do
     |> where([s], s.user_id == ^user_id)
   end
 
+  def list_shifts_by_user(user_id) do
+    user_id
+    |> query_shifts_by_user()
+    |> Repo.all()
+  end
+
   def list_shifts_by_user_in_date_range(user_id, %Date.Range{} = date_range) do
-    query_shifts_by_user(user_id)
+    user_id
+    |> query_shifts_by_user()
     |> where([s], s.date >= ^date_range.first)
     |> where([s], s.date <= ^date_range.last)
     |> order_by([s], [s.date, s.time_start])
@@ -35,12 +42,14 @@ defmodule Shift73k.Shifts do
   end
 
   defp query_shifts_by_user_from_list_of_dates(user_id, date_list) do
-    query_shifts_by_user(user_id)
+    user_id
+    |> query_shifts_by_user()
     |> where([s], s.date in ^date_list)
   end
 
   def list_shifts_by_user_from_list_of_dates(user_id, date_list) do
-    query_shifts_by_user_from_list_of_dates(user_id, date_list)
+    user_id
+    |> query_shifts_by_user_from_list_of_dates(date_list)
     |> Repo.all()
   end
 

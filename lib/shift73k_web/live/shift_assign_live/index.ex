@@ -1,10 +1,8 @@
 defmodule Shift73kWeb.ShiftAssignLive.Index do
   use Shift73kWeb, :live_view
-  use Timex
 
   alias Ecto.Multi
   alias Shift73k.Repo
-  alias Shift73k.EctoEnums.WeekdayEnum
   alias Shift73k.Shifts
   alias Shift73k.Shifts.Shift
   alias Shift73k.Shifts.Templates
@@ -27,8 +25,6 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
 
   @impl true
   def handle_params(_params, _url, socket) do
-    user = socket.assigns.current_user
-
     socket
     |> init_shift_templates()
     |> init_shift_template()
@@ -36,8 +32,8 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> assign_shift_length()
     |> assign_shift_template_changeset()
     |> assign_modal_close_handlers()
-    |> assign(:day_names, day_names(user.week_start_at))
-    |> init_today(Timex.today())
+    |> init_today(Date.utc_today())
+    |> init_day_names()
     |> update_calendar()
     |> live_noreply()
   end
@@ -61,7 +57,11 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   end
 
   defp init_today(socket, today) do
-    assign(socket, current_date: today, cursor_date: today)
+    assign(socket, current_date: today, cursor_date: cursor_date(today))
+  end
+
+  defp cursor_date(%Date{} = date) do
+    date |> Date.beginning_of_month() |> Date.add(4)
   end
 
   defp assign_shift_template_changeset(%{assigns: %{shift_template: shift}} = socket) do
@@ -105,27 +105,26 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     {label, template.id}
   end
 
-  defp rotate_week(week_start_at) do
-    {a, b} = Enum.split_while(WeekdayEnum.__enum_map__(), fn {k, _v} -> k != week_start_at end)
-    b ++ a
-  end
+  defp init_day_names(%{assigns: %{current_user: user, current_date: today}} = socket) do
+    week_start = Date.beginning_of_week(today, user.week_start_at)
 
-  defp day_names(week_start_at) do
-    week_start_at
-    |> rotate_week()
-    |> Keyword.values()
-    |> Enum.map(&Timex.day_shortname/1)
+    day_names =
+      week_start
+      |> Date.range(Date.add(week_start, 6))
+      |> Enum.map(&Calendar.strftime(&1, "%a"))
+
+    assign(socket, :day_names, day_names)
   end
 
   defp date_range(cursor_date, week_start_at) do
     last =
       cursor_date
-      |> Timex.end_of_month()
-      |> Timex.end_of_week(week_start_at)
+      |> Date.end_of_month()
+      |> Date.end_of_week(week_start_at)
 
     cursor_date
-    |> Timex.beginning_of_month()
-    |> Timex.beginning_of_week(week_start_at)
+    |> Date.beginning_of_month()
+    |> Date.beginning_of_week(week_start_at)
     |> Date.range(last)
   end
 
@@ -134,26 +133,20 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     assign(socket, :date_range, date_range)
   end
 
-  defp week_rows(%Date.Range{} = date_range) do
-    Interval.new(from: date_range.first, until: date_range.last, right_open: false)
-    |> Stream.map(&NaiveDateTime.to_date(&1))
-    |> Enum.chunk_every(7)
-  end
-
   defp assign_week_rows(%{assigns: %{date_range: date_range}} = socket) do
-    assign(socket, :week_rows, week_rows(date_range))
+    assign(socket, :week_rows, Enum.chunk_every(date_range, 7))
   end
 
   def day_color(day, current_date, cursor_date, selected_days) do
     cond do
       Enum.member?(selected_days, Date.to_string(day)) ->
         cond do
-          Timex.compare(day, current_date, :days) == 0 -> "bg-triangle-info text-white"
+          Date.compare(day, current_date) == :eq -> "bg-triangle-info text-white"
           day.month != cursor_date.month -> "bg-triangle-light text-gray"
           true -> "bg-triangle-white"
         end
 
-      Timex.compare(day, current_date, :days) == 0 ->
+      Date.compare(day, current_date) == :eq ->
         "bg-info text-white"
 
       day.month != cursor_date.month ->
@@ -221,15 +214,16 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   end
 
   @impl true
-  def handle_event("month-nav", %{"month" => direction}, socket) do
+  def handle_event("month-nav", %{"month" => nav}, socket) do
     new_cursor =
       cond do
-        direction == "now" ->
-          Timex.today()
+        nav == "now" ->
+          Date.utc_today()
 
         true ->
-          months = (direction == "prev" && -1) || 1
-          Timex.shift(socket.assigns.cursor_date, months: months)
+          socket.assigns.cursor_date
+          |> Date.add((nav == "prev" && -30) || 30)
+          |> cursor_date()
       end
 
     socket

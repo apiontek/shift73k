@@ -68,16 +68,27 @@ defmodule Shift73kWeb.LiveHelpers do
     end)
   end
 
-  def format_shift_time(time), do: Timex.format!(time, "{h12}:{m}{am}")
+  def format_shift_time(time) do
+    time
+    |> Calendar.strftime("%-I:%M%P")
+    |> String.trim_trailing("m")
+  end
 
-  def format_shift_length(shift_template) do
+  def format_shift_length(%ShiftTemplate{} = shift_template) do
     shift_template
     |> ShiftTemplate.shift_length()
-    |> Timex.Duration.from_minutes()
-    |> Timex.format_duration()
-    |> String.replace("PT", "")
-    |> String.replace("H", "h ")
-    |> String.replace("M", "m")
-    |> String.trim()
+    |> format_shift_length()
+  end
+
+  def format_shift_length(minutes) when is_integer(minutes) do
+    h = Integer.floor_div(minutes, 60)
+    m = rem(minutes, 60)
+
+    cond do
+      h > 0 && m > 0 -> "#{h}h #{m}m"
+      h > 0 -> "#{h}h"
+      m > 0 -> "#{m}m"
+      true -> "0m"
+    end
   end
 end

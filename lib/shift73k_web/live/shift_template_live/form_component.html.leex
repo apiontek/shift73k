@@ -90,7 +90,7 @@
           list: "tz_list"
         %>
         <datalist id="tz_list">
-          <%= for tz_name <- Timex.timezones() do %>
+          <%= for tz_name <- Tzdata.zone_list() do %>
             <option value="<%= tz_name %>"></option>
           <% end %>
           end

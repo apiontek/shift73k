@@ -14,7 +14,13 @@ defmodule Shift73kWeb.UserLive.Settings.WeekStart do
   end
 
   def week_start_options do
-    WeekdayEnum.__enum_map__() |> Enum.map(fn {d, n} -> {Timex.day_name(n), d} end)
+    {week_start_at, _} = WeekdayEnum.__enum_map__() |> hd()
+    week_start = Date.beginning_of_week(Date.utc_today(), week_start_at)
+
+    week_start
+    |> Date.range(Date.add(week_start, 6))
+    |> Enum.map(&Calendar.strftime(&1, "%A"))
+    |> Enum.zip(Keyword.keys(WeekdayEnum.__enum_map__()))
   end
 
   @impl true

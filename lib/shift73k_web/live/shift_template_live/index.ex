@@ -1,6 +1,5 @@
 defmodule Shift73kWeb.ShiftTemplateLive.Index do
   use Shift73kWeb, :live_view
-  use Timex
 
   alias Shift73k.Accounts
   alias Shift73k.Shifts.Templates

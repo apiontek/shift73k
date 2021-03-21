@@ -1,5 +1,4 @@
 defmodule Shift73k.Shifts.Templates.ShiftTemplate do
-  use Timex
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -59,7 +58,7 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
           []
       end
     end)
-    |> validate_inclusion(:time_zone, Timex.timezones(),
+    |> validate_inclusion(:time_zone, Tzdata.zone_list(),
       message: "must be a valid IANA tz database time zone"
     )
   end
@@ -70,7 +69,8 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
 
   def shift_length(%ShiftTemplate{time_end: time_end, time_start: time_start}) do
     time_end
-    |> Timex.diff(time_start, :minute)
+    |> Time.diff(time_start)
+    |> Integer.floor_div(60)
     |> shift_length()
   end
 
@@ -79,11 +79,4 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
 
   def shift_length(time_end, time_start),
     do: shift_length(%ShiftTemplate{time_end: time_end, time_start: time_start})
-
-  def shift_length_h_m(%ShiftTemplate{time_end: _, time_start: _} = template) do
-    shift_length_seconds = shift_length(template)
-    h = shift_length_seconds |> Integer.floor_div(60)
-    m = shift_length_seconds |> rem(60)
-    {h, m}
-  end
 end
