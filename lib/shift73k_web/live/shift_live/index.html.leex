@@ -1,18 +1,8 @@
-<%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, Shift73kWeb.ShiftLive.FormComponent,
-    id: @shift.id || :new,
-    title: @page_title,
-    action: @live_action,
-    shift: @shift,
-    return_to: Routes.shift_index_path(@socket, :index) %>
-<% end %>
-
-
 <div class="row justify-content-start justify-content-sm-center">
   <div class="col-md-10 col-xl-10">
 
 <h2 class="mb-3 mb-sm-0">
-  <%= icon_div @socket, "bi-calendar2-date", [class: "icon baseline"] %>
+  <%= icon_div @socket, "bi-card-list", [class: "icon baseline"] %>
   My Shifts
 </h2>
 
@@ -40,7 +30,6 @@
 
 <dl>
 <%= for day <- Enum.to_list(@date_range) do %>
-  <% Date.day_of_week(day, @current_user.week_start_at) |> IO.inspect(label: "day in date_range") %>
   <%= if Date.day_of_week(day, @current_user.week_start_at) == 1 do %>
   <div class="border-top mt-4 mb-4"></div>
   <% end %>
@@ -69,8 +58,6 @@
             </div>
             <div style="font-size: smaller;"><%= shift.description %></div>
             <div style="font-size: smaller;">
-              <span><%= live_redirect "Show", to: Routes.shift_show_path(@socket, :show, shift) %></span>
-              <span><%= live_patch "Edit", to: Routes.shift_index_path(@socket, :edit, shift) %></span>
               <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
             </div>
           </div>
@@ -80,13 +67,10 @@
     </dd>
 
   <% else %>
-    <dd><em>No shift scheduled</em></dd>
+    <dd><em>Nothing scheduled</em></dd>
   <% end %>
 <% end %>
 </dl>
-
-
-<span><%= live_patch "New Shift", to: Routes.shift_index_path(@socket, :new) %></span>
 
 
   </div>

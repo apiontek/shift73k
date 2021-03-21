@@ -11,8 +11,6 @@ defmodule Shift73kWeb.ShiftLive.Index do
     socket
     |> assign_defaults(session)
     |> live_okreply()
-
-    # {:ok, assign(socket, :shifts, list_shifts())}
   end
 
   @impl true
@@ -23,8 +21,6 @@ defmodule Shift73kWeb.ShiftLive.Index do
 
     if Roles.can?(current_user, shift, live_action) do
       socket
-      # |> assign_shift_templates()
-      # |> assign_modal_close_handlers()
       |> init_today(Timex.today())
       |> assign_date_range()
       |> assign_known_shifts()
@@ -37,20 +33,6 @@ defmodule Shift73kWeb.ShiftLive.Index do
       |> redirect(to: "/")
       |> live_noreply()
     end
-
-    # {:noreply, apply_action(socket, socket.assigns.live_action, params)}
-  end
-
-  defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, "Edit Shift")
-    |> assign(:shift, Shifts.get_shift!(id))
-  end
-
-  defp apply_action(socket, :new, _params) do
-    socket
-    |> assign(:page_title, "New Shift")
-    |> assign(:shift, %Shift{})
   end
 
   defp apply_action(socket, :index, _params) do

@@ -98,11 +98,6 @@ defmodule Shift73kWeb.Router do
     live "/assign", ShiftAssignLive.Index, :index
 
     live "/shifts", ShiftLive.Index, :index
-    live "/shifts/new", ShiftLive.Index, :new
-    live "/shifts/:id/edit", ShiftLive.Index, :edit
-
-    live "/shifts/:id", ShiftLive.Show, :show
-    live "/shifts/:id/show/edit", ShiftLive.Show, :edit
   end
 
   # scope "/", Shift73kWeb do
