@@ -87,6 +87,14 @@ defmodule Shift73k.Shifts do
     |> Repo.insert()
   end
 
+  def create_multiple(shift_attrs) when is_list(shift_attrs) do
+    try do
+      Repo.insert_all(Shift, shift_attrs)
+    rescue
+      e in Postgrex.Error -> {:error, e.message}
+    end
+  end
+
   @doc """
   Updates a shift.
 

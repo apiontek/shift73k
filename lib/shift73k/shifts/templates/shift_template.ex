@@ -77,6 +77,14 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
   def shift_length(len_min) when is_integer(len_min) and len_min >= 0, do: len_min
   def shift_length(len_min) when is_integer(len_min) and len_min < 0, do: 1440 + len_min
 
-  def shift_length(time_end, time_start),
-    do: shift_length(%ShiftTemplate{time_end: time_end, time_start: time_start})
+  def shift_length(time_end, time_start) do
+    shift_length(%ShiftTemplate{time_end: time_end, time_start: time_start})
+  end
+
+  # Get shift attrs from shift template
+  def attrs(%ShiftTemplate{} = shift_template) do
+    shift_template
+    |> Map.from_struct()
+    |> Map.drop([:__meta__, :id, :inserted_at, :updated_at, :user, :is_fave_of_user])
+  end
 end

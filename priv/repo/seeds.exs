@@ -121,3 +121,27 @@ for user <- Accounts.list_users() do
 
   Repo.insert_all(ShiftTemplate, user_shifts)
 end
+
+#####
+# insert shifts for each user?
+alias Shift73k.Shifts
+alias Shift73k.Shifts.Templates
+
+for user <- Accounts.list_users() do
+  # build a date range for the time from 120 days ago to 120 days from now
+  today = Date.utc_today()
+  date_range = Date.range(Date.add(today, -120), Date.add(today, 120))
+
+  # get 3 random shift templates for user
+  st_list = Templates.list_shift_templates_by_user(user.id) |> Enum.take_random(3)
+
+  for st <- st_list do
+    days_to_schedule = Enum.take_random(date_range, 47)
+    shift_data = ShiftTemplate.attrs(st)
+
+    days_to_schedule
+    |> Stream.map(&Map.put(shift_data, :date, &1))
+    |> Enum.map(&Repo.timestamp/1)
+    |> Shifts.create_multiple()
+  end
+end

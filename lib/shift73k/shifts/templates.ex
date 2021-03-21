@@ -21,13 +21,11 @@ defmodule Shift73k.Shifts.Templates do
     Repo.all(ShiftTemplate)
   end
 
-  def list_shift_templates_by_user_id(user_id) do
-    q =
-      from s in ShiftTemplate,
-        where: s.user_id == ^user_id,
-        order_by: [fragment("lower(?)", s.subject), s.time_start]
-
-    Repo.all(q)
+  def list_shift_templates_by_user(user_id) do
+    from(s in ShiftTemplate)
+    |> where([s], s.user_id == ^user_id)
+    |> order_by([s], [fragment("lower(?)", s.subject), s.time_start])
+    |> Repo.all()
   end
 
   @doc """

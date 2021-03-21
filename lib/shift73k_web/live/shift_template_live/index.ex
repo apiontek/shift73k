@@ -65,7 +65,7 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
 
   defp assign_shift_templates(socket) do
     %User{id: uid} = socket.assigns.current_user
-    user_shifts = Templates.list_shift_templates_by_user_id(uid)
+    user_shifts = Templates.list_shift_templates_by_user(uid)
     assign(socket, :shift_templates, user_shifts)
   end
 

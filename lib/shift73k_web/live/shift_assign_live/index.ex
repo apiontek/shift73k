@@ -81,7 +81,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
 
   defp init_shift_templates(%{assigns: %{current_user: user}} = socket) do
     shift_templates =
-      Templates.list_shift_templates_by_user_id(user.id)
+      Templates.list_shift_templates_by_user(user.id)
       |> Stream.map(fn t -> shift_template_option(t, user.fave_shift_template_id) end)
       |> Enum.concat([@custom_shift_opt])
 
@@ -252,12 +252,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
 
   @impl true
   def handle_event("select-day", %{"day" => day}, socket) do
-    selected_days =
-      case Enum.member?(socket.assigns.selected_days, day) do
-        false -> [day | socket.assigns.selected_days]
-        true -> Enum.reject(socket.assigns.selected_days, fn d -> d == day end)
-      end
-
+    selected_days = update_selected_days(socket.assigns.selected_days, day)
     {:noreply, assign(socket, :selected_days, selected_days)}
   end
 
@@ -277,17 +272,15 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   @impl true
   def handle_event("save-days", _params, socket) do
     # 1. collect attrs from loaded shift template
-    shift_data = shift_data_from_template(socket.assigns.shift_template)
+    shift_data = ShiftTemplate.attrs(socket.assigns.shift_template)
 
-    # 2. create list of shift attrs to insert
-    to_insert =
-      Enum.map(socket.assigns.selected_days, &shift_from_day_and_shift_data(&1, shift_data))
-
-    # 3. insert the data
-    {status, msg} = insert_shifts(to_insert, length(socket.assigns.selected_days))
-
-    socket
-    |> put_flash(status, msg)
+    # 2. fashion list of shift attrs and insert
+    socket.assigns.selected_days
+    |> Stream.map(&Date.from_iso8601!/1)
+    |> Stream.map(&Map.put(shift_data, :date, &1))
+    |> Enum.map(&Repo.timestamp/1)
+    |> Shifts.create_multiple()
+    |> handle_create_multiple_result(socket)
     |> assign(:selected_days, [])
     |> assign_known_shifts()
     |> live_noreply()
@@ -320,40 +313,37 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> live_noreply()
   end
 
-  defp shift_data_from_template(shift_template) do
-    shift_template
-    |> Map.from_struct()
-    |> Map.drop([:__meta__, :id, :inserted_at, :updated_at, :user, :is_fave_of_user])
-  end
+  defp handle_create_multiple_result(result, socket) do
+    day_count = length(socket.assigns.selected_days)
 
-  defp shift_from_day_and_shift_data(day, shift_data) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-    date_data = %{date: Date.from_iso8601!(day), inserted_at: now, updated_at: now}
-    Map.merge(shift_data, date_data)
-  end
+    {status, msg} =
+      case result do
+        {:error, errmsg} ->
+          {:error, "Ope, problem error inserting shifts, page the dev! Message: #{errmsg}"}
 
-  defp insert_shifts(to_insert, day_count) do
-    Multi.new()
-    |> Multi.insert_all(:insert_all, Shift, to_insert)
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{insert_all: {n, _}}} ->
-        s = (n > 1 && "s") || ""
+        {n, _} ->
+          s = (n > 1 && "s") || ""
 
-        if n == day_count do
-          {:success, "Successfully assigned shift to #{n} day#{s}"}
-        else
-          {:warning, "Some error, only #{n} day#{s} inserted but #{day_count} were selected"}
-        end
+          if n == day_count do
+            {:success, "Successfully assigned shift to #{n} day#{s}"}
+          else
+            {:warning, "Some error, only #{n} day#{s} inserted but #{day_count} were selected"}
+          end
+      end
 
-      _ ->
-        {:error, "Ope, unknown error inserting shifts, page the dev"}
-    end
+    put_flash(socket, status, msg)
   end
 
   def shifts_to_show(day_shifts) do
     if length(day_shifts) == 1 || length(day_shifts) > 2,
       do: Enum.take(day_shifts, 1),
       else: day_shifts
+  end
+
+  defp update_selected_days(selected_days, day) do
+    case Enum.member?(selected_days, day) do
+      false -> [day | selected_days]
+      true -> Enum.reject(selected_days, fn d -> d == day end)
+    end
   end
 end
