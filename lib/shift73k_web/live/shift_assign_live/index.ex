@@ -1,10 +1,8 @@
 defmodule Shift73kWeb.ShiftAssignLive.Index do
   use Shift73kWeb, :live_view
 
-  alias Ecto.Multi
   alias Shift73k.Repo
   alias Shift73k.Shifts
-  alias Shift73k.Shifts.Shift
   alias Shift73k.Shifts.Templates
   alias Shift73k.Shifts.Templates.ShiftTemplate
 

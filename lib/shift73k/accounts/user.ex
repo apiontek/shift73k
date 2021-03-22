@@ -1,7 +1,6 @@
 defmodule Shift73k.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  import EctoEnum
   import Shift73k.Util.Dt, only: [weekdays: 0]
 
   alias Shift73k.Shifts.Templates.ShiftTemplate
@@ -12,8 +11,6 @@ defmodule Shift73k.Accounts.User do
     manager: "Can create users, update user emails & passwords",
     admin: "Can delete users and change user roles"
   ]
-
-  defenum(RolesEnum, :role, Keyword.keys(@roles))
 
   @max_email 254
   @min_password 8
@@ -28,7 +25,7 @@ defmodule Shift73k.Accounts.User do
     field(:hashed_password, :string)
     field(:confirmed_at, :naive_datetime)
 
-    field(:role, RolesEnum, default: :user)
+    field(:role, Ecto.Enum, values: Keyword.keys(@roles), default: :user)
     field(:week_start_at, Ecto.Enum, values: weekdays(), default: :monday)
 
     has_many(:shift_templates, ShiftTemplate)
@@ -69,13 +66,6 @@ defmodule Shift73k.Accounts.User do
     |> validate_password(opts)
   end
 
-  # def update_changeset(user, attrs, opts \\ [])
-
-  # def update_changeset(user, %{"password" => ""} = attrs, _),
-  #   do: update_changeset_no_pw(user, attrs)
-
-  # def update_changeset(user, %{password: ""} = attrs, _), do: update_changeset_no_pw(user, attrs)
-
   def update_changeset(user, attrs, opts) do
     user
     |> cast(attrs, [:email, :password, :role])
@@ -84,21 +74,10 @@ defmodule Shift73k.Accounts.User do
     |> validate_password_not_required(opts)
   end
 
-  # def update_changeset_no_pw(user, attrs) do
-  #   user
-  #   |> cast(attrs, [:email, :role])
-  #   |> validate_role()
-  #   |> validate_email()
-  # end
-
-  defp role_validator(:role, role) do
-    (RolesEnum.valid_value?(role) && []) || [role: "invalid user role"]
-  end
-
   defp validate_role(changeset) do
     changeset
     |> validate_required([:role])
-    |> validate_change(:role, &role_validator/2)
+    |> validate_inclusion(:role, Keyword.keys(@roles), message: "invalid user role")
   end
 
   defp validate_email_format(changeset) do

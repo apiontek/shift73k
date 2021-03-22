@@ -2,8 +2,6 @@ defmodule Shift73k.Shifts.Shift do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Shift73k.Shifts.Templates.ShiftTemplate
-
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "shifts" do
