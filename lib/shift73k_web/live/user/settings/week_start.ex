@@ -1,7 +1,7 @@
 defmodule Shift73kWeb.UserLive.Settings.WeekStart do
   use Shift73kWeb, :live_component
+  import Shift73k.Util.Dt, only: [weekdays: 0]
 
-  alias Shift73k.EctoEnums.WeekdayEnum
   alias Shift73k.Accounts
 
   @impl true
@@ -14,13 +14,12 @@ defmodule Shift73kWeb.UserLive.Settings.WeekStart do
   end
 
   def week_start_options do
-    {week_start_at, _} = WeekdayEnum.__enum_map__() |> hd()
-    week_start = Date.beginning_of_week(Date.utc_today(), week_start_at)
+    week_start = Date.beginning_of_week(Date.utc_today(), hd(weekdays()))
 
     week_start
     |> Date.range(Date.add(week_start, 6))
     |> Enum.map(&Calendar.strftime(&1, "%A"))
-    |> Enum.zip(Keyword.keys(WeekdayEnum.__enum_map__()))
+    |> Enum.zip(weekdays())
   end
 
   @impl true

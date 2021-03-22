@@ -55,6 +55,10 @@ extra_mock_users = ~s([
   {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
 ])
 
+# for random week_start_at values
+[head | tail] = Shift73k.Util.Dt.weekdays()
+week_starts = [head | Enum.drop(tail, 4)]
+
 mock_users =
   extra_mock_users
   |> Jason.decode!()
@@ -66,7 +70,7 @@ mock_users =
       email: e["email"],
       role: String.to_existing_atom(e["role"]),
       hashed_password: Bcrypt.hash_pwd_salt(e["password"]),
-      week_start_at: :rand.uniform(2),
+      week_start_at: Enum.at(week_starts, Enum.random(0..2)),
       inserted_at: add_dt,
       updated_at: add_dt,
       confirmed_at: (e["confirmed_at"] && NaiveDateTime.add(add_dt, 300, :second)) || nil

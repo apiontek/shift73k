@@ -2,8 +2,8 @@ defmodule Shift73k.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   import EctoEnum
+  import Shift73k.Util.Dt, only: [weekdays: 0]
 
-  alias Shift73k.EctoEnums.WeekdayEnum
   alias Shift73k.Shifts.Templates.ShiftTemplate
   alias Shift73k.Shifts.Shift
 
@@ -29,7 +29,7 @@ defmodule Shift73k.Accounts.User do
     field(:confirmed_at, :naive_datetime)
 
     field(:role, RolesEnum, default: :user)
-    field(:week_start_at, WeekdayEnum, default: 1)
+    field(:week_start_at, Ecto.Enum, values: weekdays(), default: :monday)
 
     has_many(:shift_templates, ShiftTemplate)
     belongs_to(:fave_shift_template, ShiftTemplate)
