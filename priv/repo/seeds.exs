@@ -71,6 +71,7 @@ mock_users =
       role: String.to_existing_atom(e["role"]),
       hashed_password: Bcrypt.hash_pwd_salt(e["password"]),
       week_start_at: Enum.at(week_starts, Enum.random(0..2)),
+      calendar_slug: Ecto.UUID.generate(),
       inserted_at: add_dt,
       updated_at: add_dt,
       confirmed_at: (e["confirmed_at"] && NaiveDateTime.add(add_dt, 300, :second)) || nil

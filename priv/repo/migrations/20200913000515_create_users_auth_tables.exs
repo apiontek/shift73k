@@ -11,10 +11,11 @@ defmodule Shift73k.Repo.Migrations.CreateUsersAuthTables do
       add(:role, :string, null: false)
       add(:confirmed_at, :naive_datetime)
       add(:week_start_at, :string, null: false)
+      add(:calendar_slug, :string, null: false)
       timestamps()
     end
 
-    create(unique_index(:users, [:email]))
+    create(unique_index(:users, [:email, :calendar_slug]))
 
     create table(:users_tokens, primary_key: false) do
       add(:id, :binary_id, primary_key: true)

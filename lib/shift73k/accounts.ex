@@ -473,4 +473,15 @@ defmodule Shift73k.Accounts do
     |> where(id: ^user_id)
     |> Repo.update_all(set: [week_start_at: day])
   end
+
+  ## Calendar slug
+
+  @doc """
+  Sets a new calendar url slug for user
+  """
+  def change_user_calendar_slug(user_id) do
+    User
+    |> where(id: ^user_id)
+    |> Repo.update_all(set: [calendar_slug: Ecto.UUID.generate()])
+  end
 end

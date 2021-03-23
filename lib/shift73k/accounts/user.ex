@@ -24,6 +24,7 @@ defmodule Shift73k.Accounts.User do
     field(:password, :string, virtual: true)
     field(:hashed_password, :string)
     field(:confirmed_at, :naive_datetime)
+    field(:calendar_slug, :string, default: Ecto.UUID.generate())
 
     field(:role, Ecto.Enum, values: Keyword.keys(@roles), default: :user)
     field(:week_start_at, Ecto.Enum, values: weekdays(), default: :monday)
