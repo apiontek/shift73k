@@ -6,6 +6,9 @@
       My Shifts
     </h2>
 
+
+
+
     <div class="row justify-content-start justify-content-sm-center">
       <div class="col-md-10 col-xl-10">
 
@@ -60,7 +63,11 @@
                         <span class="text-muted">(<%= shift.location %>)</span>
                       <% end %>
                     </div>
-                    <div style="font-size: smaller;"><%= shift.description %></div>
+                    <%= if shift.description do %>
+                      <div style="font-size: smaller;">
+                        <%= text_to_html shift.description %>
+                      </div>
+                    <% end %>
                     <div style="font-size: smaller;">
                       <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
                     </div>

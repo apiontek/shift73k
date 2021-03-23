@@ -26,6 +26,15 @@
       <% end %>
     </li>
 
+    <li><hr class="dropdown-divider"></li>
+<%# user_shifts_csv_path %>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.user_shifts_csv_path(@conn, :new), class: "dropdown-item") do %>
+        <%= icon_div @conn, "bi-file-earmark-spreadsheet", [class: "icon baseline me-1"] %>
+        CSV Export
+      <% end %>
+    </li>
+
   </ul>
 
 </li>

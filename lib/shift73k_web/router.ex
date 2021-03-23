@@ -98,6 +98,9 @@ defmodule Shift73kWeb.Router do
     live "/assign", ShiftAssignLive.Index, :index
 
     live "/shifts", ShiftLive.Index, :index
+
+    get "/csv", UserShiftsCsvController, :new
+    post "/csv", UserShiftsCsvController, :export
   end
 
   # scope "/", Shift73kWeb do

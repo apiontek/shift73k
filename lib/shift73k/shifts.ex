@@ -21,7 +21,7 @@ defmodule Shift73k.Shifts do
     Repo.all(Shift)
   end
 
-  defp query_shifts_by_user(user_id) do
+  def query_shifts_by_user(user_id) do
     from(s in Shift)
     |> where([s], s.user_id == ^user_id)
   end
@@ -51,6 +51,25 @@ defmodule Shift73k.Shifts do
     user_id
     |> query_shifts_by_user_from_list_of_dates(date_list)
     |> Repo.all()
+  end
+
+  def query_user_shift_dates(user_id) do
+    query_shifts_by_user(user_id)
+    |> select([s], s.date)
+  end
+
+  def get_min_user_shift_date(user_id) do
+    query_user_shift_dates(user_id)
+    |> order_by([s], asc: s.date)
+    |> limit([s], 1)
+    |> Repo.one()
+  end
+
+  def get_max_user_shift_date(user_id) do
+    query_user_shift_dates(user_id)
+    |> order_by([s], desc: s.date)
+    |> limit([s], 1)
+    |> Repo.one()
   end
 
   @doc """
@@ -145,5 +164,21 @@ defmodule Shift73k.Shifts do
   """
   def change_shift(%Shift{} = shift, attrs \\ %{}) do
     Shift.changeset(shift, attrs)
+  end
+
+  ###
+  # UTILS
+  def shift_length(%{time_end: time_end, time_start: time_start}) do
+    time_end
+    |> Time.diff(time_start)
+    |> Integer.floor_div(60)
+    |> shift_length()
+  end
+
+  def shift_length(len_min) when is_integer(len_min) and len_min >= 0, do: len_min
+  def shift_length(len_min) when is_integer(len_min) and len_min < 0, do: 1440 + len_min
+
+  def shift_length(time_end, time_start) do
+    shift_length(%{time_end: time_end, time_start: time_start})
   end
 end

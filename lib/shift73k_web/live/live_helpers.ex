@@ -5,7 +5,7 @@ defmodule Shift73kWeb.LiveHelpers do
   alias Shift73k.Accounts
   alias Shift73k.Accounts.User
   alias Shift73kWeb.UserAuth
-  alias Shift73k.Shifts.Templates.ShiftTemplate
+  alias Shift73k.Shifts
 
   @doc """
   Performs the {:noreply, socket} for a given socket.
@@ -74,9 +74,9 @@ defmodule Shift73kWeb.LiveHelpers do
     |> String.trim_trailing("m")
   end
 
-  def format_shift_length(%ShiftTemplate{} = shift_template) do
-    shift_template
-    |> ShiftTemplate.shift_length()
+  def format_shift_length(%{} = shift_or_template) do
+    shift_or_template
+    |> Shifts.shift_length()
     |> format_shift_length()
   end
 

@@ -2,6 +2,7 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Shift73k.Shifts
   alias Shift73k.Shifts.Templates.ShiftTemplate
 
   @app_vars Application.get_env(:shift73k, :app_global_vars, time_zone: "America/New_York")
@@ -45,7 +46,7 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
     |> validate_length(:subject, count: :codepoints, max: 280)
     |> validate_length(:location, count: :codepoints, max: 280)
     |> validate_change(:time_end, fn :time_end, time_end ->
-      shift_length = shift_length(time_end, time_start_from_attrs(attrs))
+      shift_length = Shifts.shift_length(time_end, time_start_from_attrs(attrs))
 
       cond do
         shift_length == 0 ->
@@ -66,20 +67,6 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
   defp time_start_from_attrs(%{"time_start" => time_start}), do: time_start
   defp time_start_from_attrs(%{time_start: time_start}), do: time_start
   defp time_start_from_attrs(_), do: nil
-
-  def shift_length(%ShiftTemplate{time_end: time_end, time_start: time_start}) do
-    time_end
-    |> Time.diff(time_start)
-    |> Integer.floor_div(60)
-    |> shift_length()
-  end
-
-  def shift_length(len_min) when is_integer(len_min) and len_min >= 0, do: len_min
-  def shift_length(len_min) when is_integer(len_min) and len_min < 0, do: 1440 + len_min
-
-  def shift_length(time_end, time_start) do
-    shift_length(%ShiftTemplate{time_end: time_end, time_start: time_start})
-  end
 
   # Get shift attrs from shift template
   def attrs(%ShiftTemplate{} = shift_template) do
