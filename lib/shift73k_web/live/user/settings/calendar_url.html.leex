@@ -1,9 +1,15 @@
 <div id="<%= @id %>" class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7 col-xxl-6 mt-1">
 
-  <h3>Calendar URL</h3>
+  <h3>ICS Subscribe URL</h3>
 
-  <p><%= @current_user.calendar_slug %></p>
+  <div class="row">
+    <div class="col mb-3">
+      <label class="form-label">Use this URL to subscribe in calendar software</label>
+      <input type="text" class="form-control" value="<%= Routes.user_shifts_ics_url(@socket, :index, @current_user.calendar_slug) %>" readonly onclick="this.focus();this.select()" />
+    </div>
+  </div>
 
+  <p class="text-danger">Clicking the button will permanently change the subscription URL. Anyone using it will need the new URL to subscribe to your calendar.</p>
   <%= form_for :calendar_slug, "#", [phx_submit: :save, phx_target: @myself], fn _csf -> %>
   <%= submit "Generate new", class: "btn btn-primary" %>
   <% end %>
