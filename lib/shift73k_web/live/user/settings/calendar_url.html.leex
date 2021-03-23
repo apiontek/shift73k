@@ -4,7 +4,7 @@
 
   <p><%= @current_user.calendar_slug %></p>
 
-  <%= form_for :calendar_slug, "#", [phx_submit: :save, phx_target: @myself], fn csf -> %>
+  <%= form_for :calendar_slug, "#", [phx_submit: :save, phx_target: @myself], fn _csf -> %>
   <%= submit "Generate new", class: "btn btn-primary" %>
   <% end %>
 

@@ -9,8 +9,6 @@ defmodule Shift73kWeb.UserShiftsCsvController do
   end
 
   def export(conn, %{"csv_export" => request_params}) do
-    IO.inspect(request_params, label: "csv request params :")
-
     case Map.get(request_params, "user_id") == conn.assigns.current_user.id do
       true ->
         export_csv(conn, request_params)
@@ -39,7 +37,6 @@ defmodule Shift73kWeb.UserShiftsCsvController do
     [csv_headers() | csv_data(user_id, date_range)]
     |> NimbleCSV.RFC4180.dump_to_iodata()
     |> to_string()
-    |> IO.inspect()
   end
 
   def csv_data(user_id, date_range) do
