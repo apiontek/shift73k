@@ -59,6 +59,7 @@ defmodule Shift73kWeb.Router do
   scope "/", Shift73kWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
 
+    # session routes, irrelevant if user is authenticated
     get("/users/register", UserRegistrationController, :new)
     get("/users/log_in", UserSessionController, :new)
     post("/users/log_in", UserSessionController, :create)
@@ -70,21 +71,25 @@ defmodule Shift73kWeb.Router do
   scope "/", Shift73kWeb do
     pipe_through([:browser, :require_authenticated_user])
 
-    # # liveview user settings
+    # user settings (change email, password, calendar week start, etc)
     live("/users/settings", UserLive.Settings, :edit)
 
-    # original user routes from phx.gen.auth
+    # confirm email by token
     get("/users/settings/confirm_email/:token", UserSettingsController, :confirm_email)
   end
 
   scope "/", Shift73kWeb do
     pipe_through([:browser])
 
+    # session paths
     delete("/users/log_out", UserSessionController, :delete)
     get("/users/force_logout", UserSessionController, :force_logout)
     get("/users/confirm", UserConfirmationController, :new)
     post("/users/confirm", UserConfirmationController, :create)
     get("/users/confirm/:token", UserConfirmationController, :confirm)
+
+    # ics/ical route for user's shifts
+    get("/ics/:slug", UserShiftsIcsController, :index)
   end
 
   scope "/", Shift73kWeb do

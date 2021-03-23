@@ -39,6 +39,10 @@ defmodule Shift73k.Accounts do
     Repo.get_by(User, email: email)
   end
 
+  def get_user_by_calendar_slug(slug) when is_binary(slug) do
+    Repo.get_by(User, calendar_slug: slug)
+  end
+
   @doc """
   Gets a user by email and password.
 

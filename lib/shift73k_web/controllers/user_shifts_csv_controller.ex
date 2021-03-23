@@ -5,7 +5,7 @@ defmodule Shift73kWeb.UserShiftsCsvController do
   alias Shift73k.Shifts.Shift
 
   def new(conn, _params) do
-    render(conn, "new.html", error_message: nil)
+    render(conn, "new.html")
   end
 
   def export(conn, %{"csv_export" => request_params}) do

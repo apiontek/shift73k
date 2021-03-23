@@ -8,26 +8,4 @@
   <%= submit "Generate new", class: "btn btn-primary" %>
   <% end %>
 
-  <%#= form_for :calendar_view, "#", [phx_change: :changed, phx_submit: :save, phx_target: @myself], fn cvf -> %>
-
-    <%#= label cvf, :week_start_at, class: "form-label" %>
-    <%# <div class="inner-addon left-addon mb-3"> %>
-      <%#= icon_div @socket, "bi-calendar2-range", [class: "icon is-left text-muted fs-5"] %>
-      <%#= select cvf, :week_start_at, week_start_options(),
-          value: @current_user.week_start_at,
-          class: "form-select"
-        %>
-    <%# </div> %>
-
-    <%# <div class="mb-3"> %>
-      <%#= submit "Save",
-          class: "btn btn-primary",
-          disabled: @form_week_start_at == @current_user.week_start_at,
-          aria_disabled: (@form_week_start_at == @current_user.week_start_at) && "true" || false,
-          phx_disable_with: "Saving..."
-        %>
-    <%# </div> %>
-
-  <%# end %>
-
 </div>

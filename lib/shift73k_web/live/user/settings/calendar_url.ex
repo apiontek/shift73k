@@ -9,23 +9,7 @@ defmodule Shift73kWeb.UserLive.Settings.CalendarUrl do
     |> assign(id: assigns.id)
     |> assign(current_user: user)
     |> live_okreply()
-
-    # |> assign(form_week_start_at: user.week_start_at)
   end
-
-  # def week_start_options do
-  #   week_start = Date.beginning_of_week(Date.utc_today(), hd(weekdays()))
-
-  #   week_start
-  #   |> Date.range(Date.add(week_start, 6))
-  #   |> Enum.map(&Calendar.strftime(&1, "%A"))
-  #   |> Enum.zip(weekdays())
-  # end
-
-  # @impl true
-  # def handle_event("changed", %{"calendar_view" => %{"week_start_at" => day}}, socket) do
-  #   {:noreply, assign(socket, form_week_start_at: String.to_existing_atom(day))}
-  # end
 
   @impl true
   def handle_event("save", _params, socket) do
