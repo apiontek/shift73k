@@ -34,6 +34,12 @@
         CSV Export
       <% end %>
     </li>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.shift_import_index_path(@conn, :index), class: "dropdown-item") do %>
+        <%= icon_div @conn, "bi-box-arrow-in-left", [class: "icon baseline me-1"] %>
+        iCal Import
+      <% end %>
+    </li>
 
   </ul>
 

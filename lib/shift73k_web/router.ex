@@ -106,6 +106,8 @@ defmodule Shift73kWeb.Router do
 
     get "/csv", UserShiftsCsvController, :new
     post "/csv", UserShiftsCsvController, :export
+
+    live "/import", ShiftImportLive.Index, :index
   end
 
   # scope "/", Shift73kWeb do

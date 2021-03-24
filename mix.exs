@@ -53,7 +53,8 @@ defmodule Shift73k.MixProject do
       {:scrivener_ecto, "~> 2.0"},
       {:tzdata, "~> 1.1"},
       {:nimble_csv, "~> 1.0"},
-      {:icalendar, "~> 1.1"}
+      {:icalendar, "~> 1.1"},
+      {:httpoison, "~> 1.7"}
     ]
   end
 

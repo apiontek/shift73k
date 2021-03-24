@@ -1,0 +1,35 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-10 col-xl-8">
+
+    <h2>
+      <%= icon_div @socket, "bi-box-arrow-in-left", [class: "icon baseline"] %>
+      Import Shifts
+    </h2>
+
+    <p class="lead">If you have an iCal/ics formatted calendar hosted elsewhere, provide its URL here to import its events.</p>
+
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-11 col-md-10 col-lg-9 col-xxl-8">
+
+        <%= form_for :ics_import, "#", [phx_submit: "save"], fn iimf -> %>
+
+          <div class="row">
+            <div class="col mb-3">
+              <%= label iimf, :ics_url, "iCal/ics URL", class: "form-label" %>
+              <%= url_input iimf, :ics_url, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col mb-3 text-end">
+              <%= submit "Submit", class: "btn btn-primary" %>
+            </div>
+          </div>
+
+        <% end %>
+
+      </div>
+    </div>
+
+  </div>
+</div>
