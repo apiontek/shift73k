@@ -35,53 +35,117 @@
         </div>
 
 
-        <dl>
         <%= for day <- Enum.to_list(@date_range) do %>
           <%= if Date.day_of_week(day, @current_user.week_start_at) == 1 do %>
           <div class="border-top mt-4 mb-4"></div>
           <% end %>
-          <dt>
+          <h4>
             <%= Calendar.strftime(day, "%A, %b %-d") %>
-          </dt>
+          </h4>
           <% day_shifts = Enum.filter(@shifts, fn s -> s.date == day end) %>
           <%= if !Enum.empty?(day_shifts) do %>
-            <dd id="day-<%= day.day %>">
-              <%= for shift <- day_shifts do %>
-                <div class="row gx-2" id="shift-<%= shift.id %>">
-                  <div class="col-4 col-md-3 col-xl-2 text-end">
-                    <div>
-                      <%= format_shift_time(shift.time_start) %>
-                      &mdash;
-                      <%= format_shift_time(shift.time_end) %>
-                    </div>
-                    <div style="font-size: smaller;"><%= shift.time_zone %></div>
-                  </div>
-                  <div class="col-8 col-md-9 col-xl-10">
-                    <div>
+
+
+            <%= for shift <- day_shifts do %>
+
+
+                <div class="card mt-2 mb-4 col-12 ms-sm-3 ms-md-4 col-lg-10 ms-lg-5 col-xxl-8" id="shift-<%= shift.id %>">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <%= icon_div @socket, "bi-tag", [class: "icon baseline text-muted me-1"] %>
                       <%= shift.subject %>
-                      <%= if shift.location do %>
-                        <span class="text-muted">(<%= shift.location %>)</span>
+                    </h5>
+
+
+                    <table class="table table-borderless table-nonfluid table-sm">
+                      <tbody>
+
+                        <tr>
+                          <th scope="row" class="text-end">
+                            <%= icon_div @socket, "bi-hourglass", [class: "icon baseline text-muted"] %>
+                            <span class="visually-hidden">Hours:</span>
+                          </th>
+                          <td>
+                            <%= format_shift_time(shift.time_start) %>
+                            &mdash;
+                            <%= format_shift_time(shift.time_end) %>
+                            <span class="text-muted">
+                              <span class="visually-hidden">Shift length:</span>
+                              (<%= format_shift_length(shift) %>)
+                            </span>
+                            <span class="valid-feedback d-block text-muted mt-n1">TZ: <%= shift.time_zone %></span>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <th scope="row" class="text-end">
+                            <%= icon_div @socket, "bi-geo", [class: "icon baseline text-muted"] %>
+                            <span class="visually-hidden">Location:</span>
+                          </th>
+                          <td>
+                            <%= if shift.location do %>
+                              <%= shift.location %>
+                            <% else %>
+                              <span class="text-muted fst-italic">none</span>
+                            <% end %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th scope="row" class="text-end">
+                            <%= icon_div @socket, "bi-justify-left", [class: "icon baseline text-muted"] %>
+                            <span class="visually-hidden">Description:</span>
+                          </th>
+                          <td class="shift-description">
+                            <%= if shift.description do %>
+                              <%= text_to_html shift.description %>
+                            <% else %>
+                              <span class="text-muted fst-italic">none</span>
+                            <% end %>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <%#= if Roles.can?(@current_user, template, :edit) do %>
+                      <%#= live_patch to: Routes.shift_template_index_path(@socket, :edit, template), class: "btn btn-primary btn-sm text-nowrap" do %>
+                        <%#= icon_div @socket, "bi-pencil", [class: "icon baseline"] %>
+                        <%# Edit %>
+                      <%# end %>
+                    <%# end %>
+
+                    <%#= if Roles.can?(@current_user, template, :delete) do %>
+                      <%# <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id=" %>
+                        <%#= shift.id %>
+                        <%# "> %>
+                        <%#= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
+                        <%# Delete %>
+                      <%# </button> %>
+                    <%# end %>
+
+                      <%= button to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm text-nowrap" do %>
+                        <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
+                        Delete
                       <% end %>
-                    </div>
-                    <%= if shift.description do %>
-                      <div style="font-size: smaller;">
-                        <%= text_to_html shift.description %>
-                      </div>
-                    <% end %>
-                    <div style="font-size: smaller;">
-                      <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"] %></span>
-                    </div>
+
+
+
                   </div>
                 </div>
-              <% end %>
 
-            </dd>
+
+
+
+            <% end %>
+
+
+
+
+
 
           <% else %>
-            <dd><em>Nothing scheduled</em></dd>
+            <p class="text-muted"><em>Nothing scheduled</em></p>
           <% end %>
         <% end %>
-        </dl>
 
 
       </div>
