@@ -11,18 +11,53 @@
     <div class="row justify-content-center">
       <div class="col-12 col-sm-11 col-md-10 col-lg-9 col-xxl-8">
 
-        <%= form_for :ics_import, "#", [phx_submit: "save"], fn iimf -> %>
+        <%= form_for :ics_import, "#", [phx_change: "validate", phx_submit: "save"], fn iimf -> %>
 
-          <div class="row">
-            <div class="col mb-3">
-              <%= label iimf, :ics_url, "iCal/ics URL", class: "form-label" %>
-              <%= url_input iimf, :ics_url, class: "form-control" %>
+        <% show_url_error = @url_validated && !@url_valid || false %>
+        <% valid_class = @url_validated && "is-valid" || "" %>
+        <%= label iimf, :ics_url, "iCal/ics URL", class: "form-label" %>
+        <div class="inner-addon left-addon mb-3">
+          <%= icon_div @socket, "bi-link", [class: "icon is-left text-muted fs-5"] %>
+          <%= url_input iimf, :ics_url,
+              class: show_url_error && "form-control is-invalid" || "form-control #{valid_class}",
+              phx_debounce: 500,
+              aria_describedby: "ics-import-url-error"
+            %>
+          <%= if show_url_error do %>
+            <div class="invalid-feedback d-block" id="ics-import-url-error">
+              Must be a valid URL
             </div>
-          </div>
+          <% end %>
+        </div>
+
+
+        <%= label iimf, :time_zone, class: "form-label" %>
+        <div class="inner-addon left-addon mb-3">
+          <%= icon_div @socket, "bi-map", [class: "icon is-left text-muted fs-5"] %>
+          <%= text_input iimf, :time_zone,
+              value: Shift73k.Util.Dt.app_time_zone(),
+              class: @tz_valid && "form-control" || "form-control is-invalid",
+              phx_debounce: 250,
+              aria_describedby: "ics-import-tz-error",
+              list: "tz_list"
+            %>
+            <datalist id="tz_list">
+              <%= for tz_name <- Tzdata.zone_list() do %>
+                <option value="<%= tz_name %>"></option>
+              <% end %>
+            </datalist>
+          <div class="valid-feedback d-block text-primary">Type to search & select from list of known <%= link "IANA tz database", to: "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", target: "_blank" %> time zones</div>
+          <%= if !@tz_valid do %>
+            <div class="invalid-feedback d-block" id="ics-import-tz-error">
+              Invalid time zone
+            </div>
+          <% end %>
+        </div>
+
 
           <div class="row">
             <div class="col mb-3 text-end">
-              <%= submit "Submit", class: "btn btn-primary" %>
+              <%= submit "Submit", class: "btn btn-primary", disabled: !@tz_valid || !@url_valid %>
             </div>
           </div>
 

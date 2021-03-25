@@ -93,7 +93,6 @@
           <%= for tz_name <- Tzdata.zone_list() do %>
             <option value="<%= tz_name %>"></option>
           <% end %>
-          end
         </datalist>
       <div class="valid-feedback d-block text-primary">Type to search & select from list of known <%= link "IANA tz database", to: "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", target: "_blank" %> time zones</div>
       <%= error_tag f, :time_zone %>

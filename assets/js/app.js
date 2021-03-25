@@ -57,6 +57,8 @@ import "../node_modules/bootstrap-icons/icons/asterisk.svg";
 import "../node_modules/bootstrap-icons/icons/card-list.svg";
 import "../node_modules/bootstrap-icons/icons/file-earmark-spreadsheet.svg";
 import "../node_modules/bootstrap-icons/icons/box-arrow-in-left.svg";
+import "../node_modules/bootstrap-icons/icons/link.svg";
+import "../node_modules/bootstrap-icons/icons/link-45deg.svg";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
