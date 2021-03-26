@@ -109,6 +109,8 @@ defmodule Shift73kWeb.ShiftImportLive.Index do
     }
   end
 
+  defp fix_description(nil), do: nil
+
   defp fix_description(description) do
     description
     |> String.replace("<br>", "\r\n")
