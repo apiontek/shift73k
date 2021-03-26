@@ -8,6 +8,7 @@ defmodule Shift73kWeb.UserLive.Settings do
   def mount(_params, session, socket) do
     socket
     |> assign_defaults(session)
+    |> assign(:page_title, "User Settings")
     |> alert_email_verified?()
     |> live_okreply()
   end

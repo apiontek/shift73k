@@ -13,6 +13,7 @@ defmodule Shift73kWeb.ShiftImportLive.Index do
 
     socket
     |> assign_defaults(session)
+    |> assign(:page_title, "iCal Import")
     |> assign(:url_valid, false)
     |> assign(:url_validated, false)
     |> assign(:tz_valid, true)

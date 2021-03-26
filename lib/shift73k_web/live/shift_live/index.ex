@@ -35,7 +35,7 @@ defmodule Shift73kWeb.ShiftLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Shifts")
+    |> assign(:page_title, "My Shifts")
     |> assign(:shift, nil)
   end
 

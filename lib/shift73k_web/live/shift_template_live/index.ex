@@ -59,7 +59,7 @@ defmodule Shift73kWeb.ShiftTemplateLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Shift templates")
+    |> assign(:page_title, "My Shift Templates")
     |> assign(:shift_template, nil)
   end
 

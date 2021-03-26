@@ -13,6 +13,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
   def mount(_params, session, socket) do
     socket
     |> assign_defaults(session)
+    |> assign(:page_title, "Schedule Shifts")
     |> assign(:custom_shift, @custom_shift)
     |> assign(:show_template_btn_active, false)
     |> assign(:show_template_details, false)
