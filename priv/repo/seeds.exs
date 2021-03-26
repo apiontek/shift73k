@@ -56,7 +56,7 @@ extra_mock_users = ~s([
 ])
 
 # for random week_start_at values
-[head | tail] = Shift73k.Util.Dt.weekdays()
+[head | tail] = Shift73k.weekdays()
 week_starts = [head | Enum.drop(tail, 4)]
 
 mock_users =

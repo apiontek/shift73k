@@ -1,7 +1,7 @@
 defmodule Shift73k.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-  import Shift73k.Util.Dt, only: [weekdays: 0]
+  import Shift73k, only: [weekdays: 0]
 
   alias Shift73k.Shifts.Templates.ShiftTemplate
   alias Shift73k.Shifts.Shift

@@ -35,7 +35,7 @@
         <div class="inner-addon left-addon mb-3">
           <%= icon_div @socket, "bi-map", [class: "icon is-left text-muted fs-5"] %>
           <%= text_input iimf, :time_zone,
-              value: Shift73k.Util.Dt.app_time_zone(),
+              value: Shift73k.app_time_zone(),
               class: @tz_valid && "form-control" || "form-control is-invalid",
               phx_debounce: 250,
               aria_describedby: "ics-import-tz-error",

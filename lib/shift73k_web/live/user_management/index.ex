@@ -2,7 +2,6 @@ defmodule Shift73kWeb.UserManagementLive.Index do
   use Shift73kWeb, :live_view
 
   import Ecto.Query
-  import Shift73k.Util.Dt
   import Shift73kWeb.Pagination
 
   alias Shift73k.Repo
@@ -199,7 +198,7 @@ defmodule Shift73kWeb.UserManagementLive.Index do
 
   def dt_out(ndt) do
     ndt
-    |> DateTime.from_naive!(app_time_zone())
+    |> DateTime.from_naive!(Shift73k.app_time_zone())
     |> Calendar.strftime("%Y %b %-d, %-I:%M %p")
   end
 end

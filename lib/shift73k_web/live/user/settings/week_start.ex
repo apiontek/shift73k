@@ -1,6 +1,6 @@
 defmodule Shift73kWeb.UserLive.Settings.WeekStart do
   use Shift73kWeb, :live_component
-  import Shift73k.Util.Dt, only: [weekdays: 0]
+  import Shift73k, only: [weekdays: 0]
 
   alias Shift73k.Accounts
 
