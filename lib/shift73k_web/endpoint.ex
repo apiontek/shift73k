@@ -44,7 +44,7 @@ defmodule Shift73kWeb.Endpoint do
   plug(Plug.Static,
     at: "/",
     from: :shift73k,
-    gzip: false,
+    gzip: true,
     only: ~w(css fonts images js) ++ static_files
   )
 
