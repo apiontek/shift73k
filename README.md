@@ -18,7 +18,7 @@ When improvements are made, we can update the deployed version like so:
 
 ```shell
 cd /opt/shift73k
-git pull 73k master
+git pull
 mix deps.get --only prod
 MIX_ENV=prod mix compile
 # might not be needed:
