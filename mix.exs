@@ -54,7 +54,12 @@ defmodule Shift73k.MixProject do
       {:tzdata, "~> 1.1"},
       {:nimble_csv, "~> 1.0"},
       {:icalendar, "~> 1.1"},
-      {:httpoison, "~> 1.7"}
+      {:httpoison, "~> 1.7"},
+
+      # Additional packages
+
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.8", only: :dev}
     ]
   end
 

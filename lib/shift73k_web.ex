@@ -55,12 +55,12 @@ defmodule Shift73kWeb do
 
       @impl true
       def handle_info(%{event: "logout_user", payload: %{user: %User{id: id}}}, socket) do
-        with %User{id: ^id} <- socket.assigns.current_user do
-          {:noreply,
-           socket
-           |> redirect(to: Routes.user_session_path(socket, :force_logout))}
-        else
-          _any -> {:noreply, socket}
+        case socket.assigns.current_user do
+          %User{id: ^id} ->
+            {:noreply, redirect(socket, to: Routes.user_session_path(socket, :force_logout))}
+
+          _ ->
+            {:noreply, socket}
         end
       end
     end

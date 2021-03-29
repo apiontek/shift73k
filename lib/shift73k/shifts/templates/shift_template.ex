@@ -1,12 +1,10 @@
 defmodule Shift73k.Shifts.Templates.ShiftTemplate do
   use Ecto.Schema
   import Ecto.Changeset
+  import Shift73k, only: [app_time_zone: 0]
 
   alias Shift73k.Shifts
   alias Shift73k.Shifts.Templates.ShiftTemplate
-
-  @app_vars Application.get_env(:shift73k, :app_global_vars, time_zone: "America/New_York")
-  @time_zone @app_vars[:time_zone]
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -14,7 +12,7 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
     field :subject, :string
     field :description, :string
     field :location, :string
-    field :time_zone, :string, default: @time_zone
+    field :time_zone, :string, default: app_time_zone()
     field :time_start, :time, default: ~T[09:00:00]
     field :time_end, :time, default: ~T[17:00:00]
 

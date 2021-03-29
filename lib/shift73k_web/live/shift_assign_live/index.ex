@@ -181,6 +181,14 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
     |> assign_known_shifts()
   end
 
+  defp new_nav_cursor("now", _cursor_date), do: Date.utc_today()
+
+  defp new_nav_cursor(nav, cursor_date) do
+    cursor_date
+    |> Date.add((nav == "prev" && -30) || 30)
+    |> cursor_date()
+  end
+
   @impl true
   def handle_event("validate-shift-template", %{"shift_template" => params}, socket) do
     params = prep_template_params(params, socket.assigns.current_user)
@@ -214,16 +222,7 @@ defmodule Shift73kWeb.ShiftAssignLive.Index do
 
   @impl true
   def handle_event("month-nav", %{"month" => nav}, socket) do
-    new_cursor =
-      cond do
-        nav == "now" ->
-          Date.utc_today()
-
-        true ->
-          socket.assigns.cursor_date
-          |> Date.add((nav == "prev" && -30) || 30)
-          |> cursor_date()
-      end
+    new_cursor = new_nav_cursor(nav, socket.assigns.cursor_date)
 
     socket
     |> assign(:cursor_date, new_cursor)
