@@ -5,7 +5,7 @@
     <%= icon_div @conn, "bi-door-open", [class: "icon baseline"] %>
     Log in
   </h2>
-  <%# <p class="lead">Who goes there?</p> %>
+  <p class="lead">Who goes there?</p>
 
   <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: "needs-validation", novalidate: true], fn f -> %>
     <%= if @error_message do %>
