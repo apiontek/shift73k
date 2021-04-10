@@ -2,6 +2,7 @@ defmodule Shift73k.ShiftsTest do
   use Shift73k.DataCase
 
   alias Shift73k.Shifts
+  import Shift73k.AccountsFixtures
 
   describe "shifts" do
     alias Shift73k.Shifts.Shift
@@ -11,6 +12,8 @@ defmodule Shift73k.ShiftsTest do
     @invalid_attrs %{date: nil, description: nil, location: nil, subject: nil, time_end: nil, time_start: nil, time_zone: nil}
 
     def shift_fixture(attrs \\ %{}) do
+      user = user_fixture()
+      attrs = attrs |> Map.put(:user_id, user.id)
       {:ok, shift} =
         attrs
         |> Enum.into(@valid_attrs)
@@ -30,7 +33,9 @@ defmodule Shift73k.ShiftsTest do
     end
 
     test "create_shift/1 with valid data creates a shift" do
-      assert {:ok, %Shift{} = shift} = Shifts.create_shift(@valid_attrs)
+      user = user_fixture()
+      shift_attrs = @valid_attrs |> Map.put(:user_id, user.id)
+      assert {:ok, %Shift{} = shift} = Shifts.create_shift(shift_attrs)
       assert shift.date == ~D[2010-04-17]
       assert shift.description == "some description"
       assert shift.location == "some location"

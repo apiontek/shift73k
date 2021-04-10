@@ -39,7 +39,7 @@ defmodule Shift73kWeb.UserLive.ResetPasswordTest do
     {:ok, view, _html} = live_isolated(conn, Shift73kWeb.UserLive.ResetPassword)
 
     # Render submitting a new password
-    new_pw = "valid_new_pass_123"
+    new_pw = "Valid_new_pass_123"
     form_data = %{"user" => %{"password" => new_pw, "password_confirmation" => new_pw}}
     _html = form(view, "#pw_reset_form", form_data) |> render_submit()
 

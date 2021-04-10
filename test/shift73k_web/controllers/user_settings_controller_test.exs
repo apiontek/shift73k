@@ -10,7 +10,7 @@ defmodule Shift73kWeb.UserSettingsControllerTest do
     test "renders settings page", %{conn: conn} do
       conn = get(conn, Routes.user_settings_path(conn, :edit))
       response = html_response(conn, 200)
-      assert response =~ "User Settings\n</h2>"
+      assert response =~ "User Settings</h2>"
     end
 
     test "redirects if user is not logged in" do
