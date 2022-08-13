@@ -1,0 +1,40 @@
+<li class="nav-item dropdown">
+
+  <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-calendar2 me-1"></i> Shifts
+  </a>
+
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUserMenu">
+
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.shift_assign_index_path(@conn, :index), class: "dropdown-item") do %>
+        <i class="bi bi-calendar2-plus me-1"></i> Schedule Shifts
+      <% end %>
+    </li>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.shift_index_path(@conn, :index), class: "dropdown-item") do %>
+        <i class="bi bi-card-list me-1"></i> My Scheduled Shifts
+      <% end %>
+    </li>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.shift_template_index_path(@conn, :index), class: "dropdown-item") do %>
+        <i class="bi bi-clock-history me-1"></i> My Shift Templates
+      <% end %>
+    </li>
+
+    <li><hr class="dropdown-divider"></li>
+<%# user_shifts_csv_path %>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.user_shifts_csv_path(@conn, :new), class: "dropdown-item") do %>
+        <i class="bi bi-file-earmark-spreadsheet me-1"></i> CSV Export
+      <% end %>
+    </li>
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.shift_import_index_path(@conn, :index), class: "dropdown-item") do %>
+        <i class="bi bi-box-arrow-in-left me-1"></i> iCal Import
+      <% end %>
+    </li>
+
+  </ul>
+
+</li>

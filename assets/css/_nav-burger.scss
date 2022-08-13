@@ -32,6 +32,10 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
           background-color: $navbar-light-color;
         }
       }
+      &:focus {
+        box-shadow: $navbar-light-toggler-border-color 0 0 0 $navbar-toggler-focus-width;
+        // var(--bs-navbar-toggler-focus-width);
+      }
     }
   }
 }
@@ -50,6 +54,9 @@ $hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
         .hamburger-inner::after {
           background-color: $navbar-dark-color;
         }
+      }
+      &:focus {
+        box-shadow: $navbar-dark-toggler-border-color 0 0 0 $navbar-toggler-focus-width;
       }
     }
   }

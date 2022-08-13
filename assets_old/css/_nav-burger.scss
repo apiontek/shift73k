@@ -1,0 +1,56 @@
+/* Hamburger settings overrides */
+$hamburger-padding-x: 0.95rem !default;
+$hamburger-padding-y: 0.625rem !default;
+$hamburger-layer-width: 1.5rem !default;
+$hamburger-layer-height: 2px !default;
+$hamburger-layer-spacing: 6px !default;
+// * skipping default color, using color from bootstrap instead, below
+// $hamburger-layer-color: rgba(0, 0, 0, 0.55) !default;
+$hamburger-layer-border-radius: 0.25rem !default;
+$hamburger-hover-opacity: 0.7 !default;
+// * skipping default color, using color from bootstrap instead, below
+// $hamburger-active-layer-color: $hamburger-layer-color !default;
+$hamburger-active-hover-opacity: $hamburger-hover-opacity !default;
+
+/* import hamburgers sass */
+@import "../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss";
+
+/* correct colors to match bootstrap defaults */
+.navbar-light {
+  .hamburger {
+    &.navbar-toggler {
+      border: 1px $navbar-light-toggler-border-color solid !important;
+      .hamburger-inner {
+        &,
+        &::before,
+        &::after {
+          background-color: $navbar-light-color;
+        }
+      }
+      &.is-active {
+        .hamburger-inner::after {
+          background-color: $navbar-light-color;
+        }
+      }
+    }
+  }
+}
+.navbar-dark {
+  .hamburger {
+    &.navbar-toggler {
+      border: 1px $navbar-dark-toggler-border-color solid !important;
+      .hamburger-inner {
+        &,
+        &::before,
+        &::after {
+          background-color: $navbar-dark-color;
+        }
+      }
+      &.is-active {
+        .hamburger-inner::after {
+          background-color: $navbar-dark-color;
+        }
+      }
+    }
+  }
+}

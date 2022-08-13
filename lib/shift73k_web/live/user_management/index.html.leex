@@ -17,8 +17,7 @@
 
 
 <h2 class="mb-3">
-  <%= icon_div @socket, "bi-people", [class: "icon baseline"] %>
-  Listing Users
+  <i class="bi bi-people"></i> Listing Users
 </h2>
 
 <%# filtering and new item creation %>
@@ -27,8 +26,7 @@
   <div class="col-12 col-md-6 col-lg-4 col-xl-3">
   <%= live_patch to: Routes.user_management_index_path(@socket, :new, Enum.into(@query, [])),
       class: "btn btn-primary mb-3 mb-md-0" do %>
-    <%= icon_div @socket, "bi-person-plus", [class: "icon baseline me-1"] %>
-    New User
+    <i class="bi bi-person-plus"></i> New User
   <% end %>
   </div>
 
@@ -49,7 +47,7 @@
   <%= form_for :filter, "#", [phx_change: "filter-change"], fn flt -> %>
     <%= label flt, :filter, class: "visually-hidden" %>
     <div class="inner-addon left-addon right-addon">
-      <%= icon_div @socket, "bi-funnel", [class: "icon is-left text-muted fs-5"] %>
+      <i class="bi bi-funnel is-left text-muted fs-5"></i>
       <%= if @query.filter != "" do %>
         <%= icon_div @socket, "bi-x-circle-fill", [class: "icon is-right text-primary fs-5"], [role: "img", aria_hidden: false, aria_label: "Clear filter", class: "cursor-pointer pe-auto", phx_click: "filter-clear"] %>
       <% end %>

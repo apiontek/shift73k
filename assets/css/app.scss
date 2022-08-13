@@ -4,9 +4,6 @@
 /* Load Bootstrap v5 and customizations */
 @import "bs-load";
 
-/*SVG ICON SYSTEM*/
-@import "svg-icons";
-
 /* LiveView specific CSS */
 @import "phx-liveview";
 
@@ -43,7 +40,7 @@
 /* style icon */
 .inner-addon > .icon {
   position: absolute;
-  padding: 0.5625rem 0.5rem;
+  padding: 0.25rem 0.5rem;
   pointer-events: none;
 }
 
@@ -67,4 +64,12 @@
 
 .shift-description p:last-child {
   margin-bottom: 0;
+}
+
+
+/*
+  fix readonly form background
+  */
+.form-control[readonly] {
+  background-color: $input-disabled-bg;
 }

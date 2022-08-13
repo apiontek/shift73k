@@ -1,0 +1,43 @@
+/* LiveView specific classes for your customizations */
+
+/* hides the feedback field help if liveview indicates field not touched yet */
+.phx-no-feedback.invalid-feedback,
+.phx-no-feedback .invalid-feedback,
+.phx-orphaned-feedback.phx-no-feedback .invalid-feedback {
+  display: none;
+}
+.phx-orphaned-feedback .invalid-feedback {
+  display: block !important;
+}
+
+/* sets default bootstrap form-control styles if field not touched yet */
+.phx-no-feedback .form-control.is-valid,
+.phx-no-feedback .form-control.is-invalid {
+  border: $input-border-width solid $input-border-color;
+  background-image: none;
+
+  &:focus {
+    color: $input-focus-color;
+    background-color: $input-focus-bg;
+    border-color: $input-focus-border-color;
+    outline: 0;
+    @if $enable-shadows {
+      @include box-shadow($input-box-shadow, $input-focus-box-shadow);
+    } @else {
+      // Avoid using mixin so we can pass custom focus shadow properly
+      box-shadow: $input-focus-box-shadow;
+    }
+  }
+}
+
+.phx-click-loading {
+  opacity: 0.5;
+  transition: opacity 1s ease-out;
+}
+
+.phx-disconnected {
+  cursor: wait;
+}
+.phx-disconnected * {
+  pointer-events: none;
+}

@@ -1,0 +1,35 @@
+// Colors
+$primary: #662c91;
+$secondary: #ee6c4d;
+$success: #3f784c;
+$info: #3f84e5;
+$warning: #ffec51;
+$light: $gray-200;
+$dark: $gray-800;
+
+// Create your own map
+$custom-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+  "gray": $gray-500,
+);
+
+// $custom-colors: (
+//   "custom-color": #900
+// );
+
+// Merge the maps
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+// misc
+$navbar-dark-color: rgba($white, 0.75);
+$navbar-dark-hover-color: rgba($white, 0.9);
+$navbar-dark-active-color: $white;
+$navbar-dark-disabled-color: rgba($white, 0.45);
+$navbar-dark-toggler-border-color: rgba($white, 0.3);
