@@ -1,0 +1,66 @@
+<div>
+
+  <%= form_for @changeset, "#", [
+      phx_target: @myself,
+      phx_change: "validate",
+      phx_submit: "save"
+    ], fn f -> %>
+
+    <div class="modal-body">
+
+      <%= label f, :email, class: "form-label" %>
+      <div class="inner-addon left-addon mb-3" phx-feedback-for={input_id(f, :email)}>
+        <i class="bi bi-at icon is-left text-muted fs-5"></i>
+        <%= email_input f, :email,
+            value: input_value(f, :email),
+            class: input_class(f, :email, "form-control"),
+            placeholder: "e.g., babka@73k.us",
+            maxlength: User.max_email,
+            autofocus: true,
+            phx_debounce: "250",
+            aria_describedby: error_ids(f, :email)
+          %>
+        <%= error_tag f, :email %>
+      </div>
+
+      <%= label f, :password, class: "form-label" %>
+      <div class="inner-addon left-addon mb-3" phx-feedback-for={input_id(f, :password)}>
+        <i class="bi bi-key icon is-left text-muted fs-5"></i>
+        <%= password_input f, :password,
+            value: input_value(f, :password),
+            class: input_class(f, :password, "form-control"),
+            maxlength: User.max_password,
+            aria_describedby: error_ids(f, :password)
+          %>
+        <%= error_tag f, :password %>
+      </div>
+
+      <%= if Roles.can?(@current_user, %User{}, :edit_role) do %>
+        <%= label f, :role, class: "form-label" %>
+        <div class="inner-addon left-addon mb-3">
+          <i class="bi bi-shield icon is-left text-muted fs-5"></i>
+          <%= select f, :role, Enum.map(User.roles(), fn {k, _v} -> {String.capitalize(Atom.to_string(k)), k} end), class: "form-select" %>
+          <span class="valid-feedback text-primary" style="display: block;">
+            <%= role_description(input_value(f, :role)) %>
+          </span>
+        </div>
+      <% else %>
+        <%= hidden_input f, :role, value: input_value(f, :role) %>
+      <% end %>
+
+    </div>
+    <div class="modal-footer">
+
+      <%= link "Cancel", to: "#", class: "btn btn-outline-dark", phx_click: "hide", phx_target: "##{@modal_id}" %>
+      <%= submit "Save",
+          class: "btn btn-primary ",
+          disabled: !@changeset.valid?,
+          aria_disabled: !@changeset.valid? && "true" || false,
+          phx_disable_with: "Saving..."
+        %>
+
+    </div>
+
+  <% end %>
+
+</div>

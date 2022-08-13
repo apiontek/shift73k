@@ -3,12 +3,12 @@ defmodule Shift73kWeb.ModalComponent do
 
   @impl true
   def render(assigns) do
-    ~L"""
-    <div id="<%= @id %>" class="modal fade"
+    ~H"""
+    <div id={@id} class="modal fade"
       phx-hook="BsModal"
       phx-window-keydown="hide"
       phx-key="escape"
-      phx-target="#<%= @id %>"
+      phx-target={"#" <> to_string(@id)}
       phx-page-loading>
 
       <div class="modal-dialog modal-dialog-centered">
@@ -16,10 +16,10 @@ defmodule Shift73kWeb.ModalComponent do
 
           <div class="modal-header">
             <h5 class="modal-title"><%= Keyword.get(@opts, :title, "Modal title") %></h5>
-            <button type="button" class="btn-close" phx-click="hide" phx-target="<%= @myself %>" aria-label="Close"></button>
+            <button type="button" class="btn-close" phx-click="hide" phx-target={@myself} aria-label="Close"></button>
           </div>
 
-          <%= live_component @socket, @component, Keyword.put(@opts, :modal_id, @id) %>
+          <%= live_component @component, Keyword.put(@opts, :modal_id, @id) %>
 
         </div>
       </div>
