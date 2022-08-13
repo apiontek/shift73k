@@ -17,7 +17,7 @@
 
 
 <h2 class="mb-3">
-  <i class="bi bi-people"></i> Listing Users
+  <i class="bi bi-people me-1"></i> Listing Users
 </h2>
 
 <%# filtering and new item creation %>
@@ -26,7 +26,7 @@
   <div class="col-12 col-md-6 col-lg-4 col-xl-3">
   <%= live_patch to: Routes.user_management_index_path(@socket, :new, Enum.into(@query, [])),
       class: "btn btn-primary mb-3 mb-md-0" do %>
-    <i class="bi bi-person-plus"></i> New User
+    <i class="bi bi-person-plus me-1"></i> New User
   <% end %>
   </div>
 
@@ -34,10 +34,10 @@
   <%= form_for :sort, "#", [phx_change: "sort-by-change"], fn srt -> %>
     <%= label srt, :sort_by, class: "visually-hidden" %>
     <div class="input-group inner-addon left-addon mb-3 mb-md-0">
-      <%= icon_div @socket, "bi-arrow-down-up", [class: "icon is-left text-muted fs-5", style: "z-index:1001;"], [style: "padding: 1px;"] %>
-      <%= Phoenix.HTML.Form.select srt, :sort_by, ["Email": "email", "Role": "role", "Created at": "inserted_at"], value: @query.sort_by, class: "form-select" %>
+      <i class="bi bi-arrow-down-up icon is-left text-muted fs-5" style="z-index:1001;"></i>
+      <%= Phoenix.HTML.Form.select srt, :sort_by, ["Email": "email", "Role": "role", "Created at": "inserted_at"], value: @query.sort_by, class: "form-select rounded-start" %>
       <button class="btn btn-primary" type="button" aria-label="Change sort order" phx-click="sort-order-change">
-      <%= icon_div @socket, (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"), [class: "icon baseline"] %>
+        <i class={if @query.sort_order == "desc", do: "bi bi-sort-up-alt", else: "bi bi-sort-down-alt"}></i>
       </button>
     </div>
   <% end %>
@@ -47,9 +47,9 @@
   <%= form_for :filter, "#", [phx_change: "filter-change"], fn flt -> %>
     <%= label flt, :filter, class: "visually-hidden" %>
     <div class="inner-addon left-addon right-addon">
-      <i class="bi bi-funnel is-left text-muted fs-5"></i>
+      <i class="bi bi-funnel icon is-left text-muted fs-5"></i>
       <%= if @query.filter != "" do %>
-        <%= icon_div @socket, "bi-x-circle-fill", [class: "icon is-right text-primary fs-5"], [role: "img", aria_hidden: false, aria_label: "Clear filter", class: "cursor-pointer pe-auto", phx_click: "filter-clear"] %>
+        <i class="bi bi-x-circle-fill icon is-right text-primary fs-5 cursor-pointer pe-auto" role="img" aria-hidden="false" aria-label="Clear filter" phx-click="filter-clear"></i>
       <% end %>
       <%= text_input flt, :filter,
           name: "filter",
@@ -90,21 +90,19 @@
             </dt>
             <dd class="d-inline d-sm-block col-auto">
               <span class="visually-hidden"><%= user.confirmed_at && "Yes" || "No" %></span>
-              <input type="checkbox" class="form-check-input" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %> disabled>
+              <input type="checkbox" class="form-check-input" aria-hidden="true" checked={user.confirmed_at && :true || :false} disabled>
             </dd>
           </dl>
 
           <%= if Roles.can?(@current_user, user, :edit) do %>
             <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-primary btn-sm text-nowrap" do %>
-              <%= icon_div @socket, "bi-pencil", [class: "icon baseline"] %>
-              Edit
+              <i class="bi bi-pencil me-1"></i> Edit
             <% end %>
           <% end %>
 
           <%= if Roles.can?(@current_user, user, :delete) do %>
-            <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= user.id %>">
-              <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
-              Delete
+            <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id={user.id}>
+              <i class="bi bi-trash me-1"></i> Delete
             </button>
           <% end %>
 
@@ -124,28 +122,25 @@
     <thead>
       <tr>
 
-        <th scope="col" phx-click="sort-change" phx-value-sort_by="email" class="cursor-pointer">
+        <th scope="col" style="white-space: nowrap;" phx-click="sort-change" phx-value-sort_by="email" class="cursor-pointer">
           Email
-          <%= if @query.sort_by == "email", do: icon_div @socket,
-                (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
-                [class: "icon baseline ms-1"]
-              %>
+          <%= if @query.sort_by == "email" do %>
+            <i class={@query.sort_order == "desc" && "bi bi-sort-up-alt ms-1" || "bi bi-sort-down-alt ms-1"}></i>
+          <% end %>
         </th>
 
-        <th scope="col" phx-click="sort-change" phx-value-sort_by="role" class="cursor-pointer">
+        <th scope="col" style="white-space: nowrap;" phx-click="sort-change" phx-value-sort_by="role" class="cursor-pointer">
           Role
-          <%= if @query.sort_by == "role", do: icon_div @socket,
-                (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
-                [class: "icon baseline ms-1"]
-              %>
+          <%= if @query.sort_by == "role" do %>
+            <i class={@query.sort_order == "desc" && "bi bi-sort-up-alt ms-1" || "bi bi-sort-down-alt ms-1"}></i>
+          <% end %>
         </th>
 
-        <th scope="col" phx-click="sort-change" phx-value-sort_by="inserted_at" class="cursor-pointer">
+        <th scope="col" style="white-space: nowrap;" phx-click="sort-change" phx-value-sort_by="inserted_at" class="cursor-pointer">
           Created at
-          <%= if @query.sort_by == "inserted_at", do: icon_div @socket,
-                (@query.sort_order == "desc" && "bi-sort-up-alt" || "bi-sort-down-alt"),
-                [class: "icon baseline ms-1"]
-              %>
+          <%= if @query.sort_by == "inserted_at" do %>
+            <i class={@query.sort_order == "desc" && "bi bi-sort-up-alt ms-1" || "bi bi-sort-down-alt ms-1"}></i>
+          <% end %>
         </th>
 
         <th scope="col">Confirmed?</th>
@@ -166,27 +161,25 @@
         </tr>
       <% else %>
         <%= for user <- @page.entries do %>
-          <tr id="user-<%= user.id %>">
+          <tr id={"user-#{user.id}"}>
             <td class="align-middle"><%= user.email %></td>
             <td class="align-middle"><%= user.role |> Atom.to_string() |> String.capitalize() %></td>
             <td class="align-middle" style="white-space: nowrap;"><%= dt_out(user.inserted_at) %></td>
             <td class="align-middle">
               <span class="visually-hidden"><%= user.confirmed_at && "Confirmed" || "Not confirmed" %></span>
-              <input type="checkbox" class="form-check-input" aria-hidden="true" <%= user.confirmed_at && "checked" || "" %> disabled>
+              <input type="checkbox" class="form-check-input" aria-hidden="true" checked={user.confirmed_at && :true || :false} disabled>
             </td>
             <td class="align-middle text-end text-nowrap">
 
               <%= if Roles.can?(@current_user, user, :edit) do %>
                 <%= live_patch to: Routes.user_management_index_path(@socket, :edit, user.id, Enum.into(@query, [])), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
-                  <%= icon_div @socket, "bi-pencil", [class: "icon baseline"] %>
-                  Edit
+                  <i class="bi bi-pencil me-1"></i> Edit
                 <% end %>
               <% end %>
 
               <%= if Roles.can?(@current_user, user, :delete) do %>
-                <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= user.id %>">
-                  <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
-                  Delete
+                <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id={user.id}>
+                  <i class="bi bi-trash me-1"></i> Delete
                 </button>
               <% end %>
 
@@ -225,16 +218,16 @@
     <ul class="pagination mb-0">
 
       <%# previous page button %>
-      <% icon = icon_div @socket, "bi-chevron-left", [class: "icon baseline"] %>
       <%= if @page.page_number == 1 do %>
       <li class="page-item disabled">
-        <span class="page-link" aria-hidden="true"><%= icon %></span>
+        <span class="page-link" aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
         <span class="visually-hidden">Previous</span>
+      </li>
       <% else %>
       <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous" phx-value-page_number="<%= @page.page_number - 1 %>" phx-click="page-change"><%= icon %></a>
-      <% end %>
+        <a class="page-link" href="#" aria-label="Previous" phx-value-page_number={@page.page_number - 1} phx-click="page-change"><i class="bi bi-chevron-left"></i></a>
       </li>
+      <% end %>
 
       <%# page buttons %>
       <%= for page_num <- generate_page_list(@page.page_number, @page.total_pages) do %>
@@ -246,26 +239,26 @@
             </li>
         <%    page_num == @page.page_number -> %>
             <li class="page-item active" aria-current="page">
-              <span class="page-link"><%= page_num %></a>
+              <span class="page-link"><%= page_num %></span>
             </li>
         <%    true -> %>
             <li class="page-item">
-              <a class="page-link" href="#" phx-value-page_number="<%= page_num %>" phx-click="page-change"><%= page_num %></a>
+              <a class="page-link" href="#" phx-value-page_number={page_num} phx-click="page-change"><%= page_num %></a>
             </li>
         <% end %>
       <% end %>
 
       <%# next page button %>
-      <% icon = icon_div @socket, "bi-chevron-right", [class: "icon baseline"] %>
       <%= if @page.page_number == @page.total_pages do %>
       <li class="page-item disabled">
-        <span class="page-link" aria-hidden="true"><%= icon %></span>
+        <span class="page-link" aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
         <span class="visually-hidden">Next</span>
+      </li>
       <% else %>
       <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next" phx-value-page_number="<%= @page.page_number + 1 %>" phx-click="page-change"><%= icon %></a>
-      <% end %>
+        <a class="page-link" href="#" aria-label="Next" phx-value-page_number={@page.page_number + 1} phx-click="page-change"><i class="bi bi-chevron-right"></i></a>
       </li>
+      <% end %>
 
     </ul>
   </nav>

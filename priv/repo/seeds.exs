@@ -51,8 +51,10 @@ mock_users = users_json |> File.read!() |> Jason.decode!() |> Enum.take_random(c
 
 extra_mock_users = ~s([
   {"email":"adam@73k.us","password":"adamadamA1","role":"admin","inserted_at":"2018-12-14T01:01:01Z","confirmed_at":true},
-  {"email":"karen@73k.us","password":"karenkarenA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
-  {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true}
+  {"email":"kat@73k.us","password":"katkatA1","role":"manager","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":true},
+  {"email":"babka@73k.us","password":"Babka2020","role":"user","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":false},
+  {"email":"malcolm@73k.us","password":"Malc2018","role":"user","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":false},
+  {"email":"casio@73k.us","password":"Casio2011","role":"user","inserted_at":"2018-12-14T01:06:01Z","confirmed_at":false}
 ])
 
 # for random week_start_at values

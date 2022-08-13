@@ -1,11 +1,11 @@
-<div id="<%= @id %>" class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7 col-xxl-6 mt-1">
+<div id={@id} class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7 col-xxl-6 mt-1">
 
   <h3>iCal Subscribe URL</h3>
 
   <div class="row">
     <div class="col mb-3">
       <label class="form-label">Use this URL to subscribe in calendar software</label>
-      <input type="text" class="form-control" value="<%= Routes.user_shifts_ics_url(@socket, :index, @current_user.calendar_slug) %>" readonly onclick="this.focus();this.select()" />
+      <input type="text" class="form-control" value={Routes.user_shifts_ics_url(@socket, :index, @current_user.calendar_slug)} readonly onclick="this.focus();this.select()" />
     </div>
   </div>
 
