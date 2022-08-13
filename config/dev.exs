@@ -1,11 +1,12 @@
-use Mix.Config
+import Config
 
 # Configure your database
 config :shift73k, Shift73k.Repo,
   username: "postgres",
   password: "postgres",
+  socket_dir: "/srv/dck/postgres/sock/postgres",
   database: "shift73k_dev",
-  hostname: "localhost",
+  stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

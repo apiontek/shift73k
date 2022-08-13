@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Only in tests, remove the complexity from the password hashing algorithm
 config :bcrypt_elixir, :log_rounds, 1
@@ -13,7 +13,8 @@ config :shift73k, Shift73k.Repo,
   password: "postgres",
   database: "shift73k_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: 10
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
@@ -28,4 +29,4 @@ config :logger, level: :warn
 config :shift73k, Shift73k.Mailer, adapter: Bamboo.TestAdapter
 
 # Import secret config
-import_config "test.secret.exs"
+# import_config "test.secret.exs"
