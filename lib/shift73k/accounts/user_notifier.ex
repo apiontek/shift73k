@@ -2,12 +2,19 @@ defmodule Shift73k.Accounts.UserNotifier do
   alias Shift73k.Mailer
   alias Shift73k.Mailer.UserEmail
 
+  def deliver(user_email, subject, body) do
+    %Swoosh.Email{} = email = UserEmail.compose(user_email, subject, body)
+    case Mailer.deliver(email) do
+      {:ok, msg} -> {:ok, msg, email}
+      err -> err
+    end
+  end
+
   @doc """
   Deliver instructions to confirm account.
   """
   def deliver_confirmation_instructions(user, url) do
-    user
-    |> UserEmail.compose("Confirm Your Account", """
+    deliver(user.email, "Confirmation instructions", """
 
     ==============================
 
@@ -21,15 +28,13 @@ defmodule Shift73k.Accounts.UserNotifier do
 
     ==============================
     """)
-    |> Mailer.deliver_later()
   end
 
   @doc """
   Deliver instructions to reset a user password.
   """
   def deliver_reset_password_instructions(user, url) do
-    user
-    |> UserEmail.compose("Reset Your Password", """
+    deliver(user.email, "Reset password instructions", """
 
     ==============================
 
@@ -43,15 +48,13 @@ defmodule Shift73k.Accounts.UserNotifier do
 
     ==============================
     """)
-    |> Mailer.deliver_later()
   end
 
   @doc """
   Deliver instructions to update a user email.
   """
   def deliver_update_email_instructions(user, url) do
-    user
-    |> UserEmail.compose("Change Your E-mail", """
+    deliver(user.email, "Update email instructions", """
 
     ==============================
 
@@ -65,6 +68,5 @@ defmodule Shift73k.Accounts.UserNotifier do
 
     ==============================
     """)
-    |> Mailer.deliver_later()
   end
 end

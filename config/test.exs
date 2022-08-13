@@ -25,8 +25,8 @@ config :shift73k, Shift73kWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-# Bamboo test mailer config
-config :shift73k, Shift73k.Mailer, adapter: Bamboo.TestAdapter
+# Swoosh test mailer config
+config :shift73k, Shift73k.Mailer, adapter: Swoosh.Adapters.Test
 
 # Import secret config
 # import_config "test.secret.exs"

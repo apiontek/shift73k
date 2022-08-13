@@ -33,11 +33,8 @@ defmodule Shift73k.AccountsFixtures do
   end
 
   def extract_user_token(fun) do
-    # {:ok, captured} = fun.(&"[TOKEN]#{&1}[TOKEN]")
-    # [_, token, _] = String.split(captured.body, "[TOKEN]")
-    # token
-    {:ok, %Bamboo.Email{} = email} = fun.(&"[TOKEN]#{&1}[TOKEN]")
-    [_, token, _] = String.split(email.text_body, "[TOKEN]")
+    {:ok, _, %Swoosh.Email{} = captured_email} = fun.(&"[TOKEN]#{&1}[TOKEN]")
+    [_, token | _] = String.split(captured_email.text_body, "[TOKEN]")
     token
   end
 

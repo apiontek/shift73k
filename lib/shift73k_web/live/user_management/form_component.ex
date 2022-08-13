@@ -33,7 +33,7 @@ defmodule Shift73kWeb.UserManagement.FormComponent do
   defp save_user(%{assigns: %{action: :new}} = socket, user_params) do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
-        {:ok, %Bamboo.Email{}} =
+        {:ok, _, %Swoosh.Email{} = _captured_email} =
           Accounts.deliver_user_confirmation_instructions(
             user,
             &Routes.user_confirmation_url(socket, :confirm, &1)
