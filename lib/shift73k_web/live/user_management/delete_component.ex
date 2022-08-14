@@ -9,9 +9,13 @@ defmodule Shift73kWeb.UserManagement.DeleteComponent do
   end
 
   @impl true
-  def handle_event("confirm", %{"id" => id, "email" => email}, socket) do
-    id
-    |> Accounts.get_user()
+  def handle_event("confirm", %{"id" => id, "email" => email} = params, socket) do
+    IO.inspect(params)
+
+    user = Accounts.get_user(id)
+    IO.inspect(user)
+
+    user
     |> Accounts.delete_user()
     |> case do
       {:ok, _} ->

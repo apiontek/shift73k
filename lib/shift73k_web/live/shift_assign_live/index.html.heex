@@ -1,10 +1,15 @@
 <%= if @delete_days_shifts do %>
-  <%= live_modal @socket, Shift73kWeb.ShiftAssignLive.DeleteComponent,
+  <.live_component
+    module={Shift73kWeb.ModalComponent}
+    id="modal"
+    component={Shift73kWeb.ShiftAssignLive.DeleteComponent}
+    opts={[
       id: "delete-days-shifts-#{@current_user.id}",
       title: "Delete Shifts From Selected Days",
       delete_days_shifts: @delete_days_shifts,
       current_user: @current_user
-      %>
+    ]}
+    />
 <% end %>
 
 

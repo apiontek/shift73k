@@ -1,8 +1,14 @@
 <%= if @delete_shift do %>
-  <%= live_modal @socket, Shift73kWeb.ShiftLive.DeleteComponent,
+  <.live_component
+    module={Shift73kWeb.ModalComponent}
+    id="modal"
+    component={Shift73kWeb.ShiftLive.DeleteComponent}
+    opts={[
       id: @delete_shift.id,
       title: "Delete Shift Template",
-      delete_shift: @delete_shift %>
+      delete_shift: @delete_shift
+    ]}
+    />
 <% end %>
 
 

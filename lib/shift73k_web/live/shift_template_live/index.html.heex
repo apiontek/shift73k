@@ -1,17 +1,29 @@
 <%= if @live_action in [:new, :edit, :clone] do %>
-  <%= live_modal @socket, Shift73kWeb.ShiftTemplateLive.FormComponent,
-    id: @shift_template.id || :new,
-    title: @page_title,
-    action: @live_action,
-    shift_template: @shift_template,
-    current_user: @current_user %>
+  <.live_component
+    module={Shift73kWeb.ModalComponent}
+    id="modal"
+    component={Shift73kWeb.ShiftTemplateLive.FormComponent}
+    opts={[
+      id: @shift_template.id || :new,
+      title: @page_title,
+      action: @live_action,
+      shift_template: @shift_template,
+      current_user: @current_user
+    ]}
+    />
 <% end %>
 
 <%= if @delete_shift_template do %>
-  <%= live_modal @socket, Shift73kWeb.ShiftTemplateLive.DeleteComponent,
+  <.live_component
+    module={Shift73kWeb.ModalComponent}
+    id="modal"
+    component={Shift73kWeb.ShiftTemplateLive.DeleteComponent}
+    opts={[
       id: @delete_shift_template.id,
       title: "Delete Shift Template",
-      delete_shift_template: @delete_shift_template %>
+      delete_shift_template: @delete_shift_template
+    ]}
+    />
 <% end %>
 
 

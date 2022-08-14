@@ -1,6 +1,5 @@
 defmodule Shift73kWeb.LiveHelpers do
   import Phoenix.LiveView
-  import Phoenix.LiveView.Helpers
 
   alias Shift73k.Accounts
   alias Shift73k.Accounts.User
@@ -18,27 +17,6 @@ defmodule Shift73kWeb.LiveHelpers do
   This helps make the ok reply pipeable
   """
   def live_okreply(socket), do: {:ok, socket}
-
-  @doc """
-  Renders a component inside the `Shift73kWeb.ModalComponent` component.
-
-  The rendered modal receives a `:return_to` option to properly update
-  the URL when the modal is closed.
-
-  ## Examples
-
-      <%= live_modal @socket, Shift73kWeb.PropertyLive.FormComponent,
-        id: @property.id || :new,
-        action: @live_action,
-        property: @property,
-        return_to: Routes.property_index_path(@socket, :index) %>
-  """
-  def live_modal(socket, component, opts) do
-    modal_opts = [id: :modal, component: component, opts: opts]
-    # dirty little workaround for elixir complaining about socket being unused
-    _socket = socket
-    live_component(socket, Shift73kWeb.ModalComponent, modal_opts)
-  end
 
   @doc """
   Loads default assigns for liveviews

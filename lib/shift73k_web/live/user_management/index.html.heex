@@ -1,18 +1,29 @@
 <%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, Shift73kWeb.UserManagement.FormComponent,
+  <.live_component
+    module={Shift73kWeb.ModalComponent}
+    id="modal"
+    component={Shift73kWeb.UserManagement.FormComponent}
+    opts={[
       id: @user.id || :new,
       title: @page_title,
       action: @live_action,
       user: @user,
-      current_user: @current_user %>
+      current_user: @current_user
+    ]}
+    />
 <% end %>
 
 <%= if @delete_user do %>
-  <%= live_modal @socket, Shift73kWeb.UserManagement.DeleteComponent,
+  <.live_component
+    module={Shift73kWeb.ModalComponent}
+    id="modal"
+    component={Shift73kWeb.UserManagement.DeleteComponent}
+    opts={[
       id: @delete_user.id,
       title: "Delete User",
       delete_user: @delete_user
-    %>
+    ]}
+    />
 <% end %>
 
 
