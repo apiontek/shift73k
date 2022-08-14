@@ -23,14 +23,19 @@
           %>
       <% end %>
 
-      <button type="button" class="ms-2 btn btn-primary text-nowrap <%= if @show_template_btn_active, do: "active" %>" id="#templateDetailsBtn" phx-click="toggle-template-details" phx-value-target_id="#templateDetailsCol">
-        <%= icon_div @socket, (@show_template_btn_active && "bi-binoculars-fill" || "bi-binoculars"), [class: "icon baseline"] %>
+      <%  details_button_class = "ms-2 btn btn-primary text-nowrap"
+          details_button_class = if @show_template_btn_active, do: "#{details_button_class} active", else: details_button_class %>
+      <button type="button" class={details_button_class} id="#templateDetailsBtn" phx-click="toggle-template-details" phx-value-target_id="#templateDetailsCol">
+        <i class={@show_template_btn_active && "bi bi-binoculars-fill me-sm-1" || "bi bi-binoculars me-sm-1"}></i>
         <span class="d-none d-sm-inline">Details</span>
       </button>
 
   </div>
 
-  <div class="col-12 col-lg-9 col-xl-8 col-xxl-7 <%= @show_template_details && "collapse show" || "collapse" %>" id="#templateDetailsCol" phx-hook="BsCollapse">
+
+  <%  template_details_div_class = "col-12 col-lg-9 col-xl-8 col-xxl-7 collapse"
+      template_details_div_class = if @show_template_details, do: "#{template_details_div_class} show", else: template_details_div_class %>
+  <div class={template_details_div_class} id="#templateDetailsCol" phx-hook="BsCollapse">
     <div class="card mt-4">
       <div class="card-body">
 
@@ -40,8 +45,8 @@
 
             <div class="col-12 col-md-6">
               <%= label stf, :subject, "Subject/Title", class: "form-label" %>
-              <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(stf, :subject) %>">
-                <%= icon_div @socket, "bi-tag", [class: "icon is-left text-muted fs-5"] %>
+              <div class="inner-addon left-addon mb-3" phx-feedback-for={input_id(stf, :subject)}>
+                <i class="bi bi-tag icon is-left text-muted fs-5"></i>
                 <%= text_input stf, :subject,
                     value: input_value(stf, :subject),
                     class: input_class(stf, :subject, "form-control"),
@@ -56,25 +61,27 @@
             <div class="col-12 col-md-6 mb-3">
               <div class="row gx-2 gx-sm-3">
 
-                <div class="col-6" phx-feedback-for="<%= input_id(stf, :time_start) %>">
+                <div class="col-6" phx-feedback-for={input_id(stf, :time_start)}>
                   <%= label stf, :time_start, "Start", class: "form-label" %>
                   <%= time_input stf, :time_start,
                       precision: :minute,
                       value: input_value(stf, :time_start),
                       class: input_class(stf, :time_start, "form-control"),
                       disabled: @shift_template.id != @custom_shift.id,
-                      aria_describedby: error_ids(stf, :time_start)
+                      aria_describedby: error_ids(stf, :time_start),
+                      required: true
                     %>
                 </div>
 
-                <div class="col-6" phx-feedback-for="<%= input_id(stf, :time_end) %>">
+                <div class="col-6" phx-feedback-for={input_id(stf, :time_end)}>
                   <%= label stf, :time_end, "End", class: "form-label" %>
                   <%= time_input stf, :time_end,
                       precision: :minute,
                       value: input_value(stf, :time_end),
                       class: input_class(stf, :time_end, "form-control"),
                       disabled: @shift_template.id != @custom_shift.id,
-                      aria_describedby: error_ids(stf, :time_end)
+                      aria_describedby: error_ids(stf, :time_end),
+                      required: true
                     %>
                 </div>
 
@@ -82,18 +89,18 @@
 
               <div class="valid-feedback d-block text-primary">Shift length: <%= @shift_length %></div>
 
-              <div class="phx-orphaned-feedback" phx-feedback-for="<%= input_id(stf, :time_start) %>">
+              <div class="phx-orphaned-feedback" phx-feedback-for={input_id(stf, :time_start)}>
                 <%= error_tag stf, :time_start %>
               </div>
-              <div class="phx-orphaned-feedback" phx-feedback-for="<%= input_id(stf, :time_end) %>">
+              <div class="phx-orphaned-feedback" phx-feedback-for={input_id(stf, :time_end)}>
                 <%= error_tag stf, :time_end %>
               </div>
             </div>
 
             <div class="col-12 col-md-6">
               <%= label stf, :location, class: "form-label" %>
-              <div class="inner-addon left-addon mb-3" phx-feedback-for="<%= input_id(stf, :location) %>">
-                <%= icon_div @socket, "bi-geo", [class: "icon is-left text-muted fs-5"] %>
+              <div class="inner-addon left-addon mb-3" phx-feedback-for={input_id(stf, :location)}>
+                <i class="bi bi-geo icon is-left text-muted fs-5"></i>
                 <%= text_input stf, :location,
                     value: input_value(stf, :location),
                     class: input_class(stf, :location, "form-control"),
@@ -107,18 +114,19 @@
 
             <div class="col-12 col-md-6">
               <%= label stf, :time_zone, class: "form-label" %>
-              <div class="inner-addon left-addon mb-3 mb-md-0" phx-feedback-for="<%= input_id(stf, :time_zone) %>">
-                <%= icon_div @socket, "bi-map", [class: "icon is-left text-muted fs-5"] %>
+              <div class="inner-addon left-addon mb-3 mb-md-0" phx-feedback-for={input_id(stf, :time_zone)}>
+                <i class="bi bi-map icon is-left text-muted fs-5"></i>
                 <%= text_input stf, :time_zone,
                     value: input_value(stf, :time_zone),
                     class: input_class(stf, :time_zone, "form-control"),
                     disabled: @shift_template.id != @custom_shift.id,
                     phx_debounce: 250,
-                    list: "tz_list"
+                    list: "tz_list",
+            placeholder: "Default: #{app_time_zone()}"
                   %>
                   <datalist id="tz_list">
                     <%= for tz_name <- Tzdata.zone_list() do %>
-                      <option value="<%= tz_name %>"></option>
+                      <option value={tz_name}></option>
                     <% end %>
                     end
                   </datalist>
@@ -131,7 +139,7 @@
 
             <div class="col-12">
               <%= label stf, :description, class: "form-label" %>
-              <div phx-feedback-for="<%= input_id(stf, :description) %>">
+              <div phx-feedback-for={input_id(stf, :description)}>
 
                 <%= textarea stf, :description,
                     value: input_value(stf, :description),
@@ -173,17 +181,17 @@
     <%= Calendar.strftime(@cursor_date, "%B %Y") %>
   </h3>
   <div>
-    <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" <%= if Map.get(@cursor_date, :month) == Map.get(Date.utc_today(), :month), do: "disabled" %>>
-      <%= icon_div @socket, "bi-asterisk", [class: "icon baseline"] %>
+    <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" disabled={if Map.get(@cursor_date, :month) == Map.get(Date.utc_today(), :month), do: :true, else: :false}>
+      <i class="bi bi-asterisk me-sm-1"></i>
       <span class="d-none d-sm-inline">Today</span>
     </button>
     <button type="button" phx-click="month-nav" phx-value-month="prev" class="btn btn-primary">
-      <%= icon_div @socket, "bi-chevron-left", [class: "icon baseline"] %>
+      <i class="bi bi-chevron-left me-sm-1"></i>
       <span class="d-none d-sm-inline">Prev</span>
     </button>
     <button type="button" phx-click="month-nav" phx-value-month="next" class="btn btn-primary">
       <span class="d-none d-sm-inline">Next</span>
-      <%= icon_div @socket, "bi-chevron-right", [class: "icon baseline", style: "margin-left:0.125rem;"] %>
+      <i class="bi bi-chevron-right ms-sm-1"></i>
     </button>
   </div>
 </div>
@@ -203,7 +211,7 @@
     <%= for week <- @week_rows do %>
       <tr>
       <%= for day <- week do %>
-        <td class="<%= day_color(day, @current_date, @cursor_date, @selected_days) %>" phx-click="select-day" phx-value-day="<%= day %>">
+        <td class={day_color(day, @current_date, @cursor_date, @selected_days)} phx-click="select-day" phx-value-day={day}>
 
           <%= Calendar.strftime(day, "%d") %><%= if day.month != @cursor_date.month, do: "-#{Calendar.strftime(day, "%b")}" %>
 
@@ -235,19 +243,16 @@
 <div class="row justify-content-center justify-content-lg-end my-5">
   <div class="col-12 col-sm-10 col-md-8 col-lg-auto d-flex flex-column-reverse flex-lg-row">
 
-  <button class="btn btn-outline-danger mb-1 mb-lg-0 me-lg-1" phx-click="delete-days-shifts" <%= if Enum.empty?(@selected_days), do: "disabled" %>>
-    <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
-    Delete shifts from selected days
+  <button class="btn btn-outline-danger mb-1 mb-lg-0 me-lg-1" phx-click="delete-days-shifts" disabled={if Enum.empty?(@selected_days), do: :true, else: :false}>
+    <i class="bi bi-trash me-1"></i> Delete shifts from selected days
   </button>
 
-  <button class="btn btn-outline-dark mb-1 mb-lg-0 me-lg-1" phx-click="clear-days" <%= if Enum.empty?(@selected_days), do: "disabled" %>>
-    <%= icon_div @socket, "bi-eraser", [class: "icon baseline"] %>
-    De-select all selected
+  <button class="btn btn-outline-dark mb-1 mb-lg-0 me-lg-1" phx-click="clear-days" disabled={if Enum.empty?(@selected_days), do: :true, else: :false}>
+    <i class="bi bi-eraser me-1"></i> De-select all selected
   </button>
 
-  <button class="btn btn-primary mb-1 mb-lg-0" phx-click="save-days" <%= if (!@shift_template_changeset.valid? || Enum.empty?(@selected_days)), do: "disabled" %>>
-    <%= icon_div @socket, "bi-save", [class: "icon baseline"] %>
-    Assign shifts to selected days
+  <button class="btn btn-primary mb-1 mb-lg-0" phx-click="save-days" disabled={if (!@shift_template_changeset.valid? || Enum.empty?(@selected_days)), do: :true, else: :false}>
+    <i class="bi bi-save me-1"></i> Assign shifts to selected days
   </button>
 
   </div>

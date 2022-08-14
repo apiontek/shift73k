@@ -1,11 +1,6 @@
 <div>
 
-  <%= form_for @changeset, "#", [
-      id: "shift_template-form",
-      phx_target: @myself,
-      phx_change: "validate",
-      phx_submit: "save"
-    ], fn f -> %>
+  <.form let={f} for={@changeset} phx-change="validate" phx-submit="save" phx-target={@myself} id="shift_template-form">
 
     <div class="modal-body">
 
@@ -92,7 +87,8 @@
             value: input_value(f, :time_zone),
             class: input_class(f, :time_zone, "form-control"),
             phx_debounce: 250,
-            list: "tz_list"
+            list: "tz_list",
+            placeholder: "Default: #{app_time_zone()}"
           %>
           <datalist id="tz_list">
             <%= for tz_name <- Tzdata.zone_list() do %>
@@ -118,6 +114,6 @@
 
     </div>
 
-  <% end %>
+  </.form>
 
 </div>

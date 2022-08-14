@@ -1,5 +1,6 @@
 defmodule Shift73kWeb.ShiftAssignLive.Index do
   use Shift73kWeb, :live_view
+  import Shift73k, only: [app_time_zone: 0]
 
   alias Shift73k.Repo
   alias Shift73k.Shifts

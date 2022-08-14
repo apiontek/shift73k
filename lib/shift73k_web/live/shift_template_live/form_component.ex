@@ -1,5 +1,6 @@
 defmodule Shift73kWeb.ShiftTemplateLive.FormComponent do
   use Shift73kWeb, :live_component
+  import Shift73k, only: [app_time_zone: 0]
 
   alias Shift73k.Shifts.Templates
   alias Shift73k.Shifts.Templates.ShiftTemplate

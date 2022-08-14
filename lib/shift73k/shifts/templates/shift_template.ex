@@ -57,6 +57,7 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
           []
       end
     end)
+    |> validate_not_nil([:time_zone])
     |> validate_inclusion(:time_zone, Tzdata.zone_list(),
       message: "must be a valid IANA tz database time zone"
     )
@@ -71,5 +72,15 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
     shift_template
     |> Map.from_struct()
     |> Map.drop([:__meta__, :id, :inserted_at, :updated_at, :user, :is_fave_of_user])
+  end
+
+  def validate_not_nil(changeset, fields) do
+    Enum.reduce(fields, changeset, fn field, changeset ->
+      if get_field(changeset, field) == nil do
+        add_error(changeset, field, "nil")
+      else
+        changeset
+      end
+    end)
   end
 end
