@@ -105,9 +105,6 @@ defmodule Shift73kWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      # Import SVG Icon helper
-      import Shift73kWeb.IconHelpers
-
       import Shift73kWeb.ErrorHelpers
       import Shift73kWeb.Gettext
       alias Shift73kWeb.Router.Helpers, as: Routes
