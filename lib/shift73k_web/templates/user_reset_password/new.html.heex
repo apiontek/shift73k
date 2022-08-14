@@ -27,7 +27,9 @@
   <% end %>
 
   <p>
-    <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+    <%= if allow_registration() do %>
+      <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+    <% end %>
     <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
   </p>
 

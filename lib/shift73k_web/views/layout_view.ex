@@ -1,8 +1,11 @@
 defmodule Shift73kWeb.LayoutView do
   use Shift73kWeb, :view
-
+  alias Shift73k.Repo
   alias Shift73k.Accounts.User
   alias Shift73kWeb.Roles
+
+  @app_vars Application.compile_env(:shift73k, :app_global_vars, allow_registration: :true)
+  @app_allow_registration @app_vars[:allow_registration]
 
   # With a Vite.js-based workflow, we will import different asset files in development
   # and in production builds. Therefore, we will need a way to conditionally render
@@ -10,6 +13,8 @@ defmodule Shift73kWeb.LayoutView do
   # releases, we need to cache the Mix environment at compile time. To this end:
   @env Mix.env() # remember value at compile time
   def dev_env?, do: @env == :dev
+
+  def allow_registration, do: @app_allow_registration
 
   def nav_link_opts(conn, opts) do
     case Keyword.get(opts, :to) == Phoenix.Controller.current_path(conn) do

@@ -8,79 +8,63 @@
     <% end %>
     </h1>
 
-    <%= if @current_user do %>
+    <%# If there's a current user,
+        OR if there are users & we allow registration,
+        THEN we will show a full menu configuration %>
+
+    <%= if @current_user || (Repo.exists?(User) && allow_registration()) do %>
+
       <button class="hamburger hamburger--squeeze collapsed navbar-toggler" id="navbarSupportedContentToggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="hamburger-box d-flex">
           <span class="hamburger-inner"></span>
         </span>
       </button>
-    <% else %>
-      <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light d-block d-lg-none") do %>
-        <i class="bi bi-door-open me-1"></i> Log in
-      <% end %>
-    <% end %>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-      <%# nav LEFT items %>
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <%# nav LEFT items %>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-        <%#= if @current_user do %>
-          <%# <li class="nav-item"> %>
-            <%#= link nav_link_opts(@conn, to: Routes.shift_template_index_path(@conn, :index), class: "nav-link") do %>
-              <%#= icon_div @conn, "bi-clock-history", [class: "icon baseline me-1"] %>
-              <%# Templates %>
-            <%# end %>
-          <%# </li> %>
-        <%# end %>
+        </ul>
 
-        <%# normal navbar link example %>
-        <%# <li class="nav-item"> %>
-          <%#= link "Properties", nav_link_opts(@conn, to: Routes.property_index_path(@conn, :index), class: "nav-link") %>
-        <%# </li> %>
 
-        <%# ACTIVE page link example %>
-        <%# <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li> %>
+        <%# nav RIGHT items %>
+        <ul class="navbar-nav">
 
-        <%# DISABLED page link example %>
-        <%# <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li> %>
+          <%= if @current_user do %>
 
-        <%# normal dropdown menu example %>
-        <%# <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownExample" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownExample">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li> %>
+            <%= render "navbar/_shifts_menu.html", assigns %>
 
-      </ul>
+            <%= render "navbar/_user_menu.html", assigns %>
+          
+          <% else %>
 
-      <%# nav RIGHT items %>
-      <ul class="navbar-nav">
+            <%= render "navbar/_nouser_menu.html", assigns %>
 
-        <%= if @current_user do %>
-
-          <%= render "navbar/_shifts_menu.html", assigns %>
-
-          <%= render "navbar/_user_menu.html", assigns %>
-
-        <% else %>
-
-          <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light d-none d-lg-block") do %>
-            <i class="bi bi-door-open me-1"></i> Log in
           <% end %>
 
+        </ul>
+
+      </div>
+
+    <%# If there's no current user,
+        AND:
+          There are no users -- [REGISTER]
+          OR no registration allowed -- [LOG IN] %>
+    <%= else %>
+
+      <%= if !Repo.exists?(User) || allow_registration() do %>
+        <%= link nav_link_opts(@conn, to: Routes.user_registration_path(@conn, :new), class: "btn btn-outline-light") do %>
+          <i class="bi bi-journal-plus"></i> Register
         <% end %>
+      <% else %>
+        <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "btn btn-outline-light") do %>
+          <i class="bi bi-door-open"></i> Log in
+        <% end %>
+      <% end %>
 
-      </ul>
+    <% end %>
 
-    </div>
   </div>
 </nav>

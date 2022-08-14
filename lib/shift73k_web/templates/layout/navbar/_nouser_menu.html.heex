@@ -1,0 +1,23 @@
+<li class="nav-item dropdown">
+
+  <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-person-circle me-1"></i> Hello?
+  </a>
+
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUserMenu">
+
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.user_registration_path(@conn, :new), class: "dropdown-item") do %>
+        <i class="bi bi-journal-plus me-1"></i> Register
+      <% end %>
+    </li>
+
+    <li>
+      <%= link nav_link_opts(@conn, to: Routes.user_session_path(@conn, :new), class: "dropdown-item") do %>
+        <i class="bi bi-door-open me-1"></i> Log in
+      <% end %>
+    </li>
+
+  </ul>
+
+</li>

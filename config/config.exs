@@ -16,7 +16,8 @@ config :shift73k,
 config :shift73k, :app_global_vars,
   time_zone: "America/New_York",
   mailer_reply_to: "reply_to@example.com",
-  mailer_from: "app_name@example.com"
+  mailer_from: "app_name@example.com",
+  allow_registration: :true
 
 # Configures the endpoint
 config :shift73k, Shift73kWeb.Endpoint,

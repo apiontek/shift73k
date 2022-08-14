@@ -4,6 +4,9 @@ defmodule Shift73kWeb.UserLive.ResetPassword do
   alias Shift73k.Accounts
   alias Shift73k.Accounts.User
 
+  @app_vars Application.compile_env(:shift73k, :app_global_vars, allow_registration: :true)
+  @app_allow_registration @app_vars[:allow_registration]
+
   @impl true
   def mount(_params, session, socket) do
     user = Accounts.get_user!(session["user_id"])
@@ -37,4 +40,6 @@ defmodule Shift73kWeb.UserLive.ResetPassword do
          |> assign(changeset: changeset)}
     end
   end
+
+  def allow_registration, do: @app_allow_registration
 end

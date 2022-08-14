@@ -2,27 +2,37 @@ defmodule Shift73kWeb.Router do
   use Shift73kWeb, :router
   import Shift73kWeb.UserAuth
   alias Shift73kWeb.EnsureRolePlug
+  alias Shift73kWeb.EnsureUserExistPlug
+  alias Shift73kWeb.EnsureAllowRegistrationPlug
 
   pipeline :browser do
-    plug(:accepts, ["html"])
-    plug(:fetch_session)
-    plug(:fetch_live_flash)
-    plug(:put_root_layout, {Shift73kWeb.LayoutView, :root})
-    plug(:protect_from_forgery)
-    plug(:put_secure_browser_headers)
-    plug(:fetch_current_user)
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, {Shift73kWeb.LayoutView, :root}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
-  pipeline :user do
-    plug(EnsureRolePlug, [:admin, :manager, :user])
+  pipeline :ensure_role_user do
+    plug EnsureRolePlug, [:admin, :manager, :user]
   end
 
-  pipeline :manager do
-    plug(EnsureRolePlug, [:admin, :manager])
+  pipeline :ensure_user_exist do
+    plug EnsureUserExistPlug
   end
 
-  pipeline :admin do
-    plug(EnsureRolePlug, :admin)
+  pipeline :ensure_allow_registration do
+    plug EnsureAllowRegistrationPlug
+  end
+
+  pipeline :ensure_role_manager do
+    plug EnsureRolePlug, [:admin, :manager]
+  end
+
+  pipeline :ensure_role_admin do
+    plug EnsureRolePlug, :admin
   end
 
   # Enables the Swoosh mailbox preview in development.
@@ -38,49 +48,54 @@ defmodule Shift73kWeb.Router do
   end
 
   scope "/", Shift73kWeb do
-    pipe_through([:browser])
+    pipe_through([:browser, :ensure_user_exist])
 
-    get("/", Redirector, to: "/assign")
+    get "/", Redirector, to: "/assign"
   end
 
   scope "/", Shift73kWeb do
-    pipe_through([:browser, :redirect_if_user_is_authenticated])
+    pipe_through [:browser, :redirect_if_user_is_authenticated, :ensure_allow_registration]
+
+    get "/users/register", UserRegistrationController, :new
+  end
+
+  scope "/", Shift73kWeb do
+    pipe_through [:browser, :redirect_if_user_is_authenticated, :ensure_user_exist]
 
     # session routes, irrelevant if user is authenticated
-    get("/users/register", UserRegistrationController, :new)
-    get("/users/log_in", UserSessionController, :new)
-    post("/users/log_in", UserSessionController, :create)
-    get("/users/reset_password", UserResetPasswordController, :new)
-    post("/users/reset_password", UserResetPasswordController, :create)
-    get("/users/reset_password/:token", UserResetPasswordController, :edit)
+    get "/users/log_in", UserSessionController, :new
+    post "/users/log_in", UserSessionController, :create
+    get "/users/reset_password", UserResetPasswordController, :new
+    post "/users/reset_password", UserResetPasswordController, :create
+    get "/users/reset_password/:token", UserResetPasswordController, :edit
   end
 
   scope "/", Shift73kWeb do
-    pipe_through([:browser, :require_authenticated_user])
+    pipe_through [:browser, :require_authenticated_user]
 
     # user settings (change email, password, calendar week start, etc)
-    live("/users/settings", UserLive.Settings, :edit)
+    live "/users/settings", UserLive.Settings, :edit
 
     # confirm email by token
-    get("/users/settings/confirm_email/:token", UserSettingsController, :confirm_email)
+    get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
   end
 
   scope "/", Shift73kWeb do
-    pipe_through([:browser])
+    pipe_through [:browser, :ensure_user_exist]
 
     # session paths
-    delete("/users/log_out", UserSessionController, :delete)
-    get("/users/force_logout", UserSessionController, :force_logout)
-    get("/users/confirm", UserConfirmationController, :new)
-    post("/users/confirm", UserConfirmationController, :create)
-    get("/users/confirm/:token", UserConfirmationController, :confirm)
+    delete "/users/log_out", UserSessionController, :delete
+    get "/users/force_logout", UserSessionController, :force_logout
+    get "/users/confirm", UserConfirmationController, :new
+    post "/users/confirm", UserConfirmationController, :create
+    get "/users/confirm/:token", UserConfirmationController, :confirm
 
     # ics/ical route for user's shifts
-    get("/ics/:slug", UserShiftsIcsController, :index)
+    get "/ics/:slug", UserShiftsIcsController, :index
   end
 
   scope "/", Shift73kWeb do
-    pipe_through([:browser, :require_authenticated_user, :user])
+    pipe_through [:browser, :require_authenticated_user, :ensure_role_user]
 
     live "/templates", ShiftTemplateLive.Index, :index
     live "/templates/new", ShiftTemplateLive.Index, :new
@@ -98,16 +113,16 @@ defmodule Shift73kWeb.Router do
   end
 
   # scope "/", Shift73kWeb do
-  #   pipe_through([:browser, :require_authenticated_user, :admin])
+  #   pipe_through([:browser, :require_authenticated_user, :ensure_role_admin])
   # end
 
   # Users Management
   scope "/users", Shift73kWeb do
-    pipe_through([:browser, :require_authenticated_user, :manager, :require_email_confirmed])
+    pipe_through [:browser, :require_authenticated_user, :ensure_role_manager, :require_email_confirmed]
 
-    live("/", UserManagementLive.Index, :index)
-    live("/new", UserManagementLive.Index, :new)
-    live("/edit/:id", UserManagementLive.Index, :edit)
+    live "/", UserManagementLive.Index, :index
+    live "/new", UserManagementLive.Index, :new
+    live "/edit/:id", UserManagementLive.Index, :edit
     # resources "/", UserManagementController, only: [:new, :create, :edit, :update]
   end
 end

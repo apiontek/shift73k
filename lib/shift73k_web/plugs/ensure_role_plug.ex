@@ -27,8 +27,7 @@ defmodule Shift73kWeb.EnsureRolePlug do
   def call(conn, roles) do
     user_token = get_session(conn, :user_token)
 
-    (user_token &&
-       Accounts.get_user_by_session_token(user_token))
+    (user_token && Accounts.get_user_by_session_token(user_token))
     |> has_role?(roles)
     |> maybe_halt(conn)
   end

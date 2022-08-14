@@ -108,6 +108,13 @@ defmodule Shift73k.Accounts do
 
   """
   def register_user(attrs) do
+    # If attrs has atom keys, convert to string
+    # If attrs don't include role, put default role
+    attrs =
+      attrs
+      |> Map.new(fn {k, v} -> {to_string(k), v} end)
+      |> Map.put_new("role", registration_role())
+
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
