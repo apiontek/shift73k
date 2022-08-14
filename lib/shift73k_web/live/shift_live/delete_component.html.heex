@@ -1,0 +1,22 @@
+<div>
+
+  <div class="modal-body">
+    <% shift_datetime = "#{Calendar.strftime(@delete_shift.date, "%A, %b %-d")}, #{format_shift_time(@delete_shift.time_start)} — #{format_shift_time(@delete_shift.time_end)}" %>
+
+    Are you sure you want to delete "<%= @delete_shift.subject %> (<%= shift_datetime %>)?"
+
+  </div>
+  <div class="modal-footer">
+
+    <%= link "Cancel", to: "#", class: "btn btn-outline-dark", phx_click: "hide", phx_target: "##{@modal_id}" %>
+    <%= link "Confirm Delete", to: "#",
+        class: "btn btn-danger",
+        phx_click: "confirm",
+        phx_target: @myself,
+        phx_value_id: @delete_shift.id,
+        phx_value_subject: @delete_shift.subject,
+        phx_value_datetime: shift_datetime %>
+
+  </div>
+
+</div>

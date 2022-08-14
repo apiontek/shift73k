@@ -86,7 +86,11 @@ defmodule Shift73k.Shifts do
       ** (Ecto.NoResultsError)
 
   """
+  def get_shift!(nil), do: nil
   def get_shift!(id), do: Repo.get!(Shift, id)
+
+  def get_shift(nil), do: nil
+  def get_shift(id), do: Repo.get(Shift, id)
 
   @doc """
   Creates a shift.

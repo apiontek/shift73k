@@ -1,17 +1,20 @@
+<%= if @delete_shift do %>
+  <%= live_modal @socket, Shift73kWeb.ShiftLive.DeleteComponent,
+      id: @delete_shift.id,
+      title: "Delete Shift Template",
+      delete_shift: @delete_shift %>
+<% end %>
+
+
 <div class="row justify-content-start justify-content-sm-center">
   <div class="col-md-10 col-xl-10">
 
     <h2 class="mb-3 mb-sm-0">
-      <%= icon_div @socket, "bi-card-list", [class: "icon baseline"] %>
-      My Shifts
+      <i class="bi bi-card-list me-1"></i> My Shifts
     </h2>
-
-
-
 
     <div class="row justify-content-start justify-content-sm-center">
       <div class="col-md-10 col-xl-10">
-
 
         <%# month navigation %>
         <div class="d-flex justify-content-between align-items-end my-4">
@@ -19,21 +22,20 @@
             <%= Calendar.strftime(@cursor_date, "%B %Y") %>
           </h3>
           <div>
-            <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" <%= if Map.get(@cursor_date, :month) == Map.get(Date.utc_today(), :month), do: "disabled" %>>
-              <%= icon_div @socket, "bi-asterisk", [class: "icon baseline"] %>
+            <button type="button" phx-click="month-nav" phx-value-month="now" class="btn btn-info text-white" disabled={if Map.get(@cursor_date, :month) == Map.get(Date.utc_today(), :month), do: :true, else: :false}>
+              <i class="bi bi-asterisk me-sm-1"></i>
               <span class="d-none d-sm-inline">Today</span>
             </button>
             <button type="button" phx-click="month-nav" phx-value-month="prev" class="btn btn-primary">
-              <%= icon_div @socket, "bi-chevron-left", [class: "icon baseline"] %>
+              <i class="bi bi-chevron-left me-sm-1"></i>
               <span class="d-none d-sm-inline">Prev</span>
             </button>
             <button type="button" phx-click="month-nav" phx-value-month="next" class="btn btn-primary">
               <span class="d-none d-sm-inline">Next</span>
-              <%= icon_div @socket, "bi-chevron-right", [class: "icon baseline", style: "margin-left:0.125rem;"] %>
+              <i class="bi bi-chevron-right ms-sm-1"></i>
             </button>
           </div>
         </div>
-
 
         <%= for day <- Enum.to_list(@date_range) do %>
           <%= if Date.day_of_week(day, @current_user.week_start_at) == 1 do %>
@@ -45,24 +47,21 @@
           <% day_shifts = Enum.filter(@shifts, fn s -> s.date == day end) %>
           <%= if !Enum.empty?(day_shifts) do %>
 
-
             <%= for shift <- day_shifts do %>
 
-
-                <div class="card mt-2 mb-4 col-12 ms-sm-3 ms-md-4 col-lg-10 ms-lg-5 col-xxl-8" id="shift-<%= shift.id %>">
+                <div class="card mt-2 mb-4 col-12 ms-sm-3 ms-md-4 col-lg-10 ms-lg-5 col-xxl-8" id={"shift-#{shift.id}"}>
                   <div class="card-body">
                     <h5 class="card-title">
-                      <%= icon_div @socket, "bi-tag", [class: "icon baseline text-muted me-1"] %>
+                      <i class="bi bi-tag text-muted me-1"></i>
                       <%= shift.subject %>
                     </h5>
-
 
                     <table class="table table-borderless table-nonfluid table-sm">
                       <tbody>
 
                         <tr>
                           <th scope="row" class="text-end">
-                            <%= icon_div @socket, "bi-hourglass", [class: "icon baseline text-muted"] %>
+                            <i class="bi bi-hourglass text-muted"></i>
                             <span class="visually-hidden">Hours:</span>
                           </th>
                           <td>
@@ -79,7 +78,7 @@
 
                         <tr>
                           <th scope="row" class="text-end">
-                            <%= icon_div @socket, "bi-geo", [class: "icon baseline text-muted"] %>
+                            <i class="bi bi-geo text-muted"></i>
                             <span class="visually-hidden">Location:</span>
                           </th>
                           <td>
@@ -92,7 +91,7 @@
                         </tr>
                         <tr>
                           <th scope="row" class="text-end">
-                            <%= icon_div @socket, "bi-justify-left", [class: "icon baseline text-muted"] %>
+                            <i class="bi bi-justify-left text-muted"></i>
                             <span class="visually-hidden">Description:</span>
                           </th>
                           <td class="shift-description">
@@ -106,51 +105,22 @@
                       </tbody>
                     </table>
 
-                    <%#= if Roles.can?(@current_user, template, :edit) do %>
-                      <%#= live_patch to: Routes.shift_template_index_path(@socket, :edit, template), class: "btn btn-primary btn-sm text-nowrap" do %>
-                        <%#= icon_div @socket, "bi-pencil", [class: "icon baseline"] %>
-                        <%# Edit %>
-                      <%# end %>
-                    <%# end %>
-
-                    <%#= if Roles.can?(@current_user, template, :delete) do %>
-                      <%# <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id=" %>
-                        <%#= shift.id %>
-                        <%# "> %>
-                        <%#= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
-                        <%# Delete %>
-                      <%# </button> %>
-                    <%# end %>
-
-                      <%= button to: "#", phx_click: "delete", phx_value_id: shift.id, data: [confirm: "Are you sure?"], class: "btn btn-outline-danger btn-sm text-nowrap" do %>
-                        <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
-                        Delete
-                      <% end %>
-
-
+                    <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id={shift.id}>
+                      <i class="bi bi-trash me-1"></i> Delete
+                    </button>
 
                   </div>
                 </div>
 
-
-
-
             <% end %>
-
-
-
-
-
 
           <% else %>
             <p class="text-muted"><em>Nothing scheduled</em></p>
           <% end %>
         <% end %>
 
-
       </div>
     </div>
-
 
   </div>
 </div>

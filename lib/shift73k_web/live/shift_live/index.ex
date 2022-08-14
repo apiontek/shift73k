@@ -22,6 +22,7 @@ defmodule Shift73kWeb.ShiftLive.Index do
       socket
       |> init_today(Date.utc_today())
       |> update_agenda()
+      |> assign_modal_close_handlers()
       |> assign(:delete_shift, nil)
       |> apply_action(socket.assigns.live_action, params)
       |> live_noreply()
@@ -31,6 +32,11 @@ defmodule Shift73kWeb.ShiftLive.Index do
       |> redirect(to: "/")
       |> live_noreply()
     end
+  end
+
+  defp assign_modal_close_handlers(socket) do
+    to = Routes.shift_index_path(socket, :index)
+    assign(socket, modal_return_to: to, modal_close_action: :return)
   end
 
   defp apply_action(socket, :index, _params) do
@@ -77,6 +83,14 @@ defmodule Shift73kWeb.ShiftLive.Index do
   end
 
   @impl true
+  def handle_event("delete-modal", %{"id" => id}, socket) do
+    socket
+    |> assign(:modal_close_action, :delete_shift)
+    |> assign(:delete_shift, Shifts.get_shift!(id))
+    |> live_noreply()
+  end
+
+  @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     shift = Shifts.get_shift!(id)
     {:ok, _} = Shifts.delete_shift(shift)
@@ -92,6 +106,28 @@ defmodule Shift73kWeb.ShiftLive.Index do
     |> assign(:cursor_date, new_cursor)
     |> update_agenda()
     |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:close_modal, _}, %{assigns: %{modal_close_action: :return}} = socket) do
+    socket
+    |> copy_flash()
+    |> push_patch(to: socket.assigns.modal_return_to)
+    |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:close_modal, _}, %{assigns: %{modal_close_action: assign_key}} = socket) do
+    socket
+    |> assign(assign_key, nil)
+    |> assign_modal_close_handlers()
+    |> assign_known_shifts()
+    |> live_noreply()
+  end
+
+  @impl true
+  def handle_info({:put_flash_message, {flash_type, msg}}, socket) do
+    socket |> put_flash(flash_type, msg) |> live_noreply()
   end
 
   defp new_nav_cursor("now", _cursor_date), do: Date.utc_today()
