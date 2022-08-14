@@ -6,19 +6,19 @@ Written in Elixir & Phoenix LiveView, with Bootstrap v5.
 
 ## TODO
 
-- [ ] Ability to edit shifts?
-- [ ] Proper modal to delete shifts?
-- [ ] Allow all-day items for notes, or require hours even for sick days?
-- [ ] Implement proper shift/template/assign tests (views etc)
+- [X] ~~*Proper modal to delete shifts?*~~ [2022-08-14]
+- [ ] Update tests, which are probably all way out of date. But I also don't care that much for this project...
 
 ## Deploying
+
+The below notes are old; I'm using a docker build to deploy this now. Will document when I have time.
 
 ### New versions
 
 When improvements are made, we can update the deployed version like so:
 
 ```shell
-cd /opt/shift73k
+cd ${SHIFT73K_BASE_DIR}
 # update from master
 /usr/bin/git pull 73k master
 # fetch prod deps & compile
@@ -27,10 +27,10 @@ MIX_ENV=prod /usr/bin/mix compile
 # perform any migrations
 MIX_ENV=prod /usr/bin/mix ecto.migrate
 # update node packages via package-lock.json
-/usr/bin/npm --prefix /opt/shift73k/assets/ ci
+/usr/bin/npm --prefix ./assets/ ci
 # rebuild static assets:
-rm -rf /opt/shift73k/priv/static/*
-/usr/bin/npm --prefix /opt/shift73k/assets/ run deploy
+rm -rf ./priv/static/*
+/usr/bin/npm --prefix ./assets/ run build
 MIX_ENV=prod /usr/bin/mix phx.digest
 # rebuild release
 MIX_ENV=prod /usr/bin/mix release --overwrite
