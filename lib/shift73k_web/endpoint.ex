@@ -25,7 +25,7 @@ defmodule Shift73kWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :shift73k,
-    gzip: (Mix.env() not in [:dev, :test]),
+    gzip: false,
     only: ~w(assets
       android-chrome-192x192.png
       android-chrome-512x512.png

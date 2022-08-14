@@ -7,84 +7,72 @@ Written in Elixir & Phoenix LiveView, with Bootstrap v5.
 ## TODO
 
 - [X] ~~*Proper modal to delete shifts?*~~ [2022-08-14]
+- [ ] move runtime config out of compile-time config files, to move towards supporting releases
+  - [ ] probably need to use `def get_app_config` style functions instead of `@module_var` module variables, ([see this](https://stephenbussey.com/2019/01/03/understanding-compile-time-dependencies-in-elixir-a-bug-hunt.html))
 - [ ] Update tests, which are probably all way out of date. But I also don't care that much for this project...
 
 ## Deploying
 
-The below notes are old; I'm using a docker build to deploy this now. Will document when I have time.
+I'm using a dumb & simple docker approach to deploying this now. Nothing automated, the basic steps are:
 
-### New versions
+1. ensure latest assets are built, digested, and committed to the repo
 
-When improvements are made, we can update the deployed version like so:
+    ```shell
+    # rebuild static assets:
+    rm -rf ./priv/static/*
+    npm --prefix assets run build
+    MIX_ENV=prod mix phx.digest
+    # then do a new commit and push...
+    ```
+
+2. on server, build a new container, and run it
+
+### Simple dockerfile
+
+```dockerfile
+# ./Dockerfile
+
+# Extend from the official Elixir image
+FROM elixir:1.13.4-otp-25-alpine
+
+# # install the package postgresql-client to run pg_isready within entrypoint script
+# RUN apt-get update && \
+#   apt-get install -y postgresql-client
+
+# Copy the entrypoint script
+COPY ./entrypoint.sh /entrypoint.sh
+
+# Create app directory and copy the Elixir projects into it
+RUN mkdir /app
+COPY ./app /app
+WORKDIR /app
+
+# Install the build tools we'll need
+RUN apk update && \
+  apk upgrade --no-cache && \
+  apk add --no-cache \
+    build-base && \
+  mix local.rebar --force && \
+  mix local.hex --force
+
+
+# The environment to build with
+ENV MIX_ENV=prod
+
+# Get deps and compile
+RUN mix do deps.get, deps.compile, compile
+
+# Start command
+CMD = ["/entrypoint.sh"]
+```
+
+### Simple entrypoint script
 
 ```shell
-cd ${SHIFT73K_BASE_DIR}
-# update from master
-/usr/bin/git pull 73k master
-# fetch prod deps & compile
-/usr/bin/mix deps.get --only prod
-MIX_ENV=prod /usr/bin/mix compile
-# perform any migrations
-MIX_ENV=prod /usr/bin/mix ecto.migrate
-# update node packages via package-lock.json
-/usr/bin/npm --prefix ./assets/ ci
-# rebuild static assets:
-rm -rf ./priv/static/*
-/usr/bin/npm --prefix ./assets/ run build
-MIX_ENV=prod /usr/bin/mix phx.digest
-# rebuild release
-MIX_ENV=prod /usr/bin/mix release --overwrite
-# restart service
-sudo /bin/systemctl restart shift73k.service
-```
+#!/bin/ash
 
-### systemd unit:
+export MIX_ENV="prod"
 
-```ini
-[Unit]
-Description=Shift73k service
-After=local-fs.target network.target
-
-[Service]
-Type=simple
-User=runuser
-Group=runuser
-WorkingDirectory=/opt/shift73k/_build/prod/rel/shift73k
-ExecStart=/opt/shift73k/_build/prod/rel/shift73k/bin/shift73k start
-ExecStop=/opt/shift73k/_build/prod/rel/shift73k/bin/shift73k stop
-#EnvironmentFile=/etc/default/myApp.env
-Environment=LANG=en_US.utf8
-Environment=MIX_ENV=prod
-#Environment=PORT=4000
-LimitNOFILE=65535
-UMask=0027
-SyslogIdentifier=shift73k
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-### nginx config:
-
-```conf
-upstream phoenix {
-  server 127.0.0.1:4000 max_fails=5 fail_timeout=60s;
-}
-server {
-  location / {
-    allow all;
-    # Proxy Headers
-    proxy_http_version 1.1;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_set_header X-Cluster-Client-Ip $remote_addr;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_redirect off;
-    # WebSockets
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_pass http://phoenix;
-  }
-}
+cd /app
+exec mix ecto.migrate && mix phx.server
 ```
