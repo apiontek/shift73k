@@ -13,7 +13,7 @@ defmodule Shift73k.Shifts.Shift do
     field :time_start, :time
     field :time_end, :time
 
-    belongs_to(:user, Shift73k.Accounts.User)
+    belongs_to :user, Shift73k.Accounts.User
 
     timestamps()
   end

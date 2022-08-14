@@ -20,19 +20,19 @@ defmodule Shift73k.Accounts.User do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
-    field(:email, :string)
-    field(:password, :string, virtual: true)
-    field(:hashed_password, :string)
-    field(:confirmed_at, :naive_datetime)
-    field(:calendar_slug, :string, default: Ecto.UUID.generate())
+    field :email, :string
+    field :password, :string, virtual: true
+    field :hashed_password, :string
+    field :confirmed_at, :naive_datetime
+    field :calendar_slug, :string, default: Ecto.UUID.generate()
 
-    field(:role, Ecto.Enum, values: Keyword.keys(@roles), default: :user)
-    field(:week_start_at, Ecto.Enum, values: weekdays(), default: :monday)
+    field :role, Ecto.Enum, values: Keyword.keys(@roles), default: :user
+    field :week_start_at, Ecto.Enum, values: weekdays(), default: :monday
 
-    has_many(:shift_templates, ShiftTemplate)
-    belongs_to(:fave_shift_template, ShiftTemplate)
+    has_many :shift_templates, ShiftTemplate
+    belongs_to :fave_shift_template, ShiftTemplate
 
-    has_many(:shifts, Shift)
+    has_many :shifts, Shift
 
     timestamps()
   end

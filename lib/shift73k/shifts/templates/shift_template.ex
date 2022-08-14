@@ -16,8 +16,8 @@ defmodule Shift73k.Shifts.Templates.ShiftTemplate do
     field :time_start, :time, default: ~T[09:00:00]
     field :time_end, :time, default: ~T[17:00:00]
 
-    belongs_to(:user, Shift73k.Accounts.User)
-    has_one(:is_fave_of_user, Shift73k.Accounts.User, foreign_key: :fave_shift_template_id)
+    belongs_to :user, Shift73k.Accounts.User
+    has_one :is_fave_of_user, Shift73k.Accounts.User, foreign_key: :fave_shift_template_id
 
     timestamps()
   end
