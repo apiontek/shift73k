@@ -52,7 +52,7 @@
         AND:
           There are no users -- [REGISTER]
           OR no registration allowed -- [LOG IN] %>
-    <%= else %>
+    <% else %>
 
       <%= if !Repo.exists?(User) || allow_registration() do %>
         <%= link nav_link_opts(@conn, to: Routes.user_registration_path(@conn, :new), class: "btn btn-outline-light") do %>
