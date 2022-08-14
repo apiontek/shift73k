@@ -1,10 +1,10 @@
 <li class="nav-item dropdown">
 
-  <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
+  <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownNoUserMenu" data-bs-toggle="dropdown" aria-expanded="false">
     <i class="bi bi-person-circle me-1"></i> Hello?
   </a>
 
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUserMenu">
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownNoUserMenu">
 
     <li>
       <%= link nav_link_opts(@conn, to: Routes.user_registration_path(@conn, :new), class: "dropdown-item") do %>

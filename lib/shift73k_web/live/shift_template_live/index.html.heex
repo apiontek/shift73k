@@ -20,12 +20,10 @@
 
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center">
       <h2 class="mb-3 mb-sm-0">
-        <%= icon_div @socket, "bi-clock-history", [class: "icon baseline"] %>
-        My Shift Templates
+        <i class="bi bi-clock-history me-1"></i> My Shift Templates
       </h2>
       <%= live_patch to: Routes.shift_template_index_path(@socket, :new), class: "btn btn-primary" do %>
-        <%= icon_div @socket, "bi-plus-circle-dotted", [class: "icon baseline"] %>
-        New Shift Template
+        <i class="bi bi-plus-circle-dotted me-1"></i> New Shift Template
       <% end %>
     </div>
 
@@ -39,13 +37,13 @@
           <div class="card mt-4">
             <h5 class="card-header d-flex justify-content-between align-items-center">
               <span class="visually-hidden">Subject:</span>
-              <%= icon_div @socket, "bi-tag", [class: "icon baseline me-1"] %>
+              <i class="bi bi-tag me-1"></i>
               <div class="w-100"><%= template.subject %></div>
-              <%= if template.id == @current_user.fave_shift_template_id do %>
-                <%= icon_div @socket, "bi-star-fill", [class: "icon baseline text-primary align-self-start ms-2"], [role: "img", aria_hidden: false, aria_label: "Unset as favorite", phx_click: "unset-user-fave-shift-template", class: "cursor-pointer"] %>
-              <% else %>
-                <%= icon_div @socket, "bi-star", [class: "icon baseline text-primary align-self-start ms-2"], [role: "img", aria_hidden: false, aria_label: "Set as favorite", phx_click: "set-user-fave-shift-template", phx_value_id: template.id, class: "cursor-pointer"] %>
-              <% end %>
+              <% fav_icon_data = if template.id == @current_user.fave_shift_template_id, do:
+                  {"bi-star-fill", "Unset as favorite", "unset-user-fave-shift-template"}, else:
+                  {"bi-star", "Set as favorite", "set-user-fave-shift-template"}
+                %>
+              <i class={"bi #{elem(fav_icon_data, 0)} text-primary align-self-start ms-2 cursor-pointer"} role="img" aria-hidden="false" aria-label={elem(fav_icon_data, 1)} phx-click={elem(fav_icon_data, 2)} phx-value-id={template.id}></i>
             </h5>
             <div class="card-body">
 
@@ -53,7 +51,7 @@
                 <tbody>
                   <tr>
                     <th scope="row" class="text-end">
-                      <%= icon_div @socket, "bi-hourglass", [class: "icon baseline text-muted"] %>
+                      <i class="bi bi-hourglass text-muted"></i>
                       <span class="visually-hidden">Hours:</span>
                     </th>
                     <td>
@@ -70,7 +68,7 @@
 
                   <tr>
                     <th scope="row" class="text-end">
-                      <%= icon_div @socket, "bi-geo", [class: "icon baseline text-muted"] %>
+                      <i class="bi bi-geo text-muted"></i>
                       <span class="visually-hidden">Location:</span>
                     </th>
                     <td>
@@ -83,7 +81,7 @@
                   </tr>
                   <tr>
                     <th scope="row" class="text-end">
-                      <%= icon_div @socket, "bi-justify-left", [class: "icon baseline text-muted"] %>
+                      <i class="bi bi-justify-left text-muted"></i>
                       <span class="visually-hidden">Description:</span>
                     </th>
                     <td>
@@ -99,24 +97,19 @@
 
               <%= if Roles.can?(@current_user, template, :edit) do %>
                 <%= live_patch to: Routes.shift_template_index_path(@socket, :edit, template), class: "btn btn-primary btn-sm text-nowrap" do %>
-                  <%= icon_div @socket, "bi-pencil", [class: "icon baseline"] %>
-                  Edit
+                  <i class="bi bi-pencil me-1"></i> Edit
                 <% end %>
               <% end %>
 
               <%= if Roles.can?(@current_user, template, :clone) do %>
                 <%= live_patch to: Routes.shift_template_index_path(@socket, :clone, template), class: "btn btn-outline-primary btn-sm text-nowrap" do %>
-                  <%= icon_div @socket, "bi-clipboard-plus", [class: "icon baseline"] %>
-                  Clone
+                  <i class="bi bi-clipboard-plus me-1"></i> Clone
                 <% end %>
               <% end %>
 
-              <%#= button "" %>
-
               <%= if Roles.can?(@current_user, template, :delete) do %>
-                <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id="<%= template.id %>">
-                  <%= icon_div @socket, "bi-trash", [class: "icon baseline"] %>
-                  Delete
+                <button class="btn btn-outline-danger btn-sm text-nowrap" phx-click="delete-modal" phx-value-id={template.id}>
+                  <i class="bi bi-trash me-1"></i> Delete
                 </button>
               <% end %>
 

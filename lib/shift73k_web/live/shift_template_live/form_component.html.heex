@@ -1,0 +1,123 @@
+<div>
+
+  <%= form_for @changeset, "#", [
+      id: "shift_template-form",
+      phx_target: @myself,
+      phx_change: "validate",
+      phx_submit: "save"
+    ], fn f -> %>
+
+    <div class="modal-body">
+
+      <%= label f, :subject, "Subject/Title", class: "form-label" %>
+      <div class="inner-addon left-addon mb-3" phx-feedback-for={input_id(f, :subject)}>
+        <i class="bi bi-tag icon is-left text-muted fs-5"></i>
+        <%= text_input f, :subject,
+            value: input_value(f, :subject),
+            class: input_class(f, :subject, "form-control"),
+            autofocus: true,
+            phx_debounce: 250,
+            aria_describedby: error_ids(f, :subject)
+          %>
+        <%= error_tag f, :subject %>
+      </div>
+
+      <div class="row gx-2 gx-sm-3">
+
+        <div class="col-6" phx-feedback-for={input_id(f, :time_start)}>
+          <%= label f, :time_start, "Start", class: "form-label" %>
+          <%= time_input f, :time_start,
+              precision: :minute,
+              value: input_value(f, :time_start),
+              class: input_class(f, :time_start, "form-control"),
+              aria_describedby: error_ids(f, :time_start),
+              required: true
+            %>
+        </div>
+
+        <div class="col-6" phx-feedback-for={input_id(f, :time_end)}>
+          <%= label f, :time_end, "End", class: "form-label" %>
+          <%= time_input f, :time_end,
+              precision: :minute,
+              value: input_value(f, :time_end),
+              class: input_class(f, :time_end, "form-control"),
+              aria_describedby: error_ids(f, :time_end),
+              required: true
+            %>
+        </div>
+
+      </div>
+
+      <div class="valid-feedback d-block text-primary">Shift length: <%= @shift_length %></div>
+
+      <div class="phx-orphaned-feedback" phx-feedback-for={input_id(f, :time_start)}>
+        <%= error_tag f, :time_start %>
+      </div>
+      <div class="phx-orphaned-feedback" phx-feedback-for={input_id(f, :time_end)}>
+        <%= error_tag f, :time_end %>
+      </div>
+
+
+
+      <%= label f, :location, class: "form-label mt-3" %>
+      <div class="inner-addon left-addon mb-3" phx-feedback-for={input_id(f, :location)}>
+        <i class="bi bi-geo icon is-left text-muted fs-5"></i>
+        <%= text_input f, :location,
+            value: input_value(f, :location),
+            class: input_class(f, :location, "form-control"),
+            phx_debounce: 250,
+            aria_describedby: error_ids(f, :location)
+          %>
+        <%= error_tag f, :location %>
+      </div>
+
+
+      <%= label f, :description, class: "form-label" %>
+      <div class="mb-3" phx-feedback-for={input_id(f, :description)}>
+
+        <%= textarea f, :description,
+            value: input_value(f, :description),
+            class: input_class(f, :description, "form-control"),
+            phx_debounce: 250,
+            aria_describedby: error_ids(f, :description)
+          %>
+        <%= error_tag f, :description %>
+      </div>
+
+
+      <%= label f, :time_zone, class: "form-label" %>
+      <div class="inner-addon left-addon mb-3" phx-feedback-for={input_id(f, :time_zone)}>
+        <i class="bi bi-map icon is-left text-muted fs-5"></i>
+        <%= text_input f, :time_zone,
+            value: input_value(f, :time_zone),
+            class: input_class(f, :time_zone, "form-control"),
+            phx_debounce: 250,
+            list: "tz_list"
+          %>
+          <datalist id="tz_list">
+            <%= for tz_name <- Tzdata.zone_list() do %>
+              <option value={tz_name}></option>
+            <% end %>
+          </datalist>
+        <div class="valid-feedback d-block text-primary">Type to search & select from list of known <%= link "IANA tz database", to: "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones", target: "_blank" %> time zones</div>
+        <%= error_tag f, :time_zone %>
+      </div>
+
+
+
+    </div>
+    <div class="modal-footer">
+
+      <%= link "Cancel", to: "#", class: "btn btn-outline-dark", phx_click: "hide", phx_target: "##{@modal_id}" %>
+      <%= submit "Save",
+          class: "btn btn-primary ",
+          disabled: !@changeset.valid?,
+          aria_disabled: !@changeset.valid? && "true" || false,
+          phx_disable_with: "Saving..."
+        %>
+
+    </div>
+
+  <% end %>
+
+</div>
